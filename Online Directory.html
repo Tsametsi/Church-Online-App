@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Directory - Church Online App</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: rgb(238, 232, 232);
+        }
+        .header {
+            width: 100%;
+            position: sticky;
+            top: 0;
+            padding: 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .container h1 {
+            color: #333;
+        }
+        .directory-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .directory-item {
+            flex: 1 1 calc(33.333% - 20px);
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .directory-item h2 {
+            color: #4CAF50;
+        }
+        .directory-item p {
+            color: #666;
+        }
+        @media (max-width: 768px) {
+            .directory-item {
+                flex: 1 1 calc(50% - 20px);
+            }
+        }
+        @media (max-width: 480px) {
+            .directory-item {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Church Online App</h1>
+        <nav>
+            <a href="Home Page.html" style="color: white; text-decoration: none; margin-right: 20px;">Home</a>
+            <a href="Online Directory.html" style="color: #d3d3d3ea; text-decoration: none; margin-right: 20px;">Online Directory</a>
+            <a href="Online Messages.html" style="color: white; text-decoration: none; margin-right: 20px;">Online Messages</a>
+            <a href="Online Purchase.html" style="color: white; text-decoration: none; margin-right: 20px;">Online Store</a>
+            <a href="Online Messages.html" style="color: white; text-decoration: none; margin-right: 20px;">Online Messages</a>
+            <a href="Prayer Request.html" style="color: white; text-decoration: none; margin-right: 20px;">Prayer Requests</a>
+            <a href="" style="color: white; text-decoration: none; margin-right: 20px;">Church Events</a>
+
+        </nav>
+    </div>
+    <div class="container">
+        <h1>Online Directory</h1>
+        <p>Find and connect with church members.</p>
+        <div class="directory-list">
+            <div class="directory-item">
+                <h2>John Doe</h2>
+                <p>Email: johndoe@example.com</p>
+                <p>Phone: (123) 456-7890</p>
+            </div>
+            <div class="directory-item">
+                <h2>Jane Smith</h2>
+                <p>Email: janesmith@example.com</p>
+                <p>Phone: (987) 654-3210</p>
+            </div>
+            <div class="directory-item">
+                <h2>Michael Johnson</h2>
+                <p>Email: michaeljohnson@example.com</p>
+                <p>Phone: (555) 123-4567</p>
+            </div>
+            <!-- Add more directory items as needed -->
+        </div>
+    </div>
+</body>
+</html>

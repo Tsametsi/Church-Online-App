@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Messages - Church Online App</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: rgb(238, 232, 232);
+        }
+        .header {
+            width: 100%;
+            position: sticky;
+            top: 0;
+            padding: 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: row;
+        }
+        .chat-list {
+            width: 30%;
+            border-right: 1px solid #ddd;
+            padding-right: 20px;
+            overflow-y: auto;
+            height: 500px;
+        }
+        .chat-list-item {
+            padding: 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #ddd;
+        }
+        .chat-list-item:hover {
+            background-color: #f0f0f0;
+        }
+        .chat-window {
+            width: 70%;
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+        }
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        .message-item {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            width: fit-content;
+        }
+        .message-item.received {
+            background-color: #d1e7dd;
+        }
+        .message-item.sent {
+            background-color: #cce5ff;
+            align-self: flex-end;
+        }
+        .message-form {
+            display: flex;
+            gap: 10px;
+        }
+        .message-form input, .message-form button {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .message-form input {
+            flex: 1;
+        }
+        .message-form button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .message-form button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Church Online App</h1>
+        <nav>
+            <a href="index.html" style="color: white; text-decoration: none; margin-right: 20px;">Home</a>
+            <a href="online-directory.html" style="color: white; text-decoration: none; margin-right: 20px;">Online Directory</a>
+            <a href="online-messages.html" style="color: white; text-decoration: none;">Online Messages</a>
+        </nav>
+    </div>
+    <div class="container">
+        <div class="chat-list">
+            <div class="chat-list-item">
+                <h3>Jane Smith</h3>
+                <p>Last message snippet...</p>
+            </div>
+            <div class="chat-list-item">
+                <h3>John Doe</h3>
+                <p>Last message snippet...</p>
+            </div>
+            <div class="chat-list-item">
+                <h3>Michael Johnson</h3>
+                <p>Last message snippet...</p>
+            </div>
+            <!-- Add more chat list items as needed -->
+        </div>
+        <div class="chat-window">
+            <div class="messages" id="messages">
+                <div class="message-item received">
+                    <p>Hello! How are you?</p>
+                </div>
+                <div class="message-item sent">
+                    <p>I'm good, thank you! How about you?</p>
+                </div>
+                <!-- More messages will be added here -->
+            </div>
+            <div class="message-form">
+                <input type="text" id="messageInput" placeholder="Type your message...">
+                <button type="button" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function sendMessage() {
+            var messageInput = document.getElementById('messageInput');
+            var messageText = messageInput.value;
+            if (messageText.trim() !== "") {
+                var messageItem = document.createElement('div');
+                messageItem.classList.add('message-item', 'sent');
+                messageItem.innerHTML = '<p>' + messageText + '</p>';
+                document.getElementById('messages').appendChild(messageItem);
+                messageInput.value = '';
+                // Scroll to the bottom of the messages container
+                var messagesContainer = document.getElementById('messages');
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+        }
+    </script>
+</body>
+</html>
