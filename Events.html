@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Church Events</title>
+    <link rel="stylesheet" href="/Events.css">
+</head>
+<body>
+    <h1>Upcoming Church Events</h1>
+
+    <div id="events-container">
+        <!-- Events will be dynamically added here -->
+    </div>
+
+    <script src="/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/api/events')
+                .then(response => response.json())
+                .then(events => {
+                    const eventsContainer = document.getElementById('events-container');
+                    events.forEach(event => {
+                        const eventDiv = document.createElement('div');
+                        eventDiv.classList.add('event');
+                        eventDiv.innerHTML = `
+                            <h2>${event.title}</h2>
+                            <p>${event.description}</p>
+                            <p><strong>Date:</strong> ${new Date(event.event_date).toLocaleString()}</p>
+                            ${event.virtual_url ? `<p><strong>Virtual URL:</strong> <a href="${event.virtual_url}">${event.virtual_url}</a></p>` : ''}
+                            <button onclick="toggleNotification(${event.id}, ${event.notification_on})">
+                                ${event.notification_on ? 'Disable' : 'Enable'} Notification
+                            </button>
+                        `;
+                        eventsContainer.appendChild(eventDiv);
+                    });
+                })
+                .catch(error => console.error('Error fetching events:', error));
+        });
+
+        function toggleNotification(id, currentStatus) {
+            const newStatus = !currentStatus;
+            fetch('/api/events/notification', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id, notification_on: newStatus })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Reload the events to reflect the new status
+                    location.reload();
+                } else {
+                    console.error('Failed to update notification status');
+                }
+            })
+            .catch(error => console.error('Error updating notification status:', error));
+        }
+    </script>
+</body>
+</html>

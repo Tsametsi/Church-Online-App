@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prayer Request</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="prayer-request-container">
+        <h2>Prayer Request</h2>
+        <form action="/submit-prayer-request" method="POST">
+            <div class="form-group">
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Your Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="prayer_request">Prayer Request:</label>
+                <textarea id="prayer_request" name="prayer_request" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="pastor_email">Select Pastor:</label>
+                <select id="pastor_email" name="pastor_email" required>
+                    <option value="pastor1@example.com">Pastor 1</option>
+                    <option value="pastor2@example.com">Pastor 2</option>
+                    <!-- Add more pastors as needed -->
+                </select>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

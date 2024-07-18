@@ -1,0 +1,74 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const mysql = require('mysql2');
+const nodemailer = require('nodemailer');
+const app = express();
+const port = 3000;
+
+// Middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Create a connection to the database
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',  // replace with your MySQL username
+    password: 'Gwacela30#',  // replace with your MySQL password
+    database: 'church_app_database'
+});
+
+// Connect to the database
+db.connect((err) => {
+    if (err) {
+        console.error('Error connecting to the database:', err);
+        return;
+    }
+    console.log('Connected to the database');
+});
+
+// Serve static files (CSS, images, etc.)
+app.use(express.static(__dirname));
+
+// Serve login page
+app.get('/Login.html', (req, res) => {
+    res.sendFile(__dirname + '/Login.html');
+});
+
+// Serve signup page
+app.get('/Signup.html', (req, res) => {
+    res.sendFile(__dirname + '/Signup.html');
+});
+
+// Serve home page
+app.get('/Home.html', (req, res) => {
+    res.sendFile(__dirname + '/Home.html');
+});
+
+// API endpoint to fetch products
+app.get('/api/products', (req, res) => {
+    const query = 'SELECT * FROM products';
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error querying products:', err);
+            res.status(500).send('Internal server error');
+            return;
+        }
+        res.json(results);
+    });
+});
+
+// Handle checkout POST request
+app.post('/checkout', (req, res) => {
+    // Process checkout logic here (e.g., update database, send confirmation email, etc.)
+    // Placeholder for illustration purposes
+    res.send('Checkout completed!');
+});
+
+// Serve shop page with product listing
+app.get('/Shop.html', (req, res) => {
+    res.sendFile(__dirname + '/Shop.html');
+});
+
+// Start server
+app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
+});

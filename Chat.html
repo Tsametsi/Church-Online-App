@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="Chat.css">
+</head>
+<body>
+    <h1>Chat Room</h1>
+    <div id="chat-box"></div>
+    <input type="text" id="username" placeholder="Your Name">
+    <input type="text" id="message" placeholder="Type a message...">
+    <button id="send">Send</button>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const sendButton = document.getElementById('send');
+        const usernameInput = document.getElementById('username');
+        const messageInput = document.getElementById('message');
+
+        const ws = new WebSocket('ws://localhost:3000');
+
+        // Load existing messages
+        fetch('/api/messages')
+            .then(response => response.json())
+            .then(messages => {
+                messages.forEach(({ username, message }) => {
+                    chatBox.innerHTML += `<div><strong>${username}</strong>: ${message}</div>`;
+                });
+            });
+
+        // Send message
+        sendButton.addEventListener('click', () => {
+            const msg = messageInput.value;
+            const username = usernameInput.value;
+
+            if (msg && username) {
+                ws.send(JSON.stringify({ username, msg }));
+                messageInput.value = ''; // Clear input
+            }
+        });
+
+        // Receive messages
+        ws.onmessage = event => {
+            const { username, msg } = JSON.parse(event.data);
+            chatBox.innerHTML += `<div><strong>${username}</strong>: ${msg}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto scroll
+        };
+    </script>
+</body>
+</html>

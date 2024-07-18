@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="home-container">
+        <h1>Welcome to the Church App</h1>
+        <div class="options">
+            <button onclick="window.location.href='PrayerRequest.html'">Prayer Request</button>
+            <button onclick="window.location.href='Shop.html'">Shop Online</button>
+            <button onclick="window.location.href='Events.html'">Church Events</button>
+            <button onclick="window.location.href='Channel.html'">Channel</button>
+            <button onclick="window.location.href='Donations.html'">Donations</button>
+            <button onclick="window.location.href='Chat.html'">Chat</button>
+            <button onclick="window.location.href='Login.html'">Log out?</button>
+        </div>
+    </div>
+
+    <div id="chatbot-icon" onclick="toggleChatbot()">
+        💬
+    </div>
+    <div id="chatbot-popup" style="display:none;">
+        <iframe src="chatbot.html" width="300" height="400"></iframe>
+    </div>
+
+    <script>
+        function toggleChatbot() {
+            var chatbotPopup = document.getElementById('chatbot-popup');
+            if (chatbotPopup.style.display === 'none') {
+                chatbotPopup.style.display = 'block';
+            } else {
+                chatbotPopup.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
