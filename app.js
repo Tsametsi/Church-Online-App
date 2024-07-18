@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql2');
 const stripe = require('stripe')('your-stripe-secret-key');
+const nodemailer = require('nodemailer');
 const app = express();
 const port = 3000;
 
@@ -24,6 +25,15 @@ db.connect((err) => {
         return;
     }
     console.log('Connected to the database');
+});
+
+// Create a transporter for nodemailer
+const transporter = nodemailer.createTransport({
+    service: 'gmail', // You can change this to your email provider
+    auth: {
+        user: 'followme303030@gmail.com', // Your email
+        pass: 'uhdt rhzs than ccfy', // Your email password or app password
+    },
 });
 
 // Serve static files (CSS, images, etc.)
@@ -52,6 +62,38 @@ app.post('/login', (req, res) => {
         } else {
             res.send('Invalid username or password.');
         }
+    });
+});
+
+// Handle prayer request submission
+app.post('/submit-prayer-request', (req, res) => {
+    const { name, email, prayer_request } = req.body;
+    // email you send it to
+    const pastorEmail = "eyethugwacela457@gmail.com";
+
+    const query = 'INSERT INTO prayer_request (name, email, prayer_request, pastor_email) VALUES (?, ?, ?, ?)';
+    db.query(query, [name, email, prayer_request, pastorEmail], (err, results) => {
+        if (err) {
+            console.error('Error inserting prayer request:', err);
+            res.status(500).send('Internal server error');
+            return;
+        }
+
+        // Send email
+        const mailOptions = {
+            from: email,
+            to: pastorEmail,
+            subject: `Prayer Request from ${name}`,
+            text: prayer_request,
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error('Error sending email:', error);
+                return res.status(500).send('Internal server error');
+            }
+            res.send('Prayer request submitted successfully!');
+        });
     });
 });
 
