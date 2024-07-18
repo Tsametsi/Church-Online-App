@@ -137,24 +137,52 @@ app.post('/api/events/notification', (req, res) => {
     });
 });
 
+// API endpoint to send chat messages
+app.post('/api/chat/send', (req, res) => {
+    const { username, message } = req.body;
+    const query = 'INSERT INTO chat_messages (username, message) VALUES (?, ?)';
+    
+    db.query(query, [username, message], (err) => {
+        if (err) {
+            console.error('Error inserting chat message:', err);
+            return res.status(500).send('Internal server error');
+        }
+        res.sendStatus(200);
+    });
+});
+
+// API endpoint to fetch chat messages
+app.get('/api/chat/messages', (req, res) => {
+    const query = 'SELECT * FROM chat_messages ORDER BY created_at ASC';
+    
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error querying chat messages:', err);
+            return res.status(500).send('Internal server error');
+        }
+        res.json(results);
+    });
+});
+
 // API endpoint to handle donations
 app.post('/donate', async (req, res) => {
     const { amount, currency, description } = req.body;
 
     try {
+        // Create a payment intent with Stripe
         const paymentIntent = await stripe.paymentIntents.create({
-            amount: amount * 100,
+            amount: amount * 100, // Stripe expects the amount in cents
             currency: currency,
             description: description,
-            payment_method_types: ['alipay'],
+            payment_method_types: ['alipay'], // Ensure this is set for Alipay
         });
 
+        // Insert donation details into the database
         const query = 'INSERT INTO donations (amount, currency, description, status) VALUES (?, ?, ?, ?)';
         db.query(query, [amount, currency, description, 'pending'], (err) => {
             if (err) {
                 console.error('Error inserting donation into database:', err);
-                res.status(500).send('Internal server error');
-                return;
+                return res.status(500).send('Internal server error');
             }
         });
 
@@ -165,6 +193,7 @@ app.post('/donate', async (req, res) => {
     }
 });
 
+
 // Handle checkout POST request
 app.post('/checkout', (req, res) => {
     res.send('Checkout completed!');
@@ -173,4 +202,55 @@ app.post('/checkout', (req, res) => {
 // Start server
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
+});
+
+const multer = require('multer');
+const path = require('path');
+
+// Set up storage for file uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
+
+// Create uploads directory if it doesn't exist
+const fs = require('fs');
+const uploadsDir = './uploads';
+if (!fs.existsSync(uploadsDir)){
+    fs.mkdirSync(uploadsDir);
+}
+
+// API endpoint to send chat messages
+app.post('/api/chat/send', upload.single('attachment'), (req, res) => {
+    const { username, message } = req.body;
+    const attachment = req.file ? `/uploads/${req.file.filename}` : null;
+
+    const query = 'INSERT INTO chat_messages (username, message, attachment) VALUES (?, ?, ?)';
+    
+    db.query(query, [username, message, attachment], (err) => {
+        if (err) {
+            console.error('Error inserting chat message:', err);
+            return res.status(500).send('Internal server error');
+        }
+        res.sendStatus(200);
+    });
+});
+
+// API endpoint to fetch chat messages
+app.get('/api/chat/messages', (req, res) => {
+    const query = 'SELECT * FROM chat_messages ORDER BY created_at ASC';
+    
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error querying chat messages:', err);
+            return res.status(500).send('Internal server error');
+        }
+        res.json(results);
+    });
 });
