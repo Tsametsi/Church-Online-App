@@ -4,9 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Include your CSS file -->
 </head>
 <body>
-    <h2>Chat with us!</h2>
-    <p>This is a placeholder for a chatbot.</p>
+    <div id="chat-container">
+        <div id="chat-messages"></div>
+        <form id="chat-form">
+            <input type="text" id="message-input" placeholder="Type your message...">
+            <input type="file" id="attachment-input" accept=".jpg, .jpeg, .png, .pdf"> <!-- If you allow attachments -->
+            <button type="submit">Send</button>
+        </form>
+    </div>
+
+    <script src="Chatbot.js"></script> <!-- Include your JavaScript file -->
 </body>
 </html>
