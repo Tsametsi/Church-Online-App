@@ -60,5 +60,10 @@ function removeFromCart(id) {
 }
 
 function checkout() {
-    alert('Checkout functionality coming soon!');
+    const totalAmount = totalPrice.toFixed(2); // Format total amount correctly
+    const paypalForm = document.getElementById('paypal-form');
+    const amountField = document.getElementById('paypal-amount');
+    
+    amountField.value = totalAmount; // Set the amount in the form
+    paypalForm.submit(); // Submit the form to PayPal
 }

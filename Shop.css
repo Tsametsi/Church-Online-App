@@ -12,6 +12,7 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative; /* Needed for positioning of cart */
 }
 
 h1 {
@@ -29,6 +30,19 @@ h1 {
     padding: 10px;
     border-radius: 8px;
     width: 200px;
+}
+
+#cart {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 250px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-height: calc(100vh - 40px); /* Ensures it doesn’t overflow */
+    overflow-y: auto;
 }
 
 .cart-item {

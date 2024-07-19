@@ -4,16 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop Online</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="Shop.css">
 </head>
 <body>
     <div class="shop-container">
         <h1>Shop Online</h1>
         <div id="products"></div>
+    </div>
+    <div id="cart">
         <h2>Cart</h2>
         <ul id="cart-items"></ul>
         <p>Total Price: $<span id="total-price">0.00</span></p>
-        <button onclick="checkout()">Checkout</button>
+        <form id="paypal-form" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+            <input type="hidden" name="cmd" value="_xclick">
+            <input type="hidden" name="business" value="uyebodhldngs@gmail.com"> <!-- Receiver's PayPal email -->
+            <input type="hidden" name="item_name" value="Shopping Cart">
+            <input type="hidden" name="amount" id="paypal-amount" value="0.00">
+            <input type="hidden" name="currency_code" value="USD">
+            <input type="hidden" name="return" value="Home.html"> <!-- Replace with your return URL -->
+            <button type="submit" onclick="checkout()">Checkout</button>
+        </form>              
     </div>
     <script src="app.js"></script>
     <script src="shop.js"></script>
