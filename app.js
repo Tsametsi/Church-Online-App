@@ -3,6 +3,9 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql2');
 const stripe = require('stripe')('your-stripe-secret-key');
 const nodemailer = require('nodemailer');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const app = express();
 const port = 3000;
 
@@ -65,6 +68,20 @@ app.post('/login', (req, res) => {
     });
 });
 
+// Handle sign-up POST request
+app.post('/signup', (req, res) => {
+    const { username, password } = req.body;
+    const query = 'INSERT INTO logged_in_users (username, password) VALUES (?, ?)';
+    db.query(query, [username, password], (err) => {
+        if (err) {
+            console.error('Error inserting new user:', err);
+            res.status(500).send('Server error');
+            return;
+        }
+        res.redirect('/Login.html');
+    });
+});
+
 // Handle prayer request submission
 app.post('/submit-prayer-request', (req, res) => {
     const { name, email, prayer_request } = req.body;
@@ -72,7 +89,7 @@ app.post('/submit-prayer-request', (req, res) => {
     const pastorEmail = "eyethugwacela457@gmail.com";
 
     const query = 'INSERT INTO prayer_request (name, email, prayer_request, pastor_email) VALUES (?, ?, ?, ?)';
-    db.query(query, [name, email, prayer_request, pastorEmail], (err, results) => {
+    db.query(query, [name, email, prayer_request, pastorEmail], (err) => {
         if (err) {
             console.error('Error inserting prayer request:', err);
             res.status(500).send('Internal server error');
@@ -87,7 +104,7 @@ app.post('/submit-prayer-request', (req, res) => {
             text: prayer_request,
         };
 
-        transporter.sendMail(mailOptions, (error, info) => {
+        transporter.sendMail(mailOptions, (error) => {
             if (error) {
                 console.error('Error sending email:', error);
                 return res.status(500).send('Internal server error');
@@ -127,7 +144,7 @@ app.get('/api/events', (req, res) => {
 app.post('/api/events/notification', (req, res) => {
     const { id, notification_on } = req.body;
     const query = 'UPDATE events SET notification_on = ? WHERE id = ?';
-    db.query(query, [notification_on, id], (err, results) => {
+    db.query(query, [notification_on, id], (err) => {
         if (err) {
             console.error('Error updating notification status:', err);
             res.status(500).send('Internal server error');
@@ -193,19 +210,10 @@ app.post('/donate', async (req, res) => {
     }
 });
 
-
 // Handle checkout POST request
 app.post('/checkout', (req, res) => {
     res.send('Checkout completed!');
 });
-
-// Start server
-app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
-});
-
-const multer = require('multer');
-const path = require('path');
 
 // Set up storage for file uploads
 const storage = multer.diskStorage({
@@ -220,13 +228,12 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Create uploads directory if it doesn't exist
-const fs = require('fs');
 const uploadsDir = './uploads';
 if (!fs.existsSync(uploadsDir)){
     fs.mkdirSync(uploadsDir);
 }
 
-// API endpoint to send chat messages
+// API endpoint to send chat messages with attachments
 app.post('/api/chat/send', upload.single('attachment'), (req, res) => {
     const { username, message } = req.body;
     const attachment = req.file ? `/uploads/${req.file.filename}` : null;
@@ -253,4 +260,9 @@ app.get('/api/chat/messages', (req, res) => {
         }
         res.json(results);
     });
+});
+
+// Start server
+app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
 });
