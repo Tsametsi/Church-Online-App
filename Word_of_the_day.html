@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word of the Day</title>
+    <link rel="stylesheet" href="Word_of_the_day.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Word of the Day</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="word_of_the_day.html">Word of the Day</a></li>
+                    <li><a href="#" id="postLink">Post a Scripture</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="word-section">
+        <div class="container">
+            <h2>Daily Scripture</h2>
+            <div id="dailyScripture">
+                <!-- Daily scripture will be loaded dynamically here -->
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Your Company. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div id="postModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Post Your Scripture</h2>
+            <form id="scriptureForm">
+                <textarea id="scriptureText" name="scripture_text" rows="6" placeholder="Enter your scripture here..." required></textarea>
+                <br>
+                <input type="submit" value="Post Scripture">
+            </form>
+            <div id="postStatus"></div>
+        </div>
+    </div>
+
+    <script src="Word_of_the_day.js"></script>
+</body>
+</html>

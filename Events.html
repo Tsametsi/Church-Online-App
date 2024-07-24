@@ -37,27 +37,27 @@
                 })
                 .catch(error => console.error('Error fetching events:', error));
         });
-
+    
         function toggleNotification(id, currentStatus) {
             const newStatus = !currentStatus;
-            fetch('/api/events/notification', {
-                method: 'POST',
+            fetch(`/api/events/${id}/notification`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ id, notification_on: newStatus })
+                body: JSON.stringify({ notification_on: newStatus })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Reload the events to reflect the new status
-                    location.reload();
+                    // Optionally update the UI to reflect the new status
+                    location.reload(); // Refresh page to reflect changes
                 } else {
                     console.error('Failed to update notification status');
                 }
             })
             .catch(error => console.error('Error updating notification status:', error));
         }
-    </script>
+    </script>    
 </body>
 </html>

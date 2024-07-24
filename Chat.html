@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="Chat.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <h1>Chat</h1>
+    <div id="users">
+        <h2>Users</h2>
+        <ul id="user-list"></ul>
+    </div>
+    <button><a href="ChatGroup.Html"> CREATE GROUP +</a></button>
+    <div>
+        <div id="chat">
+            <h2>Chat with <span id="chat-with">Select a user</span></h2>
+            <div id="message-box"></div>
+            <input type="file" id="attachment-input">
+            <input type="text" id="message-input" placeholder="Type a message...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const userList = document.getElementById('user-list');
+        const chatWith = document.getElementById('chat-with');
+        const messageBox = document.getElementById('message-box');
+        const attachmentInput = document.getElementById('attachment-input');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+
+        let selectedUser = '';
+        const socket = io();
+
+        // Get logged-in username from localStorage
+        const yourUsername = localStorage.getItem('username');
+
+        if (!yourUsername) {
+            window.location.href = '/Login.html';
+        }
+
+        // Fetch and display users
+        function loadUsers() {
+            fetch('/api/users')
+                .then(response => response.json())
+                .then(users => {
+                    userList.innerHTML = '';
+                    users.forEach(user => {
+                        const li = document.createElement('li');
+                        li.textContent = user.username;
+                        if (user.logged_in) {
+                            const greenDot = document.createElement('span');
+                            greenDot.style.color = 'green';
+                            greenDot.textContent = ' •';
+                            li.appendChild(greenDot);
+                        }
+                        li.addEventListener('click', () => selectUser(user.username));
+                        userList.appendChild(li);
+                    });
+                });
+        }
+
+        // Fetch and display messages between users
+        function loadMessages(user) {
+            fetch(`/api/chat/messages/${yourUsername}/${user}`)
+                .then(response => response.json())
+                .then(messages => {
+                    messageBox.innerHTML = '';
+                    messages.forEach(message => {
+                        const p = document.createElement('p');
+                        p.classList.add('message');
+                        p.classList.add(message.username === yourUsername ? 'sender' : 'receiver');
+                        p.textContent = `${message.username}: ${message.message}`;
+                        if (message.attachment) {
+                            const link = document.createElement('a');
+                            link.href = message.attachment;
+                            link.textContent = 'Attachment';
+                            p.appendChild(link);
+                        }
+                        p.addEventListener('click', () => {
+                            if (message.username === yourUsername) {
+                                if (confirm('Do you want to delete this message?')) {
+                                    deleteMessage(message.id);
+                                }
+                            }
+                        });
+                        messageBox.appendChild(p);
+                    });
+                    // Ensure the message box scrolls to the bottom
+                    messageBox.scrollTop = messageBox.scrollHeight;
+                });
+        }
+
+        // Select user and load messages
+        function selectUser(user) {
+            selectedUser = user;
+            chatWith.textContent = user;
+            loadMessages(user);
+        }
+
+        // Send a new message with optional attachment
+        function sendMessage() {
+            const message = messageInput.value;
+            const attachment = attachmentInput.files[0];
+
+            if (message.trim() === '' && !attachment) return;
+
+            const formData = new FormData();
+            formData.append('username', yourUsername);
+            formData.append('recipient', selectedUser);
+            formData.append('message', message);
+            if (attachment) {
+                formData.append('attachment', attachment);
+            }
+
+            fetch('/api/chat/send', {
+                method: 'POST',
+                body: formData
+            }).then(() => {
+                messageInput.value = '';
+                attachmentInput.value = '';
+                socket.emit('send_message', {
+                    username: yourUsername,
+                    recipient: selectedUser,
+                    message: message,
+                    attachment: attachment ? URL.createObjectURL(attachment) : null
+                });
+                // Ensure the message box scrolls to the bottom
+                messageBox.scrollTop = messageBox.scrollHeight;
+            });
+        }
+
+        // Delete a message
+        function deleteMessage(messageId) {
+            fetch(`/api/chat/delete/${messageId}`, {
+                method: 'DELETE'
+            }).then(() => {
+                loadMessages(selectedUser);
+            });
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // Handle incoming messages
+        socket.on('new_message', (data) => {
+            if (data.username === selectedUser || data.recipient === selectedUser) {
+                const p = document.createElement('p');
+                p.classList.add('message');
+                p.classList.add(data.username === yourUsername ? 'sender' : 'receiver');
+                p.textContent = `${data.username}: ${data.message}`;
+                if (data.attachment) {
+                    const link = document.createElement('a');
+                    link.href = data.attachment;
+                    link.textContent = 'Attachment';
+                    p.appendChild(link);
+                }
+                p.addEventListener('click', () => {
+                    if (data.username === yourUsername) {
+                        if (confirm('Do you want to delete this message?')) {
+                            deleteMessage(data.id);
+                        }
+                    }
+                });
+                messageBox.appendChild(p);
+                // Ensure the message box scrolls to the bottom
+                messageBox.scrollTop = messageBox.scrollHeight;
+            }
+        });
+
+        // Join the chat room for the logged-in user
+        socket.emit('join', yourUsername);
+
+        // Handle user status updates
+        socket.on('user_status', (data) => {
+            loadUsers();
+        });
+
+        // Initial load of users
+        loadUsers();
+
+        // Refresh messages every 4 seconds
+        setInterval(() => {
+            if (selectedUser) {
+                loadMessages(selectedUser);
+            }
+        }, 4000);
+    </script>
+</body>
+</html>

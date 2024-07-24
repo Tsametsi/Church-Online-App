@@ -1,3 +1,6 @@
+/* Shop.css */
+
+/* General body styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
@@ -5,6 +8,7 @@ body {
     padding: 0;
 }
 
+/* Container for the shop content */
 .shop-container {
     max-width: 800px;
     margin: 20px auto;
@@ -15,23 +19,48 @@ body {
     position: relative; /* Needed for positioning of cart */
 }
 
+/* Heading style */
 h1 {
     text-align: center;
+    margin-bottom: 20px; /* Added margin for spacing */
 }
 
+/* Flex container for products */
 #products {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
 }
 
+/* Individual product styling */
 .product {
     border: 1px solid #ddd;
     padding: 10px;
     border-radius: 8px;
     width: 200px;
+    text-align: center;
+    position: relative; /* Relative positioning for the frame */
 }
 
+.product-frame {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 200px; /* Adjust as needed */
+    margin-bottom: 10px;
+}
+
+.product-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the frame */
+}
+
+.product-description {
+    padding: 10px;
+}
+
+/* Styling for the fixed cart section */
 #cart {
     position: fixed;
     top: 20px;
@@ -45,16 +74,27 @@ h1 {
     overflow-y: auto;
 }
 
+/* Styling for individual cart items */
 .cart-item {
     list-style: none;
     border-bottom: 1px solid #ddd;
     padding: 10px 0;
+    display: flex;
+    align-items: center;
 }
 
-.cart-item:last-child {
-    border-bottom: none;
+.cart-item img {
+    width: 50px; /* Adjust image size as needed */
+    height: 50px; /* Maintain aspect ratio */
+    border-radius: 8px;
+    margin-right: 10px;
 }
 
+.cart-item-name {
+    flex: 1; /* Takes remaining space */
+}
+
+/* Button styles */
 button {
     background-color: #007bff;
     color: #fff;
@@ -69,6 +109,7 @@ button:hover {
     background-color: #0056b3;
 }
 
+/* Total price style */
 #total-price {
     font-weight: bold;
 }

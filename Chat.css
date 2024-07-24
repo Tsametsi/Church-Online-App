@@ -1,75 +1,133 @@
-/* Basic styling for the chat container */
+/* Reset some default styles */
+body, h1, h2, ul, p, input, button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Ensure box-sizing consistency */
+}
+
+/* Basic styling for the entire page */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    padding: 20px;
-}
-
-#chat-container {
-    max-width: 600px;
-    margin: 0 auto;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Styling for chat messages */
-#chat-messages {
-    max-height: 300px;
-    overflow-y: auto;
-    margin-bottom: 10px;
-    padding-right: 10px;
-}
-
-.message {
-    margin-bottom: 10px;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.message strong {
-    font-weight: bold;
+    background-color: #f4f4f4;
     color: #333;
 }
 
-/* Styling for chat form */
-#chat-form {
+/* Styling for the chat container */
+#chat {
+    float: left;
+    width: 60%;
+    margin-left: 5%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 600px; /* Adjust height as needed */
     display: flex;
-    margin-top: 10px;
+    flex-direction: column;
 }
 
-#message-input {
-    flex: 1;
+.sender {
+    background-color: #367056;
+    color: #fff; /* Text color for sender messages */
+    text-align: left;
+    border-radius: 8px;
     padding: 8px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
+    margin: 5px 0;
+    width: 150px;
 }
 
-#attachment-input {
-    margin-left: 10px;
+.receiver {
+    background-color: #4695ad;
+    color: #fff; /* Text color for receiver messages */
+    text-align: right;
+    border-radius: 8px;
+    padding: 8px;
+    margin: 5px 0;
+    width: 150px;
+
 }
 
-button {
-    padding: 8px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 3px;
+/* Styling for the user list container */
+#users {
+    float: left;
+    width: 20%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 600px; /* Adjust height as needed */
+    overflow-y: auto;
+}
+
+/* List item styling for users */
+#user-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#user-list li {
+    padding: 8px;
     cursor: pointer;
+    border-bottom: 1px solid #d89140;
+    border-radius: 4px;
     transition: background-color 0.3s;
 }
 
-button:hover {
-    background-color: #45a049;
+#user-list li:hover {
+    background-color: #f0f0f0;
 }
 
-button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
+/* Styling for chat header */
+#chat h2 {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    text-align: center;
 }
 
+/* Styling for message box */
+#message-box {
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+/* Styling for message input */
+#message-input {
+    width: calc(100% - 22px); /* Adjust for padding and border */
+    height: 50px;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Styling for send button */
+#send-button {
+    width: 80px;
+    height: 50px;
+    margin: 10px;
+    background-color: #367056;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#send-button:hover {
+    background-color: #276043;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #chat, #users {
+        width: 100%; /* Stack chat and users on top of each other on smaller screens */
+        margin: 0;
+        float: none;
+    }
+}

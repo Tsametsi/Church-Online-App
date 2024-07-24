@@ -1,0 +1,138 @@
+/* Reset some default styles */
+body, h1, h2, ul, p, input, button {
+    margin: 0;
+    padding: 0;
+}
+
+/* Basic styling for the entire page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* Styling for the chat container */
+#chat {
+    float: left;
+    width: 60%;
+    margin-left: 5%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 600px; /* Adjust height as needed */
+    display: flex;
+    flex-direction: column;
+}
+
+.sender {
+    background-color: #367056;
+    text-align: left;
+}
+
+.receiver {
+    background-color: #4695ad;
+    text-align: right;
+}
+
+/* Styling for the user list container */
+#users {
+    float: left;
+    width: 20%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 600px; /* Adjust height as needed */
+    overflow-y: auto;
+}
+
+/* List item styling for users */
+#user-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#user-list li {
+    padding: 8px;
+    cursor: pointer;
+    border-bottom: 1px solid #d89140;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+#user-list li:hover {
+    background-color: #f0f0f0;
+}
+
+/* Styling for chat header */
+#chat h2 {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+/* Styling for message box */
+#message-box {
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #491f80;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+/* Modal styling */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4); /* Overlay background */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Additional styles for group management */
+#group-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#group-list li {
+    padding: 8px;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+    transition: background-color 0.3s;
+}
+
+#group-list li:hover {
+    background-color: #f0f0f0;
+}

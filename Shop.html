@@ -10,6 +10,9 @@
     <div class="shop-container">
         <h1>Shop Online</h1>
         <div id="products"></div>
+        <div id="products">
+            <!-- Product items will be dynamically added here -->
+        </div>
     </div>
     <div id="cart">
         <h2>Cart</h2>
@@ -22,10 +25,9 @@
             <input type="hidden" name="amount" id="paypal-amount" value="0.00">
             <input type="hidden" name="currency_code" value="USD">
             <input type="hidden" name="return" value="Home.html"> <!-- Replace with your return URL -->
-            <button type="submit" onclick="checkout()">Checkout</button>
+            <button type="submit">Checkout</button>
         </form>              
     </div>
-    <script src="app.js"></script>
     <script src="shop.js"></script>
 </body>
 </html>

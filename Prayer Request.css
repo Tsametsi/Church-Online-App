@@ -1,12 +1,16 @@
+/* PrayerRequest.css */
+
+/* General body styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #7cabe0;
     margin: 0;
     padding: 20px;
 }
 
+/* Container for the prayer request form */
 .prayer-request-container {
-    background-color: white;
+    background-color: rgb(141, 207, 209);
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
@@ -15,68 +19,80 @@ body {
     transition: transform 0.2s;
 }
 
+/* Hover effect for the container */
 .prayer-request-container:hover {
     transform: scale(1.02);
 }
 
+/* Header styles */
 h2 {
     text-align: center;
     color: #333;
+    margin-bottom: 20px; /* Added margin for spacing */
 }
 
+/* Form group styling */
 .form-group {
     margin-bottom: 15px;
 }
 
-.label {
+/* Label styling */
+.form-group label {
     display: block;
     margin-bottom: 5px;
     color: #666;
 }
 
+/* Input and textarea styling */
 input[type="text"],
 input[type="email"],
-textarea,
-select {
+textarea {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #070707;
     border-radius: 4px;
     box-sizing: border-box;
     transition: border-color 0.3s;
 }
 
+/* Focus state for inputs and textarea */
 input:focus,
 textarea:focus {
-    border-color: #5cb85c;
+    border-color: #0a0a0a;
     outline: none;
 }
 
+/* Textarea resizing behavior */
 textarea {
     resize: vertical;
 }
 
+/* Button styling */
 button {
     width: 100%;
     padding: 10px;
-    background-color: #5cb85c;
-    color: white;
+    background-color: #cac9c9;
+    color: rgb(0, 0, 0);
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s;
+    margin-top: 5px;
 }
 
+/* Button hover state */
 button:hover {
     background-color: #4cae4c;
 }
 
+/* Disabled state for the button */
 button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }
 
+/* Response message styling */
 #responseMessage {
     margin-top: 15px;
     text-align: center;

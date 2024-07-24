@@ -1,0 +1,211 @@
+/* Reset and base styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #6284c2;
+    overflow-y: auto; /* Enable vertical scrolling */
+
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Ensure it's above other content */
+}
+.home-container {
+    padding-top: 50px; /* Adjust padding to accommodate fixed header */
+    background-color: #6284c2;
+    padding: 20px;
+    width: 80%; /* Adjusted width */
+    margin: 0 auto; /* Centering the container horizontally */
+    opacity: 0.9;
+
+}
+
+
+.options {
+    text-align: center;
+    margin: 10%;
+}
+
+.options button {
+    padding: 20px 40px; /* Increase padding to make buttons larger */
+    margin: 6px;
+    font-size: 18px; /* Increase font size for better readability */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%; /* Ensure button takes full width */
+
+}
+
+.options button:hover {
+    background-color: #0056b3;
+}
+
+.logout-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+}
+
+.logout-btn {
+    padding: 10px 20px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.menu-toggle {
+    display: block;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.menu {
+    display: none;
+    position: absolute;
+    top: 50px; /* Adjust as needed */
+    right: 10px; /* Adjust as needed */
+    background-color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Ensure it's above other content */
+}
+
+.menu.visible {
+    display: block;
+}
+
+.menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu ul li {
+    margin-bottom: 10px;
+}
+
+.menu ul li a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 10px;
+}
+
+.menu ul li a:hover {
+    background-color: #555;
+}
+
+/* Login and Signup forms */
+.login-container,
+.signup-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: 50px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.login-container h2,
+.signup-container h2 {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Home and Prayer Request pages */
+.prayer-request-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: 50px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Chatbot icon and popup */
+#chatbot-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    padding: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.social-icons {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+}
+
+.social-icons .social-icon {
+    display: inline-block;
+    margin-right: 10px;
+    color: #fff;
+    font-size: 24px; /* Adjust icon size if needed */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.social-icons .social-icon:hover {
+    color: #ffc107; /* Change to desired hover color */
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <link rel="stylesheet" href="Chat.css">
+</head>
+<body>
+    <div id="chat">
+        <h2>Chat</h2>
+        <div id="message-box"></div>
+        <input type="text" id="message-input" placeholder="Type your message...">
+        <button id="send-button">Send</button>
+    </div>
+    <div id="users">
+        <h2>Users</h2>
+        <ul id="user-list"></ul>
+        <button id="create-group-button">Create Group</button>
+        <h2>Groups You Created</h2>
+        <ul id="group-list"></ul>
+    </div>
+
+    <!-- Group Modal -->
+    <div id="group-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Create Group</h2>
+            <label for="group-name-input">Group Name:</label>
+            <input type="text" id="group-name-input">
+            <h3>Add Members:</h3>
+            <ul id="add-members-list"></ul>
+            <button id="add-member-button">Add Selected Members</button>
+            <button id="create-group-submit">Create Group</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+    <script src="Chat.js"></script>
+</body>
+</html>

@@ -1,24 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Home Page</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-n9xh+SpAdPCDmTMXsBjqGmUfxx/1p0zx9TA3QxtEiZpGGTEp27f9V4N1I7vRKRuplGB6Ei/6/mXE13p9y4ERug==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="Login.css">
+    </head>
+<body style="background-image: url('Image 4.webp'); background-repeat: no-repeat; background-size: cover;">
     <div class="home-container">
-        <h1>Welcome to the Church App</h1>
-        <div class="options">
-            <button onclick="window.location.href='PrayerRequest.html'">Prayer Request</button>
-            <button onclick="window.location.href='Shop.html'">Shop Online</button>
-            <button onclick="window.location.href='Events.html'">Church Events</button>
-            <button onclick="window.location.href='Channel.html'">Channel</button>
-            <button onclick="window.location.href='Donations.html'">Donations</button>
-            <button onclick="window.location.href='Chat.html'">Chat</button>
-            <button onclick="window.location.href='Login.html'">Log out?</button>
+        <header>
+            <button class="menu-toggle" aria-label="Toggle Menu">&#9776;</button>
+            <h1>Welcome to the Church App</h1>
+        </header>
+        <div class="social-icons">
+            <a href="Login.html" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <!-- Add more social icons as needed -->
         </div>
+        <div class="options">
+            <button onclick="window.location.href='PrayerRequest.html'">Prayer Request <br> 
+                <p class="OptioN-decription">Request a prayer from a Pastor</p></button>
+               
+            <button onclick="window.location.href='Shop.html'">Shop Online
+                <br> Shop church Online</button>
+            <button onclick="window.location.href='Events.html'">Church Events
+                <br> See upcoming events</button>
+            <button onclick="window.location.href='Donations.html'">Donations
+                <br> Giving</button>
+            <button onclick="window.location.href='Chat.html'">Chat
+                <br> Connect with other users</button>
+        </div>
+        </div>
+        <div class="logout-container">
+        </div>
+        <nav class="menu">
+            <ul>
+                <li><a href="Events.html">Word of the day</a></li>
+                <li><a href="AboutUs.html">About Us</a></li> <!-- Added: About Us link -->
+                <li><a href="MemberProfile.html">Member Profile</a></li> <!-- Added: Member Profile link -->
+                <li><a href="MemberProfile.html">Inspiration</a></li> <!-- Added: Member Profile link -->
+                <button onclick="window.location.href='Login.html'" class="logout-btn">Log out?</button>
+            </ul>
+        </nav>
     </div>
+    <!-- Example image -->
+    
     <script>!function(e,t,a){var c=e.head||e.getElementsByTagName("head")[0],n=e.createElement("script");n.async=!0,n.defer=!0, n.type="text/javascript",n.src=t+"/static/js/widget.js?config="+JSON.stringify(a),c.appendChild(n)}(document,"https://app.engati.com",{bot_key:"2344c7cbf6e34de2",welcome_msg:true,branding_key:"default",server:"https://app.engati.com",e:"p" });</script>
+
+    <script>
+        // Toggle menu visibility
+        const menuToggle = document.querySelector('.menu-toggle');
+        const menu = document.querySelector('.menu');
+
+        menuToggle.addEventListener('click', () => {
+            menu.classList.toggle('visible');
+        });
+    </script>
 </body>
 </html>
