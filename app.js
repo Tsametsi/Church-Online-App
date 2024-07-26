@@ -300,6 +300,21 @@ app.get('/api/products', (req, res) => {
         res.json(results);
     });
 });
+// API endpoint to fetch all church executives
+app.get('/api/executives', (req, res) => {
+    const query = 'SELECT * FROM executives';
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error querying executives:', err);
+            return res.status(500).send('Internal server error');
+        }
+        res.json(results);
+    });
+});
+
+// Serve the profile page
+app.get('/executives.html', (req, res) => res.sendFile(__dirname + '/executives.html'));
+
 
 // Start the server
 server.listen(port, () => {
