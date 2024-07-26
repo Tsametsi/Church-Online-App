@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspiration</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <h1>Inspiration Videos</h1>
+
+    <!-- Video upload form -->
+    <div class="upload-form">
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="text" name="title" placeholder="Title" required>
+            <textarea name="description" placeholder="Description" required></textarea>
+            <input type="file" name="video" accept="video/*" required>
+            <button type="submit">Upload Video</button>
+        </form>
+    </div>
+
+    <!-- Video list -->
+    <div id="videoList"></div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/api/videos', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.status === 201) {
+                    alert('Video uploaded successfully');
+                    loadVideos();
+                } else {
+                    alert('Failed to upload video');
+                }
+            })
+            .catch(error => console.error('Error uploading video:', error));
+        });
+
+        function loadVideos() {
+            fetch('/api/videos')
+            .then(response => response.json())
+            .then(videos => {
+                const videoList = document.getElementById('videoList');
+                videoList.innerHTML = '';
+                videos.forEach(video => {
+                    const videoItem = document.createElement('div');
+                    videoItem.innerHTML = `
+                        <h2>${video.title}</h2>
+                        <p>${video.description}</p>
+                        <video src="${video.filename}" controls></video>
+                        <p>Likes: ${video.likes}</p>
+                        <button onclick="likeVideo(${video.id})">Like</button>
+                        <button onclick="deleteVideo(${video.id})">Delete</button>
+                        <div>
+                            <h3>Comments:</h3>
+                            <div>${video.comments ? video.comments.map(comment => `<p>${comment.username}: ${comment.comment}</p>`).join('') : 'No comments yet.'}</div>
+                            <textarea placeholder="Add a comment"></textarea>
+                            <button onclick="addComment(${video.id}, this.previousElementSibling.value)">Comment</button>
+                        </div>
+                    `;
+                    videoList.appendChild(videoItem);
+                });
+            })
+            .catch(error => console.error('Error fetching videos:', error));
+        }
+
+        function likeVideo(videoId) {
+            fetch(`/api/videos/${videoId}/like`, { method: 'POST' })
+            .then(response => {
+                if (response.status === 200) {
+                    loadVideos();
+                } else {
+                    alert('Failed to like video');
+                }
+            })
+            .catch(error => console.error('Error liking video:', error));
+        }
+
+        function addComment(videoId, comment) {
+            if (!comment.trim()) {
+                alert('Comment cannot be empty');
+                return;
+            }
+            fetch(`/api/videos/${videoId}/comment`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ comment })
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    loadVideos();
+                } else {
+                    alert('Failed to add comment');
+                }
+            })
+            .catch(error => console.error('Error adding comment:', error));
+        }
+
+        function deleteVideo(videoId) {
+            fetch(`/api/videos/${videoId}`, { method: 'DELETE' })
+            .then(response => {
+                if (response.status === 200) {
+                    loadVideos();
+                } else {
+                    alert('Failed to delete video');
+                }
+            })
+            .catch(error => console.error('Error deleting video:', error));
+        }
+
+        loadVideos();
+    </script>
+</body>
+</html>
