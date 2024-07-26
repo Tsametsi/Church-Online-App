@@ -72,6 +72,12 @@ app.post('/login', (req, res) => {
         }
     });
 });
+// Redirect root URL to Login.html
+app.get('/', (req, res) => {
+    res.redirect('/Login.html');
+});
+
+// Serve other static files and define other routes as needed...
 
 // Handle logout POST request
 app.post('/logout', (req, res) => {

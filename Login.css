@@ -21,7 +21,7 @@ header {
 }
 .home-container {
     padding-top: 50px; /* Adjust padding to accommodate fixed header */
-    background-color: #6284c2;
+    background-color: transparent;
     padding: 20px;
     width: 80%; /* Adjusted width */
     margin: 0 auto; /* Centering the container horizontally */

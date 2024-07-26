@@ -22,10 +22,19 @@
 
     <section class="about-section">
         <div class="container">
-            <h2>Our Story</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam viverra eros eu mi tincidunt, ac fermentum nunc euismod. Aliquam erat volutpat.</p>
-            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer accumsan, odio id posuere vehicula, est elit facilisis ex, vel fringilla odio libero vitae felis.</p>
-            <p>Nullam et turpis risus. Sed et justo id nisi sollicitudin ultricies. Donec vel tristique justo, sed consequat urna.</p>
+            <h2 style="color: cyan;">Our Story</h2>
+            <div class="slideshow-container">
+                <img class="mySlides" src="slide1.jpg">
+                <img class="mySlides" src="slide2.jpg">
+                <img class="mySlides" src="slide3.jpg">
+                <img class="mySlides" src="slide4.jpg">
+                <img class="mySlides" src="slide5.jpg">
+            </div>
+            <p style="color: aliceblue; text-align: left; font-size: large;">
+                Welcome to [Church Name], a vibrant community of faith dedicated to spreading the love and teachings of Jesus Christ. Nestled in the heart of [City/Town], our church has been a beacon of hope and spiritual growth for over [number] years. At [Church Name], we believe in the power of prayer, the strength found in fellowship, and the transformative grace of God.
+                
+                Our mission is simple yet profound: to create a welcoming environment where individuals and families can deepen their relationship with God and each other. Through inspiring worship services, engaging Bible study groups, and compassionate outreach programs, we strive to serve our community and share the message of God's love. Whether you are exploring your faith for the first time or seeking a church family to grow with, we invite you to join us on this journey of faith, hope, and love at [Church Name].
+            </p>
         </div>
     </section>
 
@@ -34,5 +43,22 @@
             <p>&copy; 2024 Your Company. All rights reserved.</p>
         </div>
     </footer>
+
+    <script>
+        var slideIndex = 0;
+        showSlides();
+
+        function showSlides() {
+            var i;
+            var slides = document.getElementsByClassName("mySlides");
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) {slideIndex = 1}
+            slides[slideIndex-1].style.display = "block";
+            setTimeout(showSlides, 5000); // Change image every 5 seconds
+        }
+    </script>
 </body>
 </html>

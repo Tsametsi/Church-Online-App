@@ -11,6 +11,12 @@ body {
     line-height: 1.6;
     background-color: #f4f4f4;
     color: #333;
+    background-image: url('WhatsApp Image 2024-07-24 at 12.43.50.jpeg');
+    margin: 0;
+    background-size: cover; /* Cover the entire background */
+    background-repeat: no-repeat; /* No repeating of background */
+    background-attachment: fixed; /* Fixed position */
+    background-position: center center; /* Center the background */
 }
 
 .container {
@@ -80,4 +86,17 @@ footer {
     position: absolute;
     bottom: 0;
     width: 100%;
+}
+/* Add this to your existing CSS */
+
+.slideshow-container {
+    max-width: 100%;
+    position: relative;
+    margin-top: 70px; /* Adjust this margin to position the slideshow correctly */
+}
+
+.mySlides {
+    display: none;
+    width: 100%;
+    height: auto;
 }

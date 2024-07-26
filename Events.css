@@ -3,11 +3,17 @@ body {
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
+    background-image: url('WhatsApp Image 2024-07-24 at 12.43.50.jpeg');
+    background-size: cover; /* Cover the entire background */
+    background-repeat: no-repeat; /* No repeating of background */
+    background-attachment: fixed; /* Fixed position */
+    background-position: center center; /* Center the background */
+
 }
 
 h1 {
     text-align: center;
-    color: #333;
+    color: #fcfcfc;
     margin-top: 20px;
 }
 
@@ -16,6 +22,7 @@ h1 {
     flex-direction: column;
     align-items: center;
     margin: 20px;
+    opacity: 0.9;
 }
 
 .event {

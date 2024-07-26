@@ -1,5 +1,8 @@
+// Word_of_the_day.js
+
 document.addEventListener('DOMContentLoaded', function() {
     loadDailyScripture();
+    loadPostedScriptures();
 
     // Open modal to post scripture
     var postLink = document.getElementById('postLink');
@@ -28,14 +31,15 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
 
         var scriptureText = document.getElementById('scriptureText').value.trim();
+        var username = document.getElementById('username').value.trim();
 
-        if (scriptureText === '') {
-            alert('Please enter a scripture.');
+        if (scriptureText === '' || username === '') {
+            alert('Please enter both username and scripture.');
             return;
         }
 
         // Save scripture (for demo purposes, using localStorage)
-        saveScripture(scriptureText);
+        saveScripture(scriptureText, username);
 
         // Clear form
         scriptureForm.reset();
@@ -43,19 +47,20 @@ document.addEventListener('DOMContentLoaded', function() {
         // Close modal
         modal.style.display = 'none';
 
-        // Reload daily scripture
-        loadDailyScripture();
+        // Reload posted scriptures
+        loadPostedScriptures();
     });
 
     // Function to save scripture (for demo purposes, using localStorage)
-    function saveScripture(scriptureText) {
+    function saveScripture(scriptureText, username) {
         // Get existing scriptures from localStorage or initialize an empty array
         var scriptures = JSON.parse(localStorage.getItem('scriptures')) || [];
 
         // Add new scripture to the array
         var newScripture = {
             scripture_text: scriptureText,
-            date: new Date().toLocaleDateString()
+            username: username,
+            date: new Date().toLocaleString()
         };
         scriptures.push(newScripture);
 
@@ -81,68 +86,55 @@ document.addEventListener('DOMContentLoaded', function() {
         if (todaysScripture) {
             dailyScriptureDiv.innerHTML = "<p>" + todaysScripture.scripture_text + "</p>";
         } else {
-            dailyScriptureDiv.innerHTML = "No scripture found for today.";
+            dailyScriptureDiv.innerHTML = "Believe in the power of your voice and the depth of your insights. Your words have the potential to touch hearts, ignite faith, and bring hope. Trust in the wisdom you've gained through your journey and share it with courage and compassion. Your sincerity and authenticity will resonate with those who are listening, bringing light and understanding into their lives. Embrace this opportunity to inspire and uplift others in your religious community. You have something unique and valuable to offer. Shine brightly, and let your faith guide you as you share your profound message.";
         }
     }
-});
-const express = require('express');
-const bodyParser = require('body-parser');
-const mysql = require('mysql');
 
-const app = express();
-const port = 3000;
+    // Function to load posted scriptures
+    function loadPostedScriptures() {
+        // Get posted scriptures from localStorage or initialize an empty array
+        var scriptures = JSON.parse(localStorage.getItem('scriptures')) || [];
 
-// MySQL connection config
-const dbConfig = {
-    host: 'localhost',
-    user: 'root',
-    password: 'Gwacela30#',
-    database: 'church_app_database'
-};
+        // Sort scriptures by date (most recent first)
+        scriptures.sort(function(a, b) {
+            return new Date(b.date) - new Date(a.date);
+        });
 
-// Create MySQL connection pool
-const pool = mysql.createPool(dbConfig);
+        // Display posted scriptures
+        var postScriptureDiv = document.getElementById('postScripture');
+        postScriptureDiv.innerHTML = ''; // Clear previous content
 
-// Middleware
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+        scriptures.forEach(function(scripture) {
+            var postItem = document.createElement('div');
+            postItem.classList.add('post-item');
 
-// Route to get daily scripture
-app.get('/api/daily-scripture', (req, res) => {
-    const today = new Date().toLocaleDateString();
-    const sql = `SELECT scripture_text FROM scriptures WHERE DATE(date) = CURDATE()`;
+            var content = "<p>" + scripture.scripture_text + "</p>";
+            content += "<div class='post-info'>Posted by " + scripture.username + " on " + scripture.date + "</div>";
+            content += "<button class='delete-btn' data-id='" + scriptures.indexOf(scripture) + "'>Delete</button>";
 
-    pool.query(sql, (err, results) => {
-        if (err) {
-            console.error(err);
-            res.status(500).send('Error fetching daily scripture');
-        } else {
-            if (results.length > 0) {
-                res.json(results[0]);
-            } else {
-                res.status(404).send('No scripture found for today');
-            }
-        }
-    });
-});
+            postItem.innerHTML = content;
+            postScriptureDiv.appendChild(postItem);
 
-// Route to post scripture
-app.post('/api/post-scripture', (req, res) => {
-    const scriptureText = req.body.scripture_text;
-    const sql = `INSERT INTO scriptures (scripture_text, date) VALUES (?, CURDATE())`;
-    const values = [scriptureText];
+            // Add event listener to delete button
+            var deleteBtn = postItem.querySelector('.delete-btn');
+            deleteBtn.addEventListener('click', function() {
+                deleteScripture(scriptures.indexOf(scripture));
+            });
+        });
+    }
 
-    pool.query(sql, values, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(500).send('Error posting scripture');
-        } else {
-            res.send('Scripture posted successfully!');
-        }
-    });
-});
+    // Function to delete a scripture
+    function deleteScripture(index) {
+        // Get scriptures from localStorage
+        var scriptures = JSON.parse(localStorage.getItem('scriptures')) || [];
 
-// Start server
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+        // Remove the scripture at the specified index
+        scriptures.splice(index, 1);
+
+        // Save updated scriptures back to localStorage
+        localStorage.setItem('scriptures', JSON.stringify(scriptures));
+
+        // Reload posted scriptures
+        loadPostedScriptures();
+    }
 });

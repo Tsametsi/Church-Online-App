@@ -1,3 +1,4 @@
+<!-- Word_of_the_day.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,8 +13,6 @@
             <h1>Word of the Day</h1>
             <nav>
                 <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="word_of_the_day.html">Word of the Day</a></li>
                     <li><a href="#" id="postLink">Post a Scripture</a></li>
                 </ul>
             </nav>
@@ -25,6 +24,15 @@
             <h2>Daily Scripture</h2>
             <div id="dailyScripture">
                 <!-- Daily scripture will be loaded dynamically here -->
+            </div>
+        </div>
+    </section>
+
+    <section class="post-section">
+        <div class="container">
+            <h2>Post a Scripture</h2>
+            <div id="postScripture">
+                <!-- Scriptures posted by users will be displayed here -->
             </div>
         </div>
     </section>
@@ -41,6 +49,8 @@
             <h2>Post Your Scripture</h2>
             <form id="scriptureForm">
                 <textarea id="scriptureText" name="scripture_text" rows="6" placeholder="Enter your scripture here..." required></textarea>
+                <br>
+                <input type="text" id="username" name="username" placeholder="Your Username" required>
                 <br>
                 <input type="submit" value="Post Scripture">
             </form>
