@@ -9,7 +9,7 @@
 <body>
     <div class="signup-container">
         <h2>Sign Up</h2>
-        <form action="/signup" method="POST">
+        <form id="signup-form" action="/signup" method="POST">
             <div class="form-group">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" required>
@@ -22,9 +22,38 @@
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
             </div>
+            <div class="form-group">
+                <label for="church">Church:</label>
+                <select id="church" name="church_id" required>
+                    <option value="">Select your church</option>
+                    <!-- Options will be populated dynamically -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="branch">Branch Name:</label>
+                <input type="text" id="branch" name="branch_name" required>
+            </div>
             <button type="submit">Sign Up</button>
         </form>
         <a href="/Login.html">Already have an account? Login here.</a>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const churchSelect = document.getElementById('church');
+
+            fetch('/api/churches')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(church => {
+                        const option = document.createElement('option');
+                        option.value = church.id; // Use church id as the value
+                        option.textContent = church.name; // Display church name
+                        churchSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching churches:', error));
+        });
+    </script>
 </body>
 </html>

@@ -20,7 +20,7 @@ const io = socketIo(server);
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Irene@441',
+    password: 'Gwacela30#',
     database: 'church_app_database'
 });
 
@@ -38,6 +38,15 @@ app.use(bodyParser.json());
 
 // Serve static files (CSS, images, etc.)
 app.use(express.static(__dirname));
+
+// Configure Nodemailer transporter
+const transporter = nodemailer.createTransport({
+    service: 'gmail', // or your email service provider
+    auth: {
+        user: 'your-email@gmail.com',
+        pass: 'your-email-password'
+    }
+});
 
 // Serve pages
 app.get('/Login.html', (req, res) => res.sendFile(__dirname + '/Login.html'));
@@ -72,12 +81,9 @@ app.post('/login', (req, res) => {
         }
     });
 });
-// Redirect root URL to Login.html
-app.get('/', (req, res) => {
-    res.redirect('/Login.html');
-});
 
-// Serve other static files and define other routes as needed...
+// Redirect root URL to Login.html
+app.get('/', (req, res) => res.redirect('/Login.html'));
 
 // Handle logout POST request
 app.post('/logout', (req, res) => {
@@ -95,9 +101,9 @@ app.post('/logout', (req, res) => {
 
 // Handle sign-up POST request
 app.post('/signup', (req, res) => {
-    const { username, password } = req.body;
-    const query = 'INSERT INTO logged_in_users (username, password) VALUES (?, ?)';
-    db.query(query, [username, password], (err) => {
+    const { username, email, password, church_id, branch_name } = req.body;
+    const query = 'INSERT INTO logged_in_users (username, email, password, church_id, branch_name) VALUES (?, ?, ?, ?, ?)';
+    db.query(query, [username, email, password, church_id, branch_name], (err) => {
         if (err) {
             console.error('Error inserting new user:', err);
             res.status(500).send('Server error');
@@ -300,6 +306,7 @@ app.get('/api/products', (req, res) => {
         res.json(results);
     });
 });
+
 // API endpoint to fetch all church executives
 app.get('/api/executives', (req, res) => {
     const query = 'SELECT * FROM executives';
@@ -312,9 +319,20 @@ app.get('/api/executives', (req, res) => {
     });
 });
 
+// Endpoint to get churches
+app.get('/api/churches', (req, res) => {
+    const sql = 'SELECT id, name FROM churches';
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Error fetching churches:', err);
+            return res.status(500).send('Internal server error');
+        }
+        res.json(results);
+    });
+});
+
 // Serve the profile page
 app.get('/executives.html', (req, res) => res.sendFile(__dirname + '/executives.html'));
-
 
 // Start the server
 server.listen(port, () => {

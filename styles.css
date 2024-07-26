@@ -87,6 +87,7 @@ header {
 .menu ul li a:hover {
     background-color: #555;
 }
+
 /* Login and Signup forms */
 .login-container,
 .signup-container {
