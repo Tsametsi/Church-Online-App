@@ -1,15 +1,27 @@
 /* Reset some default styles */
-body, h1, h2, ul, p, input, button {
+h1, h2, ul, p, input, button {
     margin: 0;
     padding: 0;
     box-sizing: border-box; /* Ensure box-sizing consistency */
+    color: #fff; /* Default text color */
 }
 
 /* Basic styling for the entire page */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
+    font-family: 'Arial', sans-serif;
+    background-color: #6e6e6e;
+    background-image: url('Chat_Image.jpg');
+    background-size: cover; /* Ensure the background covers the entire screen */
+    background-repeat: no-repeat;
+    color: #fff; /* Default text color */
+}
+
+/* Center title */
+h1 {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 /* Styling for the chat container */
@@ -17,46 +29,48 @@ body {
     float: left;
     width: 60%;
     margin-left: 5%;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    background-color: rgba(76, 99, 133, 0.9);
+    border: 1px solid #d89140; /* Gold border */
+    border-radius: 10px;
     padding: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     height: 600px; /* Adjust height as needed */
     display: flex;
     flex-direction: column;
 }
 
+/* Message styling */
 .sender {
-    background-color: #367056;
-    color: #fff; /* Text color for sender messages */
+    background-color: rgba(163, 184, 241, 0.9); /* Lighter blue for sender */
+    color: #333; /* Dark text for sender messages */
     text-align: left;
     border-radius: 8px;
     padding: 8px;
     margin: 5px 0;
-    width: 150px;
+    max-width: 70%; /* Set a max width */
+    align-self: flex-start; /* Align sender messages to the left */
 }
 
 .receiver {
-    background-color: #4695ad;
-    color: #fff; /* Text color for receiver messages */
+    background-color: rgba(132, 120, 243, 0.9); /* Lighter purple for receiver */
+    color: #fff; /* White text for receiver messages */
     text-align: right;
     border-radius: 8px;
     padding: 8px;
     margin: 5px 0;
-    width: 150px;
-
+    max-width: 70%; /* Set a max width */
+    align-self: flex-end; /* Align receiver messages to the right */
 }
 
 /* Styling for the user list container */
 #users {
     float: left;
     width: 20%;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    background-color: rgba(7, 43, 160, 0.9); /* Dark blue background */
+    border: 1px solid #d89140; /* Gold border */
+    border-radius: 10px;
     padding: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     height: 600px; /* Adjust height as needed */
     overflow-y: auto;
 }
@@ -68,21 +82,22 @@ body {
 }
 
 #user-list li {
-    padding: 8px;
+    padding: 10px;
     cursor: pointer;
-    border-bottom: 1px solid #d89140;
+    border-bottom: 1px solid #d89140; /* Gold border */
     border-radius: 4px;
     transition: background-color 0.3s;
 }
 
 #user-list li:hover {
-    background-color: #f0f0f0;
+    background-color: rgba(255, 215, 0, 0.3); /* Gold on hover */
+    color: #fff; /* Keep text white on hover */
 }
 
 /* Styling for chat header */
 #chat h2 {
     margin-bottom: 10px;
-    font-size: 1.2em;
+    font-size: 1.5em;
     text-align: center;
 }
 
@@ -93,6 +108,7 @@ body {
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 10px;
+    background-color: rgba(255, 255, 255, 0.1); /* Light background for message box */
 }
 
 /* Styling for message input */
@@ -100,10 +116,12 @@ body {
     width: calc(100% - 22px); /* Adjust for padding and border */
     height: 50px;
     padding: 10px;
-    margin: 10px;
-    border: 1px solid #ccc;
+    margin: 10px 0;
+    border: 1px solid #d89140; /* Gold border */
     border-radius: 4px;
     font-size: 14px;
+    background-color: rgba(255, 255, 255, 0.3); /* Light input background */
+    color: #fff; /* White text */
 }
 
 /* Styling for send button */
@@ -111,16 +129,17 @@ body {
     width: 80px;
     height: 50px;
     margin: 10px;
-    background-color: #367056;
-    color: #fff;
+    background-color: #d89140; /* Gold background */
+    color: #000; /* Black text */
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
+    transition: background-color 0.3s;
 }
 
 #send-button:hover {
-    background-color: #276043;
+    background-color: rgba(255, 215, 0, 0.8); /* Darker gold on hover */
 }
 
 /* Responsive adjustments */
@@ -130,4 +149,46 @@ body {
         margin: 0;
         float: none;
     }
+}
+
+/* Online indicator styling */
+.online-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: green;
+    border-radius: 50%;
+    margin-left: 5px;
+    vertical-align: middle; /* Align the dot with the text */
+}
+
+/* Additional styling */
+button {
+    font-weight: bold; /* Make buttons bold */
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #d89140; /* Gold on hover for buttons */
+    color: #000; /* Black text on hover */
+}
+/* Back button styles */
+.back-button {
+    position: fixed; /* Change to fixed to keep it in the same spot when scrolling */
+    top: 20px; /* Distance from the top */
+    left: 20px; /* Distance from the left */
+    background-color: #000000; /* Button color */
+    color: white; /* Text color */
+    padding: 10px 15px; /* Button padding */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* No underline */
+    font-size: 1rem; /* Font size */
+    transition: background-color 0.3s, transform 0.2s; /* Transition effects */
+    z-index: 1000; /* Ensure it’s on top of other elements */
+}
+
+.back-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly grow button on hover */
 }

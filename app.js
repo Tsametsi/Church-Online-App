@@ -10,6 +10,7 @@ const socketIo = require('socket.io');
 const app = express();
 const port = 3000;
 
+
 // Create HTTP server
 const server = http.createServer(app);
 
@@ -43,8 +44,8 @@ app.use(express.static(__dirname));
 const transporter = nodemailer.createTransport({
     service: 'gmail', // or your email service provider
     auth: {
-        user: 'your-email@gmail.com',
-        pass: 'your-email-password'
+        user: 'followme303030@gmail.com',
+        pass: 'fich ohaw cohm fugc'
     }
 });
 
@@ -59,28 +60,29 @@ app.get('/Chat.html', (req, res) => res.sendFile(__dirname + '/Chat.html'));
 
 // Handle login POST request
 app.post('/login', (req, res) => {
+    console.log('Login request received:', req.body); // Debug log
     const { username, password } = req.body;
+
     const query = 'SELECT * FROM logged_in_users WHERE username = ? AND password = ?';
     db.query(query, [username, password], (err, results) => {
         if (err) {
             console.error('Error querying the database:', err);
-            res.status(500).send('Server error');
-            return;
+            return res.status(500).json({ success: false, message: 'Server error' });
         }
         if (results.length > 0) {
-            // Mark user as logged in
             const updateQuery = 'UPDATE logged_in_users SET logged_in = 1 WHERE username = ?';
             db.query(updateQuery, [username], (err) => {
                 if (err) {
                     console.error('Error updating user login status:', err);
                 }
-                res.json({ success: true, username: results[0].username });
+                return res.json({ success: true, username: results[0].username });
             });
         } else {
-            res.send('Invalid username or password.');
+            return res.status(401).json({ success: false, message: 'Invalid username or password.' });
         }
     });
 });
+
 
 // Redirect root URL to Login.html
 app.get('/', (req, res) => res.redirect('/Login.html'));
@@ -333,6 +335,83 @@ app.get('/api/churches', (req, res) => {
 
 // Serve the profile page
 app.get('/executives.html', (req, res) => res.sendFile(__dirname + '/executives.html'));
+
+
+// Endpoint to get all podcasts
+app.get('/api/podcasts', (req, res) => {
+    const sql = 'SELECT * FROM podcasts';
+    db.query(sql, (err, results) => {
+        if (err) throw err;
+        res.json(results);
+    });
+});
+
+// Endpoint to get all inspirational videos
+app.get('/api/inspirational-videos', (req, res) => {
+    const sql = 'SELECT * FROM inspirational_videos';
+    db.query(sql, (err, results) => {
+        if (err) throw err;
+        res.json(results);
+    });
+});
+
+// Endpoint to like a video
+app.post('/api/inspirational-videos/:id/like', (req, res) => {
+    const videoId = req.params.id;
+    const sql = 'UPDATE inspirational_videos SET likes = likes + 1 WHERE id = ?';
+    db.query(sql, [videoId], (err, result) => {
+        if (err) throw err;
+        res.json({ success: true, message: 'Video liked!' });
+    });
+});
+
+
+
+// Forgot Password Endpoint
+app.post('/forgot-password', (req, res) => {
+    const { email } = req.body;
+
+    // Check if email is provided
+    if (!email) {
+        return res.status(400).json({ success: false, message: 'Email is required.' });
+    }
+
+    // Fetch the user's password from the database based on the email
+    db.query('SELECT password FROM logged_in_users WHERE email = ?', [email], (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ success: false, message: 'Database error.' });
+        }
+
+        // Check if the user exists
+        if (results.length > 0) {
+            const password = results[0].password; // Get the password from the results
+
+            // Prepare email options
+            const mailOptions = {
+                from: 'followme303030@gmail.com', // Replace with your email
+                to: email,
+                subject: 'Password Recovery: Keep you password safe',
+                text: `Your password is: ${password}` // Password sent in the email
+            };
+
+            // Send the email
+            transporter.sendMail(mailOptions, (error) => {
+                if (error) {
+                    console.error('Error sending email:', error);
+                    return res.status(500).json({ success: false, message: 'Error sending email.' });
+                }
+                console.log('Password email sent to:', email);
+                res.json({ success: true, message: 'Password sent to your email!' });
+            });
+        } else {
+            res.json({ success: false, message: 'No user found with this email.' });
+        }
+    });
+});
+
+
+// Start the server
 
 // Start the server
 server.listen(port, () => {

@@ -5,29 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop Online</title>
     <link rel="stylesheet" href="Shop.css">
+    <a href="javascript:history.back()" class="back-button">← Back</a>
+
 </head>
 <body>
     <div class="shop-container">
         <h1>Shop Online</h1>
-        <div id="products"></div>
         <div id="products">
             <!-- Product items will be dynamically added here -->
         </div>
     </div>
+    
     <div id="cart">
         <h2>Cart</h2>
         <ul id="cart-items"></ul>
-        <p>Total Price: $<span id="total-price">0.00</span></p>
+        <p>Total Price: ZAR <span id="total-price">0.00</span></p>
         <form id="paypal-form" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
             <input type="hidden" name="cmd" value="_xclick">
             <input type="hidden" name="business" value="uyebodhldngs@gmail.com"> <!-- Receiver's PayPal email -->
             <input type="hidden" name="item_name" value="Shopping Cart">
             <input type="hidden" name="amount" id="paypal-amount" value="0.00">
-            <input type="hidden" name="currency_code" value="USD">
+            <input type="hidden" name="currency_code" value="ZAR"> 
             <input type="hidden" name="return" value="Home.html"> <!-- Replace with your return URL -->
-            <button type="submit">Checkout</button>
+        </form>
+        <form id="alipay-form" action="/api/alipay" method="post" target="_blank">
+            <input type="hidden" name="amount" id="alipay-amount" value="0.00">
+            <button type="submit">Checkout (Alipay/VodaPay)</button>
         </form>              
     </div>
+
+    <!-- Popup for larger image -->
+    <div id="image-popup" class="popup" style="display: none;">
+        <span class="close" onclick="closePopup()">&times;</span>
+        <img class="popup-image" id="popup-image" src="" alt="Product Image">
+    </div>
+
     <script src="shop.js"></script>
 </body>
 </html>

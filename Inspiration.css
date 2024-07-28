@@ -1,0 +1,137 @@
+/* Reset some default styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #666d7e; /* Light background color */
+    color: #333;
+}
+
+/* Header styles */
+header {
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(to right, #0718ac, #000000); /* Gradient background */
+    color: white;
+    border-bottom: 5px solid #18BC9C; /* Bottom border for exclusivity */
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+p {
+    font-size: 1.2rem;
+}
+
+/* Main content styles */
+main {
+    padding: 20px;
+}
+
+/* Video list styles */
+.video-list {
+    margin: 40px auto;
+    max-width: 800px; /* Limit width for better appearance */
+}
+
+/* Video styles */
+.video {
+    background-color: #4240ac; /* White background for videos */
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 20px;
+    margin: 20px 0;
+    transition: transform 0.3s, box-shadow 0.3s; /* Smooth transitions */
+}
+
+.video:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
+}
+
+.video h3 {
+    color: #f6f6f8; /* Dark color for title */
+    font-size: 1.8rem; /* Increase font size */
+    margin-bottom: 10px;
+}
+
+.likes {
+    font-weight: normal;
+    color: #888; /* Gray color for likes */
+}
+
+/* Button Styles */
+.like-btn {
+    background-color: #030ea8; /* Stylish green */
+    border: none;
+    color: white;
+    padding: 12px 20px; /* Increased padding */
+    font-size: 1rem; /* Larger font size */
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.like-btn:hover {
+    background-color: #0d0aa8; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly grow button on hover */
+}
+
+/* Footer styles */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #000000;
+    color: white;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: 40px;
+}
+
+footer p {
+    margin: 5px 0;
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+    header {
+        padding: 40px 10px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .video {
+        padding: 15px;
+    }
+}
+/* Back button styles */
+.back-button {
+    position: fixed; /* Change to fixed to keep it in the same spot when scrolling */
+    top: 20px; /* Distance from the top */
+    left: 20px; /* Distance from the left */
+    background-color: #000000; /* Button color */
+    color: white; /* Text color */
+    padding: 10px 15px; /* Button padding */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* No underline */
+    font-size: 1rem; /* Font size */
+    transition: background-color 0.3s, transform 0.2s; /* Transition effects */
+    z-index: 1000; /* Ensure it’s on top of other elements */
+}
+
+.back-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly grow button on hover */
+}

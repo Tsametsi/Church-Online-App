@@ -4,7 +4,7 @@ body {
     color: #333;
     margin: 0;
     padding: 20px;
-    background-image: url('5dc3d8d2-751f-4100-9092-b76d12006326.jpg');
+    background-image: url('https://media.istockphoto.com/id/171582219/photo/tithe-and-offering.jpg?s=612x612&w=0&k=20&c=YtiR0pHsL_wuKmYGviXftUXpOoRrfVNxyxaTZM2g8bw=');
     background-size:cover; /* Cover the entire background */
     background-repeat: no-repeat; /* No repeating of background */
     background-attachment: fixed; /* Fixed position */
@@ -15,10 +15,10 @@ body {
 
 h1 {
     text-align: center;
-    color: hsl(170, 100%, 50%);
-    background-color: #333;
-    margin-left: 200px;
-    margin-right: 200px;
+    color: hsl(0, 0%, 100%);
+    background-color: #000000;
+    margin-left: 100px;
+    margin-right: 100px;
 }
 
 form {
@@ -40,7 +40,7 @@ label {
 input[type="number"],
 input[type="text"],
 select {
-    width: 100%;
+    width: 90%;
     padding: 10px;
     padding-right: 15px;
     margin-bottom: 20px;
@@ -76,3 +76,24 @@ button:hover {
     margin-top: 20px;
     text-align: center;
 }
+/* Back button styles */
+.back-button {
+    position: fixed; /* Change to fixed to keep it in the same spot when scrolling */
+    top: 20px; /* Distance from the top */
+    left: 20px; /* Distance from the left */
+    background-color: #000000; /* Button color */
+    color: white; /* Text color */
+    padding: 10px 15px; /* Button padding */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* No underline */
+    font-size: 1rem; /* Font size */
+    transition: background-color 0.3s, transform 0.2s; /* Transition effects */
+    z-index: 1000; /* Ensure it’s on top of other elements */
+}
+
+.back-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly grow button on hover */
+}
+

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Application</title>
-    <link rel="stylesheet" href="Chat.css">
+    <link rel="stylesheet" href="ChatGroup.css">
 </head>
 <body>
     <div id="chat">
@@ -25,9 +25,11 @@
     <div id="group-modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Create Group</h2>
+            <h2>Create/Edit Group</h2>
             <label for="group-name-input">Group Name:</label>
-            <input type="text" id="group-name-input">
+            <input type="text" id="group-name-input" required>
+            <label for="group-description-input">Description:</label>
+            <input type="text" id="group-description-input" placeholder="Enter group description" required>
             <h3>Add Members:</h3>
             <ul id="add-members-list"></ul>
             <button id="add-member-button">Add Selected Members</button>
@@ -36,6 +38,6 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
-    <script src="Chat.js"></script>
+    <script src="ChatGroup.js"></script>
 </body>
 </html>

@@ -1,5 +1,3 @@
-// JavaScript for Chat Application
-
 document.addEventListener('DOMContentLoaded', function() {
     // Socket.IO client-side initialization
     const socket = io();
@@ -17,6 +15,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const addMembersList = document.getElementById('add-members-list');
     const createGroupSubmitButton = document.getElementById('create-group-submit');
 
+    // Assuming you have a way to get the current user's username
+    const currentUsername = 'current_user'; // Replace with actual logic to get current username
+
     // Event listener to open group modal
     createGroupButton.addEventListener('click', function() {
         groupModal.style.display = 'block';
@@ -30,6 +31,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 users.forEach(user => {
                     const li = document.createElement('li');
                     li.textContent = user.username;
+
+                    // Create a green dot if the user is online
+                    if (user.isOnline) {
+                        const onlineIndicator = document.createElement('span');
+                        onlineIndicator.className = 'online-indicator';
+                        li.appendChild(onlineIndicator);
+                    }
+
                     li.setAttribute('data-username', user.username);
                     li.addEventListener('click', function() {
                         this.classList.toggle('selected');
@@ -72,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
         groupModal.style.display = 'none';
     });
 
-    // Function to fetch users from the server (replace with actual API call)
+    // Function to fetch users from the server
     function fetchUsers() {
         return fetch('/api/users')
                 .then(response => {
@@ -81,14 +90,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     return response.json();
                 })
-                .then(users => users)
+                .then(users => {
+                    // Filter out the current user from the list
+                    return users.filter(user => user.username !== currentUsername);
+                })
                 .catch(error => {
                     console.error('Error fetching users:', error);
                     throw error;
                 });
     }
 
-    // Function to display created groups (replace with actual API call)
+    // Function to display created groups
     function displayGroups() {
         fetch('/api/groups') // Replace with actual endpoint to fetch user's groups
             .then(response => {
@@ -120,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize on page load
     displayGroups(); // Display user's groups on load
 
-    // Socket.IO events (replace with actual Socket.IO events as needed)
+    // Socket.IO events
     socket.on('connect', function() {
         console.log('Connected to Socket.IO');
     });
@@ -134,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Handle incoming message (e.g., display in messageBox)
     });
 
-    // Function to send message (replace with actual logic)
+    // Function to send message
     sendButton.addEventListener('click', function() {
         const message = messageInput.value.trim();
         if (message === '') {
@@ -143,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const recipient = ''; // Implement recipient logic
         const attachment = null; // Implement attachment logic
         const data = {
-            username: '', // Implement username logic
+            username: currentUsername, // Use actual current username
             recipient: recipient,
             message: message,
             attachment: attachment

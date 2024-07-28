@@ -9,7 +9,7 @@ body {
 }
 
 header {
-    background-color: #333;
+    background-color:#080808;
     color: #fff;
     text-align: center;
     padding: 10px 0;
@@ -43,7 +43,7 @@ header {
     border-radius: 5px;
     cursor: pointer;
     width: 60%; /* Ensure button takes full width */
-
+    opacity: 0.9;
 }
 
 .options button:hover {

@@ -100,3 +100,23 @@ footer {
     width: 100%;
     height: auto;
 }
+/* Back button styles */
+.back-button {
+    position: absolute;
+    top: 20px; /* Adjust the position */
+    left: 20px; /* Adjust the position */
+    background-color: #4CAF50; /* Button color */
+    color: white; /* Text color */
+    padding: 10px 15px; /* Button padding */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* No underline */
+    font-size: 1rem; /* Font size */
+    transition: background-color 0.3s, transform 0.2s; /* Transition effects */
+    z-index: 1000; /* Ensure it’s on top of other elements */
+}
+
+.back-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly grow button on hover */
+}

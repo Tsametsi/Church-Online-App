@@ -20,31 +20,35 @@
             </div>
             <button type="submit">Login</button>
             <button type="button" onclick="window.location.href='/Signup.html'">Sign Up</button>
-            <button type="button" onclick="window.location.href='/reset-password'">Reset Password</button>
+            <button type="button" onclick="window.location.href='/ForgotPassword.html'">Forgot Password?</button>
         </form>
     </div>
 
-    <script>
+<script>
         document.getElementById('login-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const formData = new FormData(this);
+    event.preventDefault(); // Prevent default form submission
 
-            fetch('/login', {
-                method: 'POST',
-                body: JSON.stringify(Object.fromEntries(formData)),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => response.json())
-              .then(data => {
-                  if (data.success) {
-                      localStorage.setItem('username', data.username);
-                      window.location.href = '/Home.html';
-                  } else {
-                      alert('Invalid username or password.');
-                  }
-              });
-        });
-    </script>
-</body>
+    const formData = new FormData(this);
+    fetch('/login', {
+        method: 'POST',
+        body: JSON.stringify(Object.fromEntries(formData)),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json()) // Ensure response is JSON
+    .then(data => {
+        if (data.success) {
+            localStorage.setItem('username', data.username); // Store username
+            window.location.href = '/Home.html'; // Redirect to Home.html
+        } else {
+            alert(data.message); // Show error message
+        }
+    })
+    .catch(error => {
+        console.error('There was an error with the fetch operation:', error);
+        alert('An error occurred. Please try again.'); // Handle fetch errors
+    });
+});
+</script>
 </html>

@@ -26,17 +26,24 @@ body {
     flex-direction: column;
 }
 
-.sender {
-    background-color: #367056;
-    text-align: left;
+/* Styling for message box */
+#message-box {
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #491f80;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px; /* Space between message box and input */
 }
 
-.receiver {
-    background-color: #4695ad;
-    text-align: right;
+/* Styling for chat header */
+#chat h2 {
+    margin-bottom: 10px;
+    font-size: 1.5em;
+    text-align: center;
 }
 
-/* Styling for the user list container */
+/* Styling for user list container */
 #users {
     float: left;
     width: 20%;
@@ -50,12 +57,12 @@ body {
 }
 
 /* List item styling for users */
-#user-list {
+#user-list, #group-list, #add-members-list {
     list-style-type: none;
     padding: 0;
 }
 
-#user-list li {
+#user-list li, #group-list li, #add-members-list li {
     padding: 8px;
     cursor: pointer;
     border-bottom: 1px solid #d89140;
@@ -63,24 +70,13 @@ body {
     transition: background-color 0.3s;
 }
 
-#user-list li:hover {
+#user-list li:hover, #group-list li:hover, #add-members-list li:hover {
     background-color: #f0f0f0;
 }
 
-/* Styling for chat header */
-#chat h2 {
-    margin-bottom: 10px;
-    font-size: 1.2em;
-    text-align: center;
-}
-
-/* Styling for message box */
-#message-box {
-    height: 300px;
-    overflow-y: auto;
-    border: 1px solid #491f80;
-    border-radius: 4px;
-    padding: 10px;
+/* Active selection styling */
+.selected {
+    background-color: #cce5ff; /* Light blue for selected users */
 }
 
 /* Modal styling */
@@ -93,7 +89,7 @@ body {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.4); /* Overlay background */
+    background-color: rgba(0, 0, 0, 0.4); /* Overlay background */
 }
 
 .modal-content {
@@ -121,18 +117,79 @@ body {
 }
 
 /* Additional styles for group management */
-#group-list {
-    list-style-type: none;
-    padding: 0;
-}
-
 #group-list li {
-    padding: 8px;
-    cursor: pointer;
     border-bottom: 1px solid #ccc;
-    transition: background-color 0.3s;
 }
 
 #group-list li:hover {
     background-color: #f0f0f0;
+}
+
+/* Styles for buttons */
+button {
+    background-color: #491f80; /* Primary button color */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 10px; /* Space above buttons */
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #5a2eab; /* Darker shade on hover */
+}
+
+/* Input field styling */
+input[type="text"], input[type="file"] {
+    width: calc(100% - 22px); /* Full width minus padding */
+    padding: 10px;
+    margin-top: 5px; /* Space above input fields */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Online user indicator */
+.online-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: green; /* Green dot for online users */
+    margin-left: 5px; /* Space between username and dot */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #chat, #users {
+        width: 90%; /* Stack on small screens */
+        margin-left: auto;
+        margin-right: auto;
+        float: none; /* Remove float for mobile */
+    }
+
+    #chat {
+        margin-bottom: 20px; /* Space between chat and users */
+    }
+}
+/* Back button styles */
+.back-button {
+    position: fixed; /* Change to fixed to keep it in the same spot when scrolling */
+    top: 20px; /* Distance from the top */
+    left: 20px; /* Distance from the left */
+    background-color: #000000; /* Button color */
+    color: white; /* Text color */
+    padding: 10px 15px; /* Button padding */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* No underline */
+    font-size: 1rem; /* Font size */
+    transition: background-color 0.3s, transform 0.2s; /* Transition effects */
+    z-index: 1000; /* Ensure it’s on top of other elements */
+}
+
+.back-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly grow button on hover */
 }
