@@ -11,7 +11,7 @@ body {
     line-height: 1.6;
     background-color: #f4f4f4;
     color: #333;
-    background-image: url('WhatsApp Image 2024-07-24 at 12.43.50.jpeg');
+    /*background-image: url('WhatsApp Image 2024-07-24 at 12.43.50.jpeg');*/
     margin: 0;
     background-size: cover; /* Cover the entire background */
     background-repeat: no-repeat; /* No repeating of background */
@@ -26,17 +26,18 @@ body {
 }
 
 header {
-    background: #333;
+    background: #0a0a0a;
     color: #fff;
     padding-top: 30px;
     min-height: 70px;
-    border-bottom: #3dc solid 3px;
+    border-bottom: rgb(199, 165, 12) solid 6px;
 }
 
 header a {
     color: #fff;
     text-decoration: none;
     text-transform: uppercase;
+    text-align: center;
     font-size: 16px;
 }
 
@@ -79,33 +80,35 @@ header h1:hover {
 }
 
 footer {
-    background: #333;
+    background: #0a0a0a;
     color: #fff;
-    text-align: center;
-    padding: 10px;
+    text-align:center;
+    padding: 20px;
     position: absolute;
-    bottom: 0;
+    bottom: -100%;
     width: 100%;
 }
 /* Add this to your existing CSS */
 
 .slideshow-container {
-    max-width: 100%;
+    width: 100%; /* or specific width */
+    height: 600px; /* or whatever height you prefer */
     position: relative;
-    margin-top: 70px; /* Adjust this margin to position the slideshow correctly */
+    margin-top: 70px; /* Adjust as needed */
+    overflow: hidden;
 }
 
 .mySlides {
-    display: none;
     width: 100%;
-    height: auto;
+    height: 100%; /* Ensures the slides fill the container */
 }
+
 /* Back button styles */
 .back-button {
     position: absolute;
     top: 20px; /* Adjust the position */
     left: 20px; /* Adjust the position */
-    background-color: #4CAF50; /* Button color */
+    background-color: #0a0a0a; /* Button color */
     color: white; /* Text color */
     padding: 10px 15px; /* Button padding */
     border: none; /* No border */
@@ -117,6 +120,6 @@ footer {
 }
 
 .back-button:hover {
-    background-color: #45a049; /* Darker green on hover */
+    background-color: #0a0a0a; /* Darker green on hover */
     transform: scale(1.05); /* Slightly grow button on hover */
 }
