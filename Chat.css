@@ -9,9 +9,11 @@ h1, h2, ul, p, input, button {
 /* Basic styling for the entire page */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #6e6e6e;
+   /* background-color: #6e6e6e;
     background-image: url('Chat_Image.jpg');
     background-size: cover; /* Ensure the background covers the entire screen */
+    background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
+    overflow-y: auto; /* Enable vertical scrolling */
     background-repeat: no-repeat;
     color: #fff; /* Default text color */
 }
@@ -139,7 +141,7 @@ h1 {
 }
 
 #send-button:hover {
-    background-color: rgba(255, 215, 0, 0.8); /* Darker gold on hover */
+    background-color: #03274e(255, 215, 0, 0.8); /* Darker gold on hover */
 }
 
 /* Responsive adjustments */
@@ -189,6 +191,6 @@ button:hover {
 }
 
 .back-button:hover {
-    background-color: #45a049; /* Darker green on hover */
+    background-color: #03274e; /* Darker green on hover */
     transform: scale(1.05); /* Slightly grow button on hover */
 }

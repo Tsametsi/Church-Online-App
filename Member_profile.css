@@ -4,13 +4,15 @@ body {
     color: #333;
     margin: 0;
     padding: 0;
-    background-image: url('Image 4.webp'); 
+    /*background-image: url('Image 4.webp'); 
     margin: 0;
     padding: 0;
     background-size: cover; 
     background-repeat: no-repeat; 
     background-attachment: fixed;
-    background-position: center center;
+    background-position: center center;*/
+    background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
+    overflow-y: auto; /* Enable vertical scrolling */
 }
 
 .back-btn {
@@ -152,7 +154,8 @@ body {
     position: fixed; /* Change to fixed to keep it in the same spot when scrolling */
     top: 20px; /* Distance from the top */
     left: 20px; /* Distance from the left */
-    background-color: #4CAF50; /* Button color */
+    background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
+    overflow-y: auto; /* Enable vertical scrolling */
     color: white; /* Text color */
     padding: 10px 15px; /* Button padding */
     border: none; /* No border */
@@ -164,6 +167,7 @@ body {
 }
 
 .back-button:hover {
-    background-color: #45a049; /* Darker green on hover */
+    background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
+    overflow-y: auto; /* Enable vertical scrolling */
     transform: scale(1.05); /* Slightly grow button on hover */
 }

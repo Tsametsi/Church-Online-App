@@ -6,12 +6,17 @@
     <title>Inspirational Videos</title>
     <link rel="stylesheet" href="Inspiration.css">
     <a href="javascript:history.back()" class="back-button">← Back</a>
-
 </head>
 <body>
     <header>
         <h1>Inspirational Videos</h1>
         <p>Your daily dose of motivation!</p>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="text" id="title" placeholder="Title" required>
+            <input type="text" id="description" placeholder="Description" required>
+            <input type="file" id="videoFile" accept="video/*" required>
+            <button type="submit">Upload Video</button>
+        </form>
     </header>
 
     <main>
@@ -26,6 +31,6 @@
     </footer>
 
     <script src="script.js"></script>
-    <script src="Inspiration.js"></script> <!-- New script for the inspiration page -->
+    <script src="Inspiration.js"></script>
 </body>
 </html>

@@ -3,13 +3,12 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #6284c2;
+    background: linear-gradient(to bottom, #ffffff, #0956b9); /* White to blue gradient */
     overflow-y: auto; /* Enable vertical scrolling */
-
 }
 
 header {
-    background-color:#080808;
+    background-color: #000000;
     color: #fff;
     text-align: center;
     padding: 10px 0;
@@ -19,6 +18,7 @@ header {
     left: 0;
     z-index: 1000; /* Ensure it's above other content */
 }
+
 .home-container {
     padding-top: 50px; /* Adjust padding to accommodate fixed header */
     background-color: transparent;
@@ -27,34 +27,37 @@ header {
     margin: 0 auto; /* Centering the container horizontally */
 }
 
-
 .options {
-    text-align: center;
-    margin: 10%;
+    display: grid; /* Use CSS Grid for layout */
+    grid-template-columns: repeat(2, 1fr); /* Two columns of equal width */
+    gap: 20px; /* Space between buttons */
+    margin: 10%; /* Margin around the options */
 }
 
 .options button {
+    display: flex; /* Ensure buttons use flexbox */
+    flex-direction: column; /* Align text vertically */
+    align-items: center; /* Center text horizontally */
     padding: 20px 40px; /* Increase padding to make buttons larger */
-    margin: 6px;
     font-size: 18px; /* Increase font size for better readability */
-    background-color: #080808;
+    background-color: #0956b9;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    width: 60%; /* Ensure button takes full width */
+    width: 100%; /* Ensure buttons take full width of the grid cell */
     opacity: 0.9;
+    transition: background-color 0.3s; /* Smooth background color change */
 }
 
 .options button:hover {
-    background-color: #0056b3;
+    background-color: #03274e;
 }
 
 .logout-container {
     position: fixed;
     top: 20px;
     right: 20px;
-    
 }
 
 .logout-btn {
@@ -82,7 +85,7 @@ header {
     position: absolute;
     top: 50px; /* Adjust as needed */
     right: 10px; /* Adjust as needed */
-    background-color: #333;
+    background-color: #0956b9;
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -111,11 +114,5 @@ header {
 }
 
 .menu ul li a:hover {
-    background-color: #555;
+    background-color: #0956b9;
 }
-
-
-
-
-
-

@@ -105,7 +105,7 @@ footer {
     position: absolute;
     top: 20px; /* Adjust the position */
     left: 20px; /* Adjust the position */
-    background-color: #4CAF50; /* Button color */
+    background-color: #03274e; /* Button color */
     color: white; /* Text color */
     padding: 10px 15px; /* Button padding */
     border: none; /* No border */
@@ -117,6 +117,6 @@ footer {
 }
 
 .back-button:hover {
-    background-color: #45a049; /* Darker green on hover */
+    background-color: #03274e; /* Darker green on hover */
     transform: scale(1.05); /* Slightly grow button on hover */
 }

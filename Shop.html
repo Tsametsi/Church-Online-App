@@ -5,14 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop Online</title>
     <link rel="stylesheet" href="Shop.css">
-    <a href="javascript:history.back()" class="back-button">← Back</a>
-
 </head>
 <body>
+    <a href="javascript:history.back()" class="back-button">← Back</a>
     <div class="shop-container">
         <h1>Shop Online</h1>
-        <div id="products">
-            <!-- Product items will be dynamically added here -->
+
+        <div class="category">
+            <h2>Music Instruments</h2>
+            <div class="product">
+                <img class="product-image" src="feb041f2-5fc9-4e35-b07f-179523fd8174.jpg" alt="Music Instruments">
+                <div class="product-info">
+                    <h3>Music Instruments</h3>
+                    <p>Price: ZAR 100.00</p>
+                    <button onclick="addToCart('Music Instruments', 100.00)">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product">
+                <img class="product-image" src="feb041f2-5fc9-4e35-b07f-179523fd8174.jpg" alt="Music Instruments">
+                <div class="product-info">
+                    <h3>Music Instruments</h3>
+                    <p>Price: ZAR 100.00</p>
+                    <button onclick="addToCart('Music Instruments', 100.00)">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="category">
+            <h2>Books</h2>
+            <div class="product">
+                <img class="product-image" src="f2fe57b0-30ae-4106-a88c-0b0087df36f0.jpg" alt="Book">
+                <div class="product-info">
+                    <h3>Book</h3>
+                    <p>Price: ZAR 150.00</p>
+                    <button onclick="addToCart('Book', 150.00)">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product">
+                <img class="product-image" src="f2fe57b0-30ae-4106-a88c-0b0087df36f0.jpg" alt="Book">
+                <div class="product-info">
+                    <h3>Book</h3>
+                    <p>Price: ZAR 150.00</p>
+                    <button onclick="addToCart('Book', 150.00)">Add to Cart</button>
+                </div>
+            </div>
         </div>
     </div>
     

@@ -10,7 +10,6 @@ const socketIo = require('socket.io');
 const app = express();
 const port = 3000;
 
-
 // Create HTTP server
 const server = http.createServer(app);
 
@@ -21,7 +20,7 @@ const io = socketIo(server);
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Gwacela30#',
+    password: 'Lookyard75',
     database: 'church_app_database'
 });
 
@@ -50,19 +49,20 @@ const transporter = nodemailer.createTransport({
 });
 
 // Serve pages
-app.get('/Login.html', (req, res) => res.sendFile(__dirname + '/Login.html'));
-app.get('/Signup.html', (req, res) => res.sendFile(__dirname + '/Signup.html'));
-app.get('/Home.html', (req, res) => res.sendFile(__dirname + '/Home.html'));
-app.get('/Shop.html', (req, res) => res.sendFile(__dirname + '/Shop.html'));
-app.get('/Events.html', (req, res) => res.sendFile(__dirname + '/Events.html'));
-app.get('/Donations.html', (req, res) => res.sendFile(__dirname + '/Donations.html'));
-app.get('/Chat.html', (req, res) => res.sendFile(__dirname + '/Chat.html'));
+app.get('/Login.html', (req, res) => res.sendFile(path.join(__dirname, 'Login.html')));
+app.get('/Signup.html', (req, res) => res.sendFile(path.join(__dirname, 'Signup.html')));
+app.get('/Home.html', (req, res) => res.sendFile(path.join(__dirname, 'Home.html')));
+app.get('/Shop.html', (req, res) => res.sendFile(path.join(__dirname, 'Shop.html')));
+app.get('/Events.html', (req, res) => res.sendFile(path.join(__dirname, 'Events.html')));
+app.get('/Donations.html', (req, res) => res.sendFile(path.join(__dirname, 'Donations.html')));
+app.get('/Chat.html', (req, res) => res.sendFile(path.join(__dirname, 'Chat.html')));
+
+// Redirect root URL to Login.html
+app.get('/', (req, res) => res.redirect('/Login.html'));
 
 // Handle login POST request
 app.post('/login', (req, res) => {
-    console.log('Login request received:', req.body); // Debug log
     const { username, password } = req.body;
-
     const query = 'SELECT * FROM logged_in_users WHERE username = ? AND password = ?';
     db.query(query, [username, password], (err, results) => {
         if (err) {
@@ -83,10 +83,6 @@ app.post('/login', (req, res) => {
     });
 });
 
-
-// Redirect root URL to Login.html
-app.get('/', (req, res) => res.redirect('/Login.html'));
-
 // Handle logout POST request
 app.post('/logout', (req, res) => {
     const { username } = req.body;
@@ -94,8 +90,7 @@ app.post('/logout', (req, res) => {
     db.query(query, [username], (err) => {
         if (err) {
             console.error('Error updating user logout status:', err);
-            res.status(500).send('Server error');
-            return;
+            return res.status(500).send('Server error');
         }
         res.sendStatus(200);
     });
@@ -108,8 +103,7 @@ app.post('/signup', (req, res) => {
     db.query(query, [username, email, password, church_id, branch_name], (err) => {
         if (err) {
             console.error('Error inserting new user:', err);
-            res.status(500).send('Server error');
-            return;
+            return res.status(500).send('Server error');
         }
         res.redirect('/Login.html');
     });
@@ -119,13 +113,11 @@ app.post('/signup', (req, res) => {
 app.post('/submit-prayer-request', (req, res) => {
     const { name, email, prayer_request } = req.body;
     const pastorEmail = "eyethugwacela457@gmail.com";
-
     const query = 'INSERT INTO prayer_request (name, email, prayer_request, pastor_email) VALUES (?, ?, ?, ?)';
     db.query(query, [name, email, prayer_request, pastorEmail], (err) => {
         if (err) {
             console.error('Error inserting prayer request:', err);
-            res.status(500).send('Internal server error');
-            return;
+            return res.status(500).send('Internal server error');
         }
 
         const mailOptions = {
@@ -138,10 +130,9 @@ app.post('/submit-prayer-request', (req, res) => {
         transporter.sendMail(mailOptions, (error) => {
             if (error) {
                 console.error('Error sending email:', error);
-                res.status(500).send('Internal server error');
-            } else {
-                res.redirect('/Home.html');
+                return res.status(500).send('Internal server error');
             }
+            res.redirect('/Home.html');
         });
     });
 });
@@ -154,8 +145,7 @@ app.put('/api/events/:id/notification', (req, res) => {
     db.query(query, [notification_on, id], (err) => {
         if (err) {
             console.error('Error updating notification status:', err);
-            res.status(500).send('Internal server error');
-            return;
+            return res.status(500).send('Internal server error');
         }
         res.json({ success: true });
     });
@@ -211,9 +201,7 @@ app.post('/api/chat/send', multer({
 }).single('attachment'), (req, res) => {
     const { username, recipient, message } = req.body;
     const attachment = req.file ? `/uploads/${req.file.filename}` : null;
-
     const query = 'INSERT INTO chat_messages (username, recipient, message, attachment) VALUES (?, ?, ?, ?)';
-
     db.query(query, [username, recipient, message, attachment], (err, result) => {
         if (err) {
             console.error('Error inserting chat message:', err);
@@ -254,7 +242,7 @@ app.post('/donate', async (req, res) => {
             amount: amount * 100,
             currency: currency,
             description: description,
-            payment_method_types: ['alipay'],
+            payment_method_types: ['card'],
         });
 
         const query = 'INSERT INTO donations (amount, currency, description, status) VALUES (?, ?, ?, ?)';
@@ -278,6 +266,7 @@ io.on('connection', (socket) => {
 
     // Join chat room
     socket.on('join', (username) => {
+        socket.username = username;
         socket.join(username);
         // Broadcast login status
         socket.broadcast.emit('user_status', { username, status: 'online' });
@@ -334,14 +323,16 @@ app.get('/api/churches', (req, res) => {
 });
 
 // Serve the profile page
-app.get('/executives.html', (req, res) => res.sendFile(__dirname + '/executives.html'));
-
+app.get('/executives.html', (req, res) => res.sendFile(path.join(__dirname, 'executives.html')));
 
 // Endpoint to get all podcasts
 app.get('/api/podcasts', (req, res) => {
     const sql = 'SELECT * FROM podcasts';
     db.query(sql, (err, results) => {
-        if (err) throw err;
+        if (err) {
+            console.error('Error querying podcasts:', err);
+            return res.status(500).send('Internal server error');
+        }
         res.json(results);
     });
 });
@@ -350,7 +341,10 @@ app.get('/api/podcasts', (req, res) => {
 app.get('/api/inspirational-videos', (req, res) => {
     const sql = 'SELECT * FROM inspirational_videos';
     db.query(sql, (err, results) => {
-        if (err) throw err;
+        if (err) {
+            console.error('Error querying inspirational videos:', err);
+            return res.status(500).send('Internal server error');
+        }
         res.json(results);
     });
 });
@@ -360,12 +354,13 @@ app.post('/api/inspirational-videos/:id/like', (req, res) => {
     const videoId = req.params.id;
     const sql = 'UPDATE inspirational_videos SET likes = likes + 1 WHERE id = ?';
     db.query(sql, [videoId], (err, result) => {
-        if (err) throw err;
+        if (err) {
+            console.error('Error liking video:', err);
+            return res.status(500).send('Internal server error');
+        }
         res.json({ success: true, message: 'Video liked!' });
     });
 });
-
-
 
 // Forgot Password Endpoint
 app.post('/forgot-password', (req, res) => {
@@ -391,7 +386,7 @@ app.post('/forgot-password', (req, res) => {
             const mailOptions = {
                 from: 'followme303030@gmail.com', // Replace with your email
                 to: email,
-                subject: 'Password Recovery: Keep you password safe',
+                subject: 'Password Recovery',
                 text: `Your password is: ${password}` // Password sent in the email
             };
 
@@ -409,9 +404,6 @@ app.post('/forgot-password', (req, res) => {
         }
     });
 });
-
-
-// Start the server
 
 // Start the server
 server.listen(port, () => {

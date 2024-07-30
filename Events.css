@@ -3,11 +3,13 @@ body {
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
-    background-image: url('WhatsApp Image 2024-07-24 at 12.43.50.jpeg');
+    /*background-image: url('WhatsApp Image 2024-07-24 at 12.43.50.jpeg');
     background-size: cover; /* Cover the entire background */
-    background-repeat: no-repeat; /* No repeating of background */
-    background-attachment: fixed; /* Fixed position */
-    background-position: center center; /* Center the background */
+    /*background-repeat: no-repeat; /* No repeating of background */
+    /*background-attachment: fixed; /* Fixed position */
+    /*background-position: center center; /* Center the background */
+    background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
+    overflow-y: auto; /* Enable vertical scrolling */   
 
 }
 
@@ -46,7 +48,7 @@ h1 {
 }
 
 .event a {
-    color: #0066cc;
+    color: #03274e;
     text-decoration: none;
 }
 
@@ -72,7 +74,8 @@ button:hover {
     position: fixed; /* Change to fixed to keep it in the same spot when scrolling */
     top: 20px; /* Distance from the top */
     left: 20px; /* Distance from the left */
-    background-color: #4CAF50; /* Button color */
+    background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
+    overflow-y: auto; /* Enable vertical scrolling */
     color: white; /* Text color */
     padding: 10px 15px; /* Button padding */
     border: none; /* No border */
@@ -84,6 +87,7 @@ button:hover {
 }
 
 .back-button:hover {
-    background-color: #45a049; /* Darker green on hover */
+    background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
+    overflow-y: auto; /* Enable vertical scrolling */
     transform: scale(1.05); /* Slightly grow button on hover */
 }

@@ -1,6 +1,7 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #161414;
+    background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
+    overflow-y: auto; /* Enable vertical scrolling */
     margin: 0;
     padding: 0;
     opacity: 0.9;
@@ -18,13 +19,21 @@ h1 {
     margin-bottom: 30px;
 }
 
+.category {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 24px;
+    color: #007bff; /* Stylish color for category titles */
+}
+
 .product {
     border: 1px solid #3b0ce6;
     padding: 10px;
     margin: 10px;
     display: inline-block;
     width: 200px; /* Fixed width for product */
-    height: 380px; /* Adjusted height for better layout */
+    height: 300px; /* Adjusted height for better layout */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
     overflow: hidden; /* Hide overflow */
@@ -44,10 +53,10 @@ h1 {
     border-radius: 8px; /* Rounded corners for images */
 }
 
-.product h2 {
+.product h3 {
     font-size: 16px;
     margin: 10px 0;
-    color: #007bff; /* Stylish color for product title */
+    color: #333; /* Stylish color for product title */
 }
 
 .product p {
@@ -164,12 +173,14 @@ button:hover {
 .close:hover {
     color: #ffcc00; /* Highlight close button on hover */
 }
+
 /* Back button styles */
 .back-button {
     position: fixed; /* Change to fixed to keep it in the same spot when scrolling */
     top: 20px; /* Distance from the top */
     left: 20px; /* Distance from the left */
-    background-color: #000000; /* Button color */
+    background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
+    overflow-y: auto; /* Enable vertical scrolling */
     color: white; /* Text color */
     padding: 10px 15px; /* Button padding */
     border: none; /* No border */
