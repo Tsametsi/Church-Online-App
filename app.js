@@ -20,7 +20,7 @@ const io = socketIo(server);
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Lookyard75',
+    password: 'Irene@441',
     database: 'church_app_database'
 });
 

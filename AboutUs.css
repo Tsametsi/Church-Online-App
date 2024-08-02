@@ -108,11 +108,7 @@ footer {
     position: absolute;
     top: 20px; /* Adjust the position */
     left: 20px; /* Adjust the position */
-<<<<<<< HEAD
     background-color: #03274e; /* Button color */
-=======
-    background-color: #0a0a0a; /* Button color */
->>>>>>> 82ad268f5a2ff430bd8cedd72f2ff8216339aad6
     color: white; /* Text color */
     padding: 10px 15px; /* Button padding */
     border: none; /* No border */
@@ -124,10 +120,6 @@ footer {
 }
 
 .back-button:hover {
-<<<<<<< HEAD
     background-color: #03274e; /* Darker green on hover */
-=======
-    background-color: #0a0a0a; /* Darker green on hover */
->>>>>>> 82ad268f5a2ff430bd8cedd72f2ff8216339aad6
     transform: scale(1.05); /* Slightly grow button on hover */
 }

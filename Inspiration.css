@@ -117,21 +117,20 @@ footer p {
 }
 /* Back button styles */
 .back-button {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    background-color: #000000;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 1rem;
-    transition: background-color 0.3s, transform 0.2s;
-    z-index: 1000;
+    position: fixed; /* Change to fixed to keep it in the same spot when scrolling */
+    top: 20px; /* Distance from the top */
+    left: 20px; /* Distance from the left */
+    background-color: #000000; /* Button color */
+    color: white; /* Text color */
+    padding: 10px 15px; /* Button padding */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* No underline */
+    font-size: 1rem; /* Font size */
+    transition: background-color 0.3s, transform 0.2s; /* Transition effects */
+    z-index: 1000; /* Ensure it’s on top of other elements */
 }
-
 .back-button:hover {
-    background-color: #45a049;
-    transform: scale(1.05);
+    background-color: #0d0aa8; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly grow button on hover */
 }

@@ -135,8 +135,9 @@ button {
     margin-right: 10px;
 }
 
-button:hover {
-    background-color: #03274e;
+.back-button:hover {
+    background-color: #03274e; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly grow button on hover */
 }
 
 /* Home and Prayer Request pages */
