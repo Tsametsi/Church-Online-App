@@ -56,6 +56,7 @@ app.get('/Shop.html', (req, res) => res.sendFile(path.join(__dirname, 'Shop.html
 app.get('/Events.html', (req, res) => res.sendFile(path.join(__dirname, 'Events.html')));
 app.get('/Donations.html', (req, res) => res.sendFile(path.join(__dirname, 'Donations.html')));
 app.get('/Chat.html', (req, res) => res.sendFile(path.join(__dirname, 'Chat.html')));
+app.get('/Channel.html', (req, res) => res.sendFile(path.join(__dirname, 'Channel.html')));
 
 // Redirect root URL to Login.html
 app.get('/', (req, res) => res.redirect('/Login.html'));
@@ -402,6 +403,128 @@ app.post('/forgot-password', (req, res) => {
         } else {
             res.json({ success: false, message: 'No user found with this email.' });
         }
+    });
+});
+
+
+
+// Create a table for messages if it doesn't exist
+db.query(`
+    CREATE TABLE IF NOT EXISTS messages (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        text VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+`, (err) => {
+    if (err) throw err;
+});
+
+// Routes
+// Get all messages
+app.get('/api/messages', (req, res) => {
+    db.query('SELECT * FROM messages ORDER BY created_at ASC', (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
+    });
+});
+
+// Create a new message
+app.post('/api/messages', (req, res) => {
+    const { text } = req.body;
+    db.query('INSERT INTO messages (text) VALUES (?)', [text], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.status(201).json({ id: results.insertId, text });
+    });
+});
+
+// API endpoint to fetch all channels
+app.get('/api/channels', (req, res) => {
+    db.query('SELECT * FROM channels ORDER BY created_at ASC', (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
+    });
+});
+
+// API endpoint to create a new channel
+app.post('/api/channels', (req, res) => {
+    const { name } = req.body;
+    db.query('INSERT INTO channels (name) VALUES (?)', [name], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.status(201).json({ success: true, id: results.insertId, name });
+    });
+});
+
+// API endpoint to fetch messages for a specific channel
+app.get('/api/channels/:id/channel_messages', (req, res) => {
+    const channelId = req.params.id;
+    db.query('SELECT * FROM channel_messages WHERE channel_id = ? ORDER BY created_at ASC', [channelId], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
+    });
+});
+
+// API endpoint to send a message to a channel
+app.post('/api/channels/:id/channel_messages', (req, res) => {
+    const channelId = req.params.id;
+    const { username, message } = req.body;
+    db.query('INSERT INTO channel_messages (channel_id, username, message) VALUES (?, ?, ?)', [channelId, username, message], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.status(201).json({ success: true, id: results.insertId, message });
+    });
+});
+
+// API endpoint to send a message to a specific channel
+app.post('/api/channels/:id/channel_messages', (req, res) => {
+    const channelId = req.params.id;
+    const { username, message } = req.body;
+
+    // Insert the message into the channel_messages table
+    db.query('INSERT INTO channel_messages (channel_id, username, message) VALUES (?, ?, ?)', [channelId, username, message], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+
+        // Optionally emit the message to the channel via Socket.IO
+        io.to(channelId).emit('new_channel_message', {
+            id: results.insertId,
+            channelId,
+            username,
+            message
+        });
+
+        res.status(201).json({ success: true, id: results.insertId, message });
+    });
+});
+
+
+// API endpoint to add users to a channel
+app.post('/api/channels/:id/members', (req, res) => {
+    const channelId = req.params.id;
+    const { userIds } = req.body; // Expecting an array of user IDs
+
+    const queries = userIds.map(userId => {
+        return new Promise((resolve, reject) => {
+            db.query('INSERT INTO channel_members (channel_id, user_id) VALUES (?, ?)', [channelId, userId], (err, results) => {
+                if (err) reject(err);
+                else resolve(results);
+            });
+        });
+    });
+
+    Promise.all(queries)
+        .then(() => res.status(201).json({ success: true }))
+        .catch(err => {
+            console.error('Error adding users to channel:', err);
+            res.status(500).json({ error: 'Internal server error' });
+        });
+});
+
+// API endpoint to fetch users for multi-select
+app.get('/api/users', (req, res) => {
+    db.query('SELECT id, username FROM logged_in_users', (err, results) => {
+        if (err) {
+            console.error('Error querying users:', err);
+            return res.status(500).send('Internal server error');
+        }
+        res.json(results);
     });
 });
 

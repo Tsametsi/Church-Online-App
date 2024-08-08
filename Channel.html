@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Channels</title>
+    <link rel="stylesheet" href="ChatGroup.css">
+</head>
+<body>
+    <div class="channel-container">
+        <header>
+            <h1>Channels</h1>
+        </header>
+
+        <select id="channelSelect">
+            <option value="">Select a channel</option>
+        </select>
+
+        <div class="create-channel">
+            <h2>Create a New Channel</h2>
+            <input type="text" id="channelName" placeholder="Channel Name" required>
+            <button id="createChannelButton">Create Channel</button>
+        </div>
+
+                <!-- Add a multi-select dropdown for users -->
+        <div class="add-users-to-channel">
+            <h2>Add Users to Channel</h2>
+            <select id="userSelect" multiple>
+                <!-- Dynamically populated users will go here -->
+            </select>
+            <button id="addUsersButton">Add Users</button>
+        </div>
+
+
+        <div class="channel-list">
+            <h2>Select a Channel</h2>
+            <ul id="channelList">
+                <!-- Dynamically populated channels will go here -->
+            </ul>
+        </div>
+
+        <div class="message-section">
+            <h2>Send a Message</h2>
+            <input type="text" id="username" placeholder="Your Name" required>
+            <textarea id="messageContent" placeholder="Type your message here..." required></textarea>
+            <button id="sendMessageButton">Send Message</button>
+        </div>
+
+        <div id="messagesContainer">
+            <h2>Messages</h2>
+            <!-- Messages will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <script>
+        const channelList = document.getElementById('channelList');
+        const messagesContainer = document.getElementById('messagesContainer');
+        const sendMessageButton = document.getElementById('sendMessageButton');
+        const createChannelButton = document.getElementById('createChannelButton');
+        const channelSelect = document.getElementById('channelSelect');
+        const userSelect = document.getElementById('userSelect');
+        const addUsersButton = document.getElementById('addUsersButton');
+
+        let selectedChannelId = null; // Variable to store the selected channel ID
+
+        // Fetch channels on page load
+        fetch('/api/channels')
+            .then(response => response.json())
+            .then(channels => {
+                channels.forEach(channel => {
+                    const option = document.createElement('option');
+                    option.value = channel.id;
+                    option.textContent = channel.name;
+                    channelSelect.appendChild(option);
+                });
+            });
+
+        // Add an event listener to fetch messages when a channel is selected
+        channelSelect.addEventListener('change', function() {
+            const channelId = this.value;
+            selectedChannelId = channelId; // Update selected channel ID
+            loadMessages(channelId); // Load messages for the selected channel
+        });
+
+        // Function to fetch channels from the server
+        function fetchChannels() {
+            fetch('/api/channels') // Endpoint to get channels
+                .then(response => response.json())
+                .then(channels => {
+                    channelList.innerHTML = ''; // Clear previous channels
+                    channels.forEach(channel => {
+                        const li = document.createElement('li');
+                        li.textContent = channel.name; // Display channel name
+                        li.dataset.channelId = channel.id; // Store channel ID
+                        channelList.appendChild(li);
+
+                        // Add click event to each channel
+                        li.addEventListener('click', () => {
+                            // Remove 'selected' class from all list items
+                            const allItems = channelList.getElementsByTagName('li');
+                            for (let item of allItems) {
+                                item.classList.remove('selected');
+                            }
+
+                            // Add 'selected' class to the clicked item
+                            li.classList.add('selected');
+                            selectedChannelId = channel.id; // Update selected channel ID
+                            loadMessages(channel.id); // Load messages for the selected channel
+                        });
+                    });
+                });
+        }
+
+        // Load messages for a specific channel
+        function loadMessages(channelId) {
+            fetch(`/api/channels/${channelId}/channel_messages`)
+                .then(response => response.json())
+                .then(messages => {
+                    messagesContainer.innerHTML = ''; // Clear previous messages
+                    messages.forEach(msg => {
+                        const div = document.createElement('div');
+                        div.textContent = `${msg.username}: ${msg.message}`; // Adjusted to `msg.message`
+                        messagesContainer.appendChild(div);
+                    });
+                });
+        }
+
+        // Send message button click event
+        sendMessageButton.addEventListener('click', () => {
+            const username = document.getElementById('username').value;
+            const messageContent = document.getElementById('messageContent').value;
+
+            if (username && messageContent && selectedChannelId) {
+                fetch(`/api/channels/${selectedChannelId}/channel_messages`, { // Updated endpoint
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, message: messageContent }) // Adjusted to match server expectations
+                })
+                .then(response => {
+                    if (response.ok) {
+                        loadMessages(selectedChannelId); // Reload messages after sending
+                        document.getElementById('messageContent').value = ''; // Clear input
+                    } else {
+                        alert('Error sending message.');
+                    }
+                });
+            } else {
+                alert('Please fill in all fields and select a channel.');
+            }
+        });
+
+        // Create channel button click event
+        createChannelButton.addEventListener('click', () => {
+            const channelName = document.getElementById('channelName').value;
+
+            if (channelName) {
+                fetch('/api/channels', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name: channelName })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('channelName').value = ''; // Clear input
+                        fetchChannels(); // Reload channels
+                    } else {
+                        alert('Error creating channel.');
+                    }
+                });
+            } else {
+                alert('Please enter a channel name.');
+            }
+        });
+
+        // Load channels on page load
+        window.onload = () => {
+            fetchChannels();
+        };
+
+
+// Fetch users on page load
+function fetchUsers() {
+    fetch('/api/users')
+        .then(response => response.json())
+        .then(users => {
+            userSelect.innerHTML = ''; // Clear previous users
+            users.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.id;
+                option.textContent = user.username;
+                userSelect.appendChild(option);
+            });
+        });
+}
+
+// Add users to the selected channel
+addUsersButton.addEventListener('click', () => {
+    const selectedOptions = Array.from(userSelect.selectedOptions);
+    const userIds = selectedOptions.map(option => option.value);
+
+    if (selectedChannelId && userIds.length > 0) {
+        fetch(`/api/channels/${selectedChannelId}/members`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userIds })
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Users added to channel successfully!');
+            } else {
+                alert('Error adding users to channel.');
+            }
+        });
+    } else {
+        alert('Please select a channel and at least one user.');
+    }
+});
+
+// Load users on page load
+window.onload = () => {
+    fetchChannels();
+    fetchUsers(); // Load users as well
+};
+    </script>
+</body>
+</html>

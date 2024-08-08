@@ -1,196 +1,101 @@
-/* Reset some default styles */
-body, h1, h2, ul, p, input, button {
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0; /* Light background for the app */
     margin: 0;
     padding: 0;
 }
 
-/* Basic styling for the entire page */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-}
-
-/* Styling for the chat container */
-#chat {
-    float: left;
-    width: 60%;
-    margin-left: 5%;
-    background-color: #fff;
-    border: 1px solid #ddd;
+.channel-container {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #ffffff; /* White background for the container */
     border-radius: 8px;
-    padding: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    height: 600px; /* Adjust height as needed */
-    display: flex;
-    flex-direction: column;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Prevent overflow */
 }
 
-/* Styling for message box */
-#message-box {
-    height: 300px;
-    overflow-y: auto;
-    border: 1px solid #491f80;
-    border-radius: 4px;
-    padding: 10px;
-    margin-bottom: 10px; /* Space between message box and input */
-}
-
-/* Styling for chat header */
-#chat h2 {
-    margin-bottom: 10px;
-    font-size: 1.5em;
+header {
+    background-color: #0078e7; /* Telegram's primary blue color */
+    color: white;
+    padding: 15px;
     text-align: center;
 }
 
-/* Styling for user list container */
-#users {
-    float: left;
-    width: 20%;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    height: 600px; /* Adjust height as needed */
-    overflow-y: auto;
+h1, h2 {
+    margin: 10px 0;
 }
 
-/* List item styling for users */
-#user-list, #group-list, #add-members-list {
-    list-style-type: none;
-    padding: 0;
+.create-channel,
+.add-users-to-channel,
+.message-section,
+.channel-list,
+#messagesContainer {
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0; /* Light border for separation */
 }
 
-#user-list li, #group-list li, #add-members-list li {
-    padding: 8px;
-    cursor: pointer;
-    border-bottom: 1px solid #d89140;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-}
-
-#user-list li:hover, #group-list li:hover, #add-members-list li:hover {
-    background-color: #f0f0f0;
-}
-
-/* Active selection styling */
-.selected {
-    background-color: #cce5ff; /* Light blue for selected users */
-}
-
-/* Modal styling */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
+input[type="text"],
+input[type="password"],
+textarea,
+select {
     width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4); /* Overlay background */
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc; /* Light border for input fields */
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
 }
 
-.modal-content {
-    background-color: #fefefe;
-    margin: 10% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-/* Additional styles for group management */
-#group-list li {
-    border-bottom: 1px solid #ccc;
-}
-
-#group-list li:hover {
-    background-color: #f0f0f0;
-}
-
-/* Styles for buttons */
 button {
-    background-color: #491f80; /* Primary button color */
+    background-color: #0078e7; /* Same blue as header */
     color: white;
     border: none;
-    border-radius: 4px;
     padding: 10px;
+    border-radius: 4px;
     cursor: pointer;
-    margin-top: 10px; /* Space above buttons */
     transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #5a2eab; /* Darker shade on hover */
+    background-color: #0056a1; /* Darker blue on hover */
 }
 
-/* Input field styling */
-input[type="text"], input[type="file"] {
-    width: calc(100% - 22px); /* Full width minus padding */
+.channel-list ul {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0;
+}
+
+.channel-list li {
     padding: 10px;
-    margin-top: 5px; /* Space above input fields */
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 1px solid transparent; /* Transparent border for hover effect */
+    cursor: pointer;
+    transition: background-color 0.3s, border 0.3s; /* Transition for hover effects */
 }
 
-/* Online user indicator */
-.online-indicator {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: green; /* Green dot for online users */
-    margin-left: 5px; /* Space between username and dot */
+.channel-list li:hover {
+    background-color: #e0f0ff; /* Light blue background on hover */
+    border: 1px solid #0078e7; /* Blue border on hover */
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    #chat, #users {
-        width: 90%; /* Stack on small screens */
-        margin-left: auto;
-        margin-right: auto;
-        float: none; /* Remove float for mobile */
+.channel-list .selected {
+    background-color: #0078e7; /* Selected channel color */
+    color: white; /* White text for selected */
+}
+
+#messagesContainer {
+    max-height: 300px; /* Set a max height for messages */
+    overflow-y: auto; /* Allow scrolling */
+    border-top: 1px solid #e0e0e0; /* Light border for separation */
+}
+
+#messagesContainer div {
+    padding: 5px;
+    border-bottom: 1px solid #f0f0f0; /* Light border for message separation */
+}
+
+@media (max-width: 600px) {
+    .channel-container {
+        width: 95%; /* Slightly wider on smaller screens */
     }
-
-    #chat {
-        margin-bottom: 20px; /* Space between chat and users */
-    }
 }
-/* Back button styles */
-.back-button {
-    position: fixed; /* Change to fixed to keep it in the same spot when scrolling */
-    top: 20px; /* Distance from the top */
-    left: 20px; /* Distance from the left */
-    background-color: #000000; /* Button color */
-    color: white; /* Text color */
-    padding: 10px 15px; /* Button padding */
-    border: none; /* No border */
-    border-radius: 5px; /* Rounded corners */
-    text-decoration: none; /* No underline */
-    font-size: 1rem; /* Font size */
-    transition: background-color 0.3s, transform 0.2s; /* Transition effects */
-    z-index: 1000; /* Ensure it’s on top of other elements */
-}
-
-.back-button:hover {
-    background-color: #0d0aa8; /* Darker green on hover */
-    transform: scale(1.05); /* Slightly grow button on hover */
-}
-
