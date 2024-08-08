@@ -3,116 +3,57 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background: linear-gradient(to bottom, #ffffff, #0956b9); /* White to blue gradient */
-    overflow-y: auto; /* Enable vertical scrolling */
-}
-
-header {
-    background-color: #000000;
-    color: #fff;
-    text-align: center;
-    padding: 10px 0;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1000; /* Ensure it's above other content */
+    background-image: url('Untitled-design-7.png');
 }
 
 .home-container {
-    padding-top: 50px; /* Adjust padding to accommodate fixed header */
+    padding-top: 70px; /* Adjust padding to accommodate fixed header */
     background-color: transparent;
     padding: 20px;
-    width: 80%; /* Adjusted width */
-    margin: 0 auto; /* Centering the container horizontally */
+    width: 80%;
+    margin: 0 auto;
+    text-align: center; /* Center the content horizontally */
 }
 
-.options {
-    display: grid; /* Use CSS Grid for layout */
-    grid-template-columns: repeat(2, 1fr); /* Two columns of equal width */
-    gap: 20px; /* Space between buttons */
-    margin: 10%; /* Margin around the options */
+.social-icons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
 }
 
-.options button {
-    display: flex; /* Ensure buttons use flexbox */
-    flex-direction: column; /* Align text vertically */
-    align-items: center; /* Center text horizontally */
-    padding: 20px 40px; /* Increase padding to make buttons larger */
-    font-size: 18px; /* Increase font size for better readability */
+.social-icon {
+    margin: 0 10px;
+    color: #fff;
+    font-size: 24px;
+}
+
+.horizontal-menu {
+    display: flex;
+    flex-wrap: wrap; /* Allow buttons to wrap to the next line if needed */
+    justify-content: center;
+    gap: 10px; /* Space between buttons */
+    margin-top: 20px; /* Add some margin to the top */
+}
+
+.horizontal-menu button {
     background-color: #0956b9;
     color: white;
     border: none;
-    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
     cursor: pointer;
-    width: 100%; /* Ensure buttons take full width of the grid cell */
-    opacity: 0.9;
-    transition: background-color 0.3s; /* Smooth background color change */
+    border-radius: 5px;
 }
 
-.options button:hover {
+.horizontal-menu button:hover {
     background-color: #03274e;
 }
 
-.logout-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-}
-
 .logout-btn {
-    padding: 10px 20px;
     background-color: #f44336;
     color: white;
-    border: none;
-    cursor: pointer;
 }
 
 .menu-toggle {
-    display: block;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: transparent;
-    color: #fff;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-}
-
-.menu {
-    display: none;
-    position: absolute;
-    top: 50px; /* Adjust as needed */
-    right: 10px; /* Adjust as needed */
-    background-color: #0956b9;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* Ensure it's above other content */
-}
-
-.menu.visible {
-    display: block;
-}
-
-.menu ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.menu ul li {
-    margin-bottom: 10px;
-}
-
-.menu ul li a {
-    display: block;
-    color: #fff;
-    text-decoration: none;
-    padding: 5px 10px;
-}
-
-.menu ul li a:hover {
-    background-color: #0956b9;
+    display: none; /* Hidden if not needed */
 }
