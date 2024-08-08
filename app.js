@@ -20,7 +20,7 @@ const io = socketIo(server);
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Irene@441',
+    password: 'Lookyard75',
     database: 'church_app_database'
 });
 
@@ -58,7 +58,7 @@ app.get('/Donations.html', (req, res) => res.sendFile(path.join(__dirname, 'Dona
 app.get('/Chat.html', (req, res) => res.sendFile(path.join(__dirname, 'Chat.html')));
 
 // Redirect root URL to Login.html
-app.get('/', (req, res) => res.redirect('/Login.html'));
+app.get('/', (req, res) => res.redirect('/Home.html'));
 
 // Handle login POST request
 app.post('/login', (req, res) => {
@@ -105,7 +105,7 @@ app.post('/signup', (req, res) => {
             console.error('Error inserting new user:', err);
             return res.status(500).send('Server error');
         }
-        res.redirect('/Login.html');
+        res.redirect('/Donations.html');
     });
 });
 
