@@ -1,72 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Home Page</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-n9xh+SpAdPCDmTMXsBjqGmUfxx/1p0zx9TA3QxtEiZpGGTEp27f9V4N1I7vRKRuplGB6Ei/6/mXE13p9y4ERug==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="Home.css">
-        <a href="javascript:history.back()" class="back-button">← Back</a>
-    </head>
-<body >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+
+    <link rel="stylesheet" href="Home.css">
+</head>
+<body>
     <div class="home-container">
-        <header>
-            <button class="menu-toggle" aria-label="Toggle Menu">&#9776;</button>
-            <h1>Welcome to the Church App</h1>
-        </header>
         <div class="social-icons">
             <a href="Login.html" class="social-icon"><i class="fab fa-facebook-f"></i></a>
             <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
             <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-            <!-- Add more social icons as needed -->
         </div>
-        <div class="options">
-            <button onclick="window.location.href='PrayerRequest.html'">Prayer Request <br> 
-                <p style="color:  rgb(5, 5, 5); font-size: small;">Request a prayer from a Pastor</p></button>
-               
-            <button onclick="window.location.href='Shop.html'">Shop Online
-                <br><p style="color:  rgb(5, 5, 5); font-size: small;">Shop online in our church shop</p></button>
 
-            <button onclick="window.location.href='Events.html'">Church Events
-                <br><p style="color:  rgb(5, 5, 5); font-size: small;">See upcoming events</p></button>
-
-            <button onclick="window.location.href='Donations.html'">Donations
-                <br> <p style="color:  rgb(5, 5, 5); font-size: small;">Giving</p></button>
-
-            <button onclick="window.location.href='Chat.html'">Chat
-                <br> <p style="color:  rgb(5, 5, 5); font-size: small;">Connect with other church members</p></button>
-
-                <button onclick="window.location.href='podcast.html'">Podcasts
-                    <br> <p style="color:  rgb(5, 5, 5); font-size: small;">Explore a range of discussions</p></button>
-
-                <button onclick="window.location.href='Orders.html'">Orders
-                    <br> <p style="color: rgb(5, 5, 5); font-size: small;"></p></button>
+        <div class="horizontal-menu"> 
+            <button onclick="window.location.href='Word_of_the_day.html'">Word of the Day</button>
+            <button onclick="window.location.href='AboutUs.html'">About Us</button>
+            <button onclick="window.location.href='podcast.html'">Podcasts</button>
+            <button onclick="window.location.href='Inspiration.html'">Inspiration</button>
+            <button onclick="window.location.href='PrayerRequest.html'">Prayer Request</button>
+            <button onclick="window.location.href='Shop.html'">Shop Online</button>
+            <button onclick="window.location.href='Events.html'">Church Events</button>
+            <button onclick="window.location.href='Donations.html'">Donations</button>
+            <button onclick="window.location.href='Signup.html'">signup</button>
+            <button onclick="window.location.href='Subscription.html'">Subscribe</button>
+            
         </div>
-        </div>
-        <div class="logout-container">
-        </div>
-        <nav class="menu">
-            <ul>
-                <li><a href="Word_of_the_day.html">Word of the day</a></li>
-                <li><a href="AboutUs.html">About Us</a></li> <!-- Added: About Us link -->
-                <li><a href="Member_profile.html">Member Profile</a></li> <!-- Added: Member Profile link -->
-                <li><a href="Inspiration.html">Inspiration</a></li> <!-- Added: Member Profile link -->
-                <button onclick="window.location.href='Login.html'" class="logout-btn">Log out?</button>
-            </ul>
-        </nav>
     </div>
-    <!-- Example image -->
-    
-    <script>!function(e,t,a){var c=e.head||e.getElementsByTagName("head")[0],n=e.createElement("script");n.async=!0,n.defer=!0, n.type="text/javascript",n.src=t+"/static/js/widget.js?config="+JSON.stringify(a),c.appendChild(n)}(document,"https://app.engati.com",{bot_key:"2344c7cbf6e34de2",welcome_msg:true,branding_key:"default",server:"https://app.engati.com",e:"p" });</script>
-
-    <script>
-        // Toggle menu visibility
-        const menuToggle = document.querySelector('.menu-toggle');
-        const menu = document.querySelector('.menu');
-
-        menuToggle.addEventListener('click', () => {
-            menu.classList.toggle('visible');
-        });
-    </script>
 </body>
 </html>
