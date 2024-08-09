@@ -1,101 +1,112 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0; /* Light background for the app */
+    background-color: #f4f4f4;
+    color: #333;
     margin: 0;
-    padding: 0;
+    padding: 20px;
 }
 
 .channel-container {
-    width: 90%;
     max-width: 800px;
-    margin: 20px auto;
-    background-color: #ffffff; /* White background for the container */
+    margin: auto;
+    background: white;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden; /* Prevent overflow */
+    padding: 20px;
 }
 
 header {
-    background-color: #0078e7; /* Telegram's primary blue color */
-    color: white;
-    padding: 15px;
     text-align: center;
+    margin-bottom: 20px;
 }
 
-h1, h2 {
+h1 {
+    font-size: 24px;
+}
+
+h2 {
+    font-size: 20px;
     margin: 10px 0;
+    border-bottom: 2px solid #007BFF;
+    padding-bottom: 5px;
 }
 
-.create-channel,
-.add-users-to-channel,
-.message-section,
-.channel-list,
-#messagesContainer {
-    padding: 15px;
-    border-bottom: 1px solid #e0e0e0; /* Light border for separation */
+.controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
 }
 
-input[type="text"],
-input[type="password"],
-textarea,
-select {
-    width: 100%;
+select, input, textarea, button {
     padding: 10px;
     margin: 5px 0;
-    border: 1px solid #ccc; /* Light border for input fields */
+    border: 1px solid #ccc;
     border-radius: 4px;
-    box-sizing: border-box; /* Ensure padding doesn't affect width */
+    font-size: 16px;
+}
+
+select:focus, input:focus, textarea:focus, button:focus {
+    border-color: #007BFF;
+    outline: none;
 }
 
 button {
-    background-color: #0078e7; /* Same blue as header */
+    background-color: #007BFF;
     color: white;
     border: none;
-    padding: 10px;
-    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #0056a1; /* Darker blue on hover */
+    background-color: #0056b3;
+}
+
+.channel-list {
+    margin: 20px 0;
 }
 
 .channel-list ul {
-    list-style-type: none; /* Remove bullet points */
+    list-style-type: none;
     padding: 0;
 }
 
 .channel-list li {
     padding: 10px;
-    border: 1px solid transparent; /* Transparent border for hover effect */
     cursor: pointer;
-    transition: background-color 0.3s, border 0.3s; /* Transition for hover effects */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 5px 0;
+    transition: background 0.3s;
 }
 
 .channel-list li:hover {
-    background-color: #e0f0ff; /* Light blue background on hover */
-    border: 1px solid #0078e7; /* Blue border on hover */
+    background-color: #f1f1f1;
 }
 
-.channel-list .selected {
-    background-color: #0078e7; /* Selected channel color */
-    color: white; /* White text for selected */
+.channel-list li.selected {
+    background-color: #007BFF;
+    color: white;
+}
+
+.message-section {
+    margin-top: 20px;
+}
+
+textarea {
+    width: 100%;
+    height: 80px;
 }
 
 #messagesContainer {
-    max-height: 300px; /* Set a max height for messages */
-    overflow-y: auto; /* Allow scrolling */
-    border-top: 1px solid #e0e0e0; /* Light border for separation */
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    max-height: 200px;
+    overflow-y: auto;
 }
 
 #messagesContainer div {
-    padding: 5px;
-    border-bottom: 1px solid #f0f0f0; /* Light border for message separation */
-}
-
-@media (max-width: 600px) {
-    .channel-container {
-        width: 95%; /* Slightly wider on smaller screens */
-    }
+    margin-bottom: 5px;
 }

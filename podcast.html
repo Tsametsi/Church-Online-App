@@ -6,7 +6,6 @@
     <title>Your Podcast Name</title>
     <link rel="stylesheet" href="podcast.css">
     <a href="javascript:history.back()" class="back-button">← Back</a>
-
 </head>
 <body>
     <header>
@@ -15,39 +14,118 @@
     </header>
 
     <main>
-        <section class="episode-list" id="episodeList">
+        <section class="subscription">
+            <h2>Manage Podcasts</h2>
+            <div class="button-group">
+                <button id="toggleUpload">Upload Your Podcast</button>
+                <button id="toggleLink">Add Podcast Link</button>
+            </div>
+
+            <div id="uploadSection" class="upload-section" style="display: none;">
+                <form id="uploadPodcast" enctype="multipart/form-data">
+                    <input type="text" name="title" placeholder="Podcast Title" required>
+                    <textarea name="description" placeholder="Description" required></textarea>
+                    <input type="file" name="podcast" accept="audio/*" required>
+                    <button type="submit">Upload Podcast</button>
+                </form>
+            </div>
+
+            <div id="linkSection" class="upload-section" style="display: none;">
+                <form id="addPodcastLink">
+                    <input type="text" name="title" placeholder="Podcast Title" required>
+                    <textarea name="description" placeholder="Description" required></textarea>
+                    <input type="url" name="youtube_link" placeholder="YouTube Link" required> <!-- Updated input name -->
+                    <button type="submit">Add Podcast Link</button>
+                </form>
+            </div>
+        </section>
+
+        <section class="episode-list">
             <h2>Episodes</h2>
-            <!-- Episodes will be dynamically inserted here -->
+            <div class="grid-container" id="episodeGrid">
+                <!-- Podcast episodes will be dynamically inserted here -->
+            </div>
         </section>
 
         <section class="about">
             <h2>About the Podcast</h2>
-            <p>Podcast mission and host background goes here.</p>
+            <p>A space where faith meets inspiration! Join us for uplifting conversations, biblical teachings, and heartfelt testimonies that deepen your connection with God and the church community. Each episode features engaging discussions on spiritual growth, practical faith applications, and the love of Christ in everyday life. Whether you’re seeking encouragement, wisdom, or fellowship, you’ll find a home here. Tune in and let’s journey together in faith!</p>
         </section>
 
         <section class="community">
-            <h2>Join the Community</h2>
             <p>Follow us on social media:</p>
             <a href="#">Facebook</a> | <a href="#">Twitter</a> | <a href="#">Instagram</a>
-        </section>
-
-        <section class="subscription">
-            <h2>Subscribe</h2>
-            <p>Subscribe to our podcast:</p>
-            <a href="#">Apple Podcasts</a> | <a href="#">Spotify</a> | <a href="#">Google Podcasts</a>
-            <p>Sign up for our newsletter:</p>
-            <form>
-                <input type="email" placeholder="Enter your email" required>
-                <button type="submit">Subscribe</button>
-            </form>
         </section>
     </main>
 
     <footer>
         <p>&copy; 2024 Your Podcast Name. All rights reserved.</p>
-        <p><a href="mailto:contact@yourpodcast.com">Contact Us</a></p>
+        <p><a href="mailto:Apostolic@TV.com">Contact Us</a></p>
     </footer>
 
     <script src="podcasts.js"></script>
+    <script>
+        // Fetch podcast episodes from the API
+        async function fetchPodcasts() {
+            const response = await fetch('/api/podcasts');
+            const podcasts = await response.json();
+
+            const episodeGrid = document.getElementById('episodeGrid');
+            episodeGrid.innerHTML = ''; // Clear existing content
+
+            podcasts.forEach(podcast => {
+                const episode = document.createElement('div');
+                episode.classList.add('episode');
+                episode.innerHTML = `
+                    <h3>${podcast.title}</h3>
+                    <p>${podcast.description}</p>
+                    <iframe width="560" height="315" src="${podcast.youtube_link.replace('watch?v=', 'embed/')}" allowfullscreen></iframe>
+                    <a href="${podcast.youtube_link}" target="_blank">Watch on YouTube</a>
+                `;
+                episodeGrid.appendChild(episode);
+            });
+        }
+
+        // Call the fetch function when the page loads
+        window.onload = fetchPodcasts;
+
+        document.getElementById('uploadPodcast').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const response = await fetch('/api/podcasts/upload', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            alert(result.message);
+            fetchPodcasts(); // Refresh the podcast list
+        };
+
+        document.getElementById('addPodcastLink').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const response = await fetch('/api/podcasts/link', {
+                method: 'POST',
+                body: new URLSearchParams(formData) // Ensure it sends the correct body format
+            });
+            const result = await response.json();
+            alert(result.message);
+            fetchPodcasts(); // Refresh the podcast list
+        };
+
+        // Toggle upload section
+        document.getElementById('toggleUpload').onclick = () => {
+            const uploadSection = document.getElementById('uploadSection');
+            uploadSection.style.display = uploadSection.style.display === 'none' ? 'block' : 'none';
+            document.getElementById('linkSection').style.display = 'none'; // Hide link section if upload is shown
+        };
+
+        // Toggle link section
+        document.getElementById('toggleLink').onclick = () => {
+            const linkSection = document.getElementById('linkSection');
+            linkSection.style.display = linkSection.style.display === 'none' ? 'block' : 'none';
+            document.getElementById('uploadSection').style.display = 'none'; // Hide upload section if link is shown
+        };
+    </script>
 </body>
 </html>
