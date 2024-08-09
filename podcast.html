@@ -25,7 +25,8 @@
                 <form id="uploadPodcast" enctype="multipart/form-data">
                     <input type="text" name="title" placeholder="Podcast Title" required>
                     <textarea name="description" placeholder="Description" required></textarea>
-                    <input type="file" name="podcast" accept="audio/*" required>
+                    <input type="file" name="audio" accept="audio/*">
+                    <input type="file" name="video" accept="video/*">
                     <button type="submit">Upload Podcast</button>
                 </form>
             </div>
@@ -34,7 +35,7 @@
                 <form id="addPodcastLink">
                     <input type="text" name="title" placeholder="Podcast Title" required>
                     <textarea name="description" placeholder="Description" required></textarea>
-                    <input type="url" name="youtube_link" placeholder="YouTube Link" required> <!-- Updated input name -->
+                    <input type="url" name="youtube_link" placeholder="YouTube Link" required>
                     <button type="submit">Add Podcast Link</button>
                 </form>
             </div>
@@ -79,7 +80,16 @@
                 episode.innerHTML = `
                     <h3>${podcast.title}</h3>
                     <p>${podcast.description}</p>
-                    <iframe width="560" height="315" src="${podcast.youtube_link.replace('watch?v=', 'embed/')}" allowfullscreen></iframe>
+                    ${podcast.youtube_link ? `<iframe width="560" height="315" src="${podcast.youtube_link.replace('watch?v=', 'embed/')}" allowfullscreen></iframe>` : ''}
+                    <audio controls>
+                        <source src="${podcast.audio_file}" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                    <br>
+                    ${podcast.video_file ? `<video width="320" height="240" controls>
+                        <source src="${podcast.video_file}" type="video/mp4">
+                        Your browser does not support the video element.
+                    </video>` : ''}
                     <a href="${podcast.youtube_link}" target="_blank">Watch on YouTube</a>
                 `;
                 episodeGrid.appendChild(episode);
@@ -99,6 +109,7 @@
             const result = await response.json();
             alert(result.message);
             fetchPodcasts(); // Refresh the podcast list
+            e.target.reset(); // Reset the form
         };
 
         document.getElementById('addPodcastLink').onsubmit = async (e) => {
@@ -111,6 +122,7 @@
             const result = await response.json();
             alert(result.message);
             fetchPodcasts(); // Refresh the podcast list
+            e.target.reset(); // Reset the form
         };
 
         // Toggle upload section

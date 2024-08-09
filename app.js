@@ -7,6 +7,7 @@ const multer = require('multer');
 const path = require('path');
 const http = require('http');
 const socketIo = require('socket.io');
+const fs = require('fs'); // Add this line
 const app = express();
 const port = 3000;
 
@@ -528,7 +529,7 @@ app.get('/api/users', (req, res) => {
     });
 });
 
-//Set up storage for podcasts
+// Set up storage for podcasts
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/podcasts/'); // Make sure this directory exists
@@ -538,15 +539,16 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage }); // Define the upload variable here
 
-// Route to handle podcast uploads
-app.post('/api/podcasts/upload', upload.single('podcast'), (req, res) => {
+// Route to handle podcast uploads (for both audio and video)
+app.post('/api/podcasts/upload', upload.fields([{ name: 'audio', maxCount: 1 }, { name: 'video', maxCount: 1 }]), (req, res) => {
     const { title, description } = req.body;
-    const podcastUrl = `/uploads/podcasts/${req.file.filename}`;
+    const audioFile = req.files['audio'] ? `/uploads/podcasts/${req.files['audio'][0].filename}` : null;
+    const videoFile = req.files['video'] ? `/uploads/podcasts/${req.files['video'][0].filename}` : null;
 
-    const query = 'INSERT INTO podcasts (title, description, url) VALUES (?, ?, ?)';
-    db.query(query, [title, description, podcastUrl], (err) => {
+    const query = 'INSERT INTO podcasts (title, description, audio_file, video_file) VALUES (?, ?, ?, ?)';
+    db.query(query, [title, description, audioFile, videoFile], (err) => {
         if (err) {
             console.error('Error inserting podcast:', err);
             return res.status(500).send('Internal server error');
@@ -554,7 +556,6 @@ app.post('/api/podcasts/upload', upload.single('podcast'), (req, res) => {
         res.status(201).json({ success: true, message: 'Podcast uploaded successfully!' });
     });
 });
-
 
 // API endpoint to add podcast link
 app.post('/api/podcasts/link', (req, res) => {
@@ -580,6 +581,13 @@ app.get('/api/podcasts', (req, res) => {
         res.json(results);
     });
 });
+
+// Ensure uploads/podcasts directory exists
+const podcastsDir = path.join(__dirname, 'uploads/podcasts');
+if (!fs.existsSync(podcastsDir)) {
+    fs.mkdirSync(podcastsDir, { recursive: true }); // Create directory if it doesn't exist
+}
+
 
 // Start the server
 server.listen(port, () => {
