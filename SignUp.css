@@ -1,0 +1,117 @@
+/* SignUpPage.css */
+
+/* Reset some default styles */
+h2, label, input, select, button, a {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Ensure box-sizing consistency */
+    color: #fff; /* Default text color */
+}
+
+/* Basic styling for the entire page */
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
+    overflow-y: auto; /* Enable vertical scrolling */
+    background-repeat: no-repeat;
+    color: #fff; /* Default text color */
+}
+
+/* Sign Up Container */
+.signup-container {
+    background-color: rgba(7, 43, 160, 0.9); /* Dark blue background for container */
+    border-radius: 10px;
+    padding: 40px;
+    max-width: 400px; /* Limit max width */
+    margin: 50px auto; /* Center container */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+}
+
+/* Header for Sign Up */
+.signup-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #ffffff; /* Gold color for header */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Form Group Styles */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+/* Input and Select Styles */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+    width: 100%; /* Full width */
+    padding: 10px;
+    border: 1px solid #d89140; /* Gold border */
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1); /* Light background */
+    color: #fff; /* Text color */
+    font-size: 14px;
+    transition: border-color 0.3s; /* Transition effect for border color */
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+select:focus {
+    border-color: #fff; /* Change border color on focus */
+}
+
+/* Button Styles */
+button {
+    background-color: #000000; /* Gold background */
+    color: #fff; /* Text color */
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%; /* Full width */
+    transition: background-color 0.3s, transform 0.2s; /* Transition effects */
+}
+
+button:hover {
+    background-color: #2725b2; /* Darker shade on hover */
+    transform: scale(1.05); /* Slightly grow button on hover */
+}
+
+/* Link Style */
+.signup-container a {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.signup-container a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+/* Responsive Styles */
+@media(max-width: 768px) {
+    .signup-container {
+        padding: 20px; /* Less padding on small screens */
+    }
+
+    .signup-container h2 {
+        font-size: 24px; /* Smaller header on small screens */
+    }
+
+    button {
+        font-size: 14px; /* Smaller button text on small screens */
+    }
+}
