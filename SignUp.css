@@ -32,7 +32,7 @@ body {
     text-align: center;
     margin-bottom: 20px;
     font-size: 28px;
-    color: #ffffff; /* Gold color for header */
+    color: #d89140; /* Gold color for header */
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
@@ -62,6 +62,12 @@ select {
     transition: border-color 0.3s; /* Transition effect for border color */
 }
 
+/* Change select dropdown styles */
+select {
+    background-color: #6d6a6a; /* Black background for select */
+    color: #fff; /* White text color */
+}
+
 input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus,
@@ -71,7 +77,7 @@ select:focus {
 
 /* Button Styles */
 button {
-    background-color: #000000; /* Gold background */
+    background-color: #d89140; /* Gold background */
     color: #fff; /* Text color */
     padding: 10px 15px;
     border: none;
@@ -83,7 +89,7 @@ button {
 }
 
 button:hover {
-    background-color: #2725b2; /* Darker shade on hover */
+    background-color: #b27c25; /* Darker shade on hover */
     transform: scale(1.05); /* Slightly grow button on hover */
 }
 
