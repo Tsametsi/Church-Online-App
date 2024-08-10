@@ -4,6 +4,7 @@ body {
     margin: 0;
     padding: 0;
     background-image: url('Untitled-design-7.png');
+    margin-top: 210px;
 }
 
 .home-container {
@@ -43,10 +44,12 @@ body {
     font-size: 16px;
     cursor: pointer;
     border-radius: 5px;
+    background-color: black;
+
 }
 
 .horizontal-menu button:hover {
-    background-color: #03274e;
+    background-color: #889aad;
 }
 
 .logout-btn {

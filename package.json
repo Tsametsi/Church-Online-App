@@ -1,7 +1,7 @@
 {
   "name": "church-app-2",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",  
   "scripts": {
     "start": "node --openssl-legacy-provider app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -24,6 +24,7 @@
     "qs": "^6.12.3",
     "socket.io": "^4.7.5",
     "stripe": "^16.2.0",
+    "web-push": "^3.6.7", 
     "ws": "^8.18.0"
   },
   "description": ""

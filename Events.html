@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Church Events</title>
     <link rel="stylesheet" href="/Events.css">
-    <a href="javascript:history.back()" class="back-button">←Back</a>
-
+    <a href="javascript:history.back()" class="back-button">← Back</a>
 </head>
 <body>
     <h1>Upcoming Church Events</h1>
@@ -29,7 +28,7 @@
                             <h2>${event.title}</h2>
                             <p>${event.description}</p>
                             <p><strong>Date:</strong> ${new Date(event.event_date).toLocaleString()}</p>
-                            ${event.virtual_url ? `<p><strong>Virtual URL:</strong> <a href="${event.virtual_url}">${event.virtual_url}</a></p>` : ''}
+                            ${event.virtual_url ? `<p><strong>Virtual URL:</strong> <a href="${event.virtual_url}" target="_blank">${event.virtual_url}</a></p>` : ''}
                             <button onclick="toggleNotification(${event.id}, ${event.notification_on})">
                                 ${event.notification_on ? 'Disable' : 'Enable'} Notification
                             </button>
