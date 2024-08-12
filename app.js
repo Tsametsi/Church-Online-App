@@ -589,6 +589,45 @@ if (!fs.existsSync(podcastsDir)) {
 }
 
 
+// Like a scripture
+app.post('/scriptures/:id/like', (req, res) => {
+    const scriptureId = req.params.id;
+    const userId = req.body.user_id; // Pass user ID from client
+
+    db.query('INSERT INTO likes (scripture_id, user_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id)', 
+             [scriptureId, userId], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        if (result.affectedRows === 1) {
+            return res.json({ message: 'Liked successfully' });
+        } else {
+            return res.status(400).json({ message: 'You have already liked this scripture' });
+        }
+    });
+});
+
+// Post a comment on a scripture
+app.post('/scriptures/:id/comments', (req, res) => {
+    const scriptureId = req.params.id;
+    const { user_id, comment_text } = req.body;
+
+    db.query('INSERT INTO comments (scripture_id, user_id, comment_text) VALUES (?, ?, ?)', 
+             [scriptureId, user_id, comment_text], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ id: result.insertId, scripture_id: scriptureId, user_id, comment_text });
+    });
+});
+
+// Get comments for a scripture
+app.get('/scriptures/:id/comments', (req, res) => {
+    const scriptureId = req.params.id;
+
+    db.query('SELECT * FROM comments WHERE scripture_id = ?', [scriptureId], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
+    });
+});
+
+
 // Start the server
 server.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
