@@ -19,6 +19,7 @@
             <div class="button-group">
                 <button id="toggleUpload">Upload Your Podcast</button>
                 <button id="toggleLink">Add Podcast Link</button>
+                <button id="toggleGroups">Manage Groups</button>
             </div>
 
             <div id="uploadSection" class="upload-section" style="display: none;">
@@ -37,6 +38,20 @@
                     <textarea name="description" placeholder="Description" required></textarea>
                     <input type="url" name="youtube_link" placeholder="YouTube Link" required>
                     <button type="submit">Add Podcast Link</button>
+                </form>
+            </div>
+
+            <div id="groupSection" class="upload-section" style="display: none;">
+                <h2>Create or Manage Groups</h2>
+                <form id="groupForm">
+                    <div>
+                        <label for="groupName">Group Name:</label>
+                        <input type="text" id="groupName" name="groupName" required>
+                    </div>
+                    <div id="episodeSelection">
+                        <!-- Episodes will be dynamically populated here with checkboxes -->
+                    </div>
+                    <button type="submit">Create Group</button>
                 </form>
             </div>
         </section>
@@ -72,9 +87,12 @@
             const podcasts = await response.json();
 
             const episodeGrid = document.getElementById('episodeGrid');
+            const episodeSelection = document.getElementById('episodeSelection');
             episodeGrid.innerHTML = ''; // Clear existing content
+            episodeSelection.innerHTML = ''; // Clear existing content
 
             podcasts.forEach(podcast => {
+                // Populate episode list for display
                 const episode = document.createElement('div');
                 episode.classList.add('episode');
                 episode.innerHTML = `
@@ -93,6 +111,21 @@
                     <a href="${podcast.youtube_link}" target="_blank">Watch on YouTube</a>
                 `;
                 episodeGrid.appendChild(episode);
+
+                // Populate episode selection for grouping
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = `episode-${podcast.id}`;
+                checkbox.name = 'episode';
+                checkbox.value = podcast.id;
+                
+                const label = document.createElement('label');
+                label.htmlFor = checkbox.id;
+                label.textContent = podcast.title;
+                
+                episodeSelection.appendChild(checkbox);
+                episodeSelection.appendChild(label);
+                episodeSelection.appendChild(document.createElement('br'));
             });
         }
 
@@ -125,11 +158,28 @@
             e.target.reset(); // Reset the form
         };
 
+        document.getElementById('groupForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const selectedEpisodes = [...document.querySelectorAll('input[name="episode"]:checked')].map(cb => cb.value);
+            formData.append('episodes', JSON.stringify(selectedEpisodes));
+            
+            const response = await fetch('/api/groups', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            alert(result.message);
+            fetchPodcasts(); // Refresh the podcast list
+            e.target.reset(); // Reset the form
+        };
+
         // Toggle upload section
         document.getElementById('toggleUpload').onclick = () => {
             const uploadSection = document.getElementById('uploadSection');
             uploadSection.style.display = uploadSection.style.display === 'none' ? 'block' : 'none';
             document.getElementById('linkSection').style.display = 'none'; // Hide link section if upload is shown
+            document.getElementById('groupSection').style.display = 'none'; // Hide group section if upload is shown
         };
 
         // Toggle link section
@@ -137,6 +187,15 @@
             const linkSection = document.getElementById('linkSection');
             linkSection.style.display = linkSection.style.display === 'none' ? 'block' : 'none';
             document.getElementById('uploadSection').style.display = 'none'; // Hide upload section if link is shown
+            document.getElementById('groupSection').style.display = 'none'; // Hide group section if link is shown
+        };
+
+        // Toggle group section
+        document.getElementById('toggleGroups').onclick = () => {
+            const groupSection = document.getElementById('groupSection');
+            groupSection.style.display = groupSection.style.display === 'none' ? 'block' : 'none';
+            document.getElementById('uploadSection').style.display = 'none'; // Hide upload section if groups are shown
+            document.getElementById('linkSection').style.display = 'none'; // Hide link section if groups are shown
         };
     </script>
 </body>
