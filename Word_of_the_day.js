@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
         loadPostedScriptures();
     });
 
-    // Function to save scripture (for demo purposes, using localStorage)
+    // Function to save scripture
     function saveScripture(scriptureText, username) {
         // Get existing scriptures from localStorage or initialize an empty array
         var scriptures = JSON.parse(localStorage.getItem('scriptures')) || [];
@@ -60,7 +60,9 @@ document.addEventListener('DOMContentLoaded', function() {
         var newScripture = {
             scripture_text: scriptureText,
             username: username,
-            date: new Date().toLocaleString()
+            date: new Date().toLocaleString(),
+            likes: 0,
+            comments: []
         };
         scriptures.push(newScripture);
 
@@ -70,18 +72,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to load daily scripture
     function loadDailyScripture() {
-        // Get today's date in string format
         var today = new Date().toLocaleDateString();
-
-        // Get scriptures from localStorage or initialize an empty array
         var scriptures = JSON.parse(localStorage.getItem('scriptures')) || [];
-
-        // Find scripture for today, if exists
         var todaysScripture = scriptures.find(function(scripture) {
             return scripture.date === today;
         });
 
-        // Display daily scripture
         var dailyScriptureDiv = document.getElementById('dailyScripture');
         if (todaysScripture) {
             dailyScriptureDiv.innerHTML = "<p>" + todaysScripture.scripture_text + "</p>";
@@ -92,49 +88,101 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to load posted scriptures
     function loadPostedScriptures() {
-        // Get posted scriptures from localStorage or initialize an empty array
         var scriptures = JSON.parse(localStorage.getItem('scriptures')) || [];
-
-        // Sort scriptures by date (most recent first)
         scriptures.sort(function(a, b) {
             return new Date(b.date) - new Date(a.date);
         });
 
-        // Display posted scriptures
         var postScriptureDiv = document.getElementById('postScripture');
         postScriptureDiv.innerHTML = ''; // Clear previous content
 
-        scriptures.forEach(function(scripture) {
+        scriptures.forEach(function(scripture, index) {
             var postItem = document.createElement('div');
             postItem.classList.add('post-item');
 
             var content = "<p>" + scripture.scripture_text + "</p>";
             content += "<div class='post-info'>Posted by " + scripture.username + " on " + scripture.date + "</div>";
-            content += "<button class='delete-btn' data-id='" + scriptures.indexOf(scripture) + "'>Delete</button>";
+            content += "<div class='like-comment'><button class='like-button' data-index='" + index + "'>Like (" + scripture.likes + ")</button>";
+            content += "<button class='comment-button' data-index='" + index + "'>Comment</button>";
+            content += "<button class='delete-button' data-index='" + index + "'>Delete</button></div>"; // Add delete button
+            content += "<div class='comment-section' id='comments-" + index + "' style='display:none;'>";
+            content += "<input type='text' class='comment-input' placeholder='Add a comment...' data-index='" + index + "'>";
+            content += "<div class='comment-list' id='comment-list-" + index + "'></div></div>";
 
             postItem.innerHTML = content;
             postScriptureDiv.appendChild(postItem);
 
+            // Add event listener to like button
+            var likeBtn = postItem.querySelector('.like-button');
+            likeBtn.addEventListener('click', function() {
+                likeScripture(index);
+            });
+
+            // Add event listener to comment button
+            var commentBtn = postItem.querySelector('.comment-button');
+            commentBtn.addEventListener('click', function() {
+                toggleCommentSection(index);
+            });
+
             // Add event listener to delete button
-            var deleteBtn = postItem.querySelector('.delete-btn');
+            var deleteBtn = postItem.querySelector('.delete-button');
             deleteBtn.addEventListener('click', function() {
-                deleteScripture(scriptures.indexOf(scripture));
+                deleteScripture(index);
+            });
+
+            // Add event listener to comment input
+            var commentInput = postItem.querySelector('.comment-input');
+            commentInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    addComment(index, commentInput.value);
+                    commentInput.value = ''; // Clear input after submitting
+                }
             });
         });
     }
 
-    // Function to delete a scripture
-    function deleteScripture(index) {
-        // Get scriptures from localStorage
+    // Function to toggle comment section visibility
+    function toggleCommentSection(index) {
+        var commentSection = document.getElementById('comments-' + index);
+        commentSection.style.display = commentSection.style.display === 'none' ? 'block' : 'none';
+        loadComments(index);
+    }
+
+    // Function to like a scripture
+    function likeScripture(index) {
         var scriptures = JSON.parse(localStorage.getItem('scriptures')) || [];
-
-        // Remove the scripture at the specified index
-        scriptures.splice(index, 1);
-
-        // Save updated scriptures back to localStorage
+        scriptures[index].likes++;
         localStorage.setItem('scriptures', JSON.stringify(scriptures));
+        loadPostedScriptures(); // Reload to show updated likes
+    }
 
-        // Reload posted scriptures
-        loadPostedScriptures();
+    // Function to add a comment
+    function addComment(index, comment) {
+        var scriptures = JSON.parse(localStorage.getItem('scriptures')) || [];
+        scriptures[index].comments.push(comment);
+        localStorage.setItem('scriptures', JSON.stringify(scriptures));
+        loadPostedScriptures(); // Reload to show updated comments
+    }
+
+    // Function to load comments
+    function loadComments(index) {
+        var scriptures = JSON.parse(localStorage.getItem('scriptures')) || [];
+        var commentList = document.getElementById('comment-list-' + index);
+        commentList.innerHTML = ''; // Clear previous comments
+
+        scriptures[index].comments.forEach(function(comment) {
+            var commentItem = document.createElement('div');
+            commentItem.classList.add('comment');
+            commentItem.textContent = comment;
+            commentList.appendChild(commentItem);
+        });
+    }
+
+    // Function to delete scripture
+    function deleteScripture(index) {
+        var scriptures = JSON.parse(localStorage.getItem('scriptures')) || [];
+        scriptures.splice(index, 1); // Remove the scripture at the specified index
+        localStorage.setItem('scriptures', JSON.stringify(scriptures)); // Save updated list
+        loadPostedScriptures(); // Reload posted scriptures
     }
 });

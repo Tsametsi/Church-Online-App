@@ -1,54 +1,54 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
     margin: 0;
     padding: 0;
-    /*background-image: url('WhatsApp Image 2024-07-24 at 12.43.50.jpeg');
-    background-size: cover; /* Cover the entire background */
-    /*background-repeat: no-repeat; /* No repeating of background */
-    /*background-attachment: fixed; /* Fixed position */
-    /*background-position: center center; /* Center the background */
-    background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
-    overflow-y: auto; /* Enable vertical scrolling */   
-
+    overflow-y: auto; /* Enable vertical scrolling */
 }
 
 h1 {
     text-align: center;
     color: #fcfcfc;
     margin-top: 20px;
+    font-size: 2.5em; /* Larger font size for emphasis */
 }
 
 #events-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px;
+    margin: 20px auto; /* Centered with auto left/right margin */
+    max-width: 800px; /* Set a maximum width for better layout */
     opacity: 0.9;
 }
 
 .event {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    background-color: #ffffff;
+    border-radius: 10px; /* Rounded corners for a softer look */
     padding: 20px;
     margin: 10px;
-    width: 80%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Full width within the container */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Softer and larger shadow */
+    transition: transform 0.3s; /* Transition for scaling effect */
+}
+
+.event:hover {
+    transform: translateY(-2px); /* Lift effect on hover */
 }
 
 .event h2 {
     margin: 0;
-    font-size: 1.5em;
-    color: #333;
+    font-size: 1.75em; /* Slightly larger font for event titles */
+    color: #333; /* Darker color for better readability */
 }
 
 .event p {
-    color: #666;
+    color: #555; /* Slightly darker gray for better contrast */
+    line-height: 1.6; /* Increase line height for readability */
 }
 
 .event a {
-    color: #03274e;
+    color: #0066cc; /* Changed link color for visibility */
     text-decoration: none;
 }
 
@@ -60,18 +60,22 @@ button {
     padding: 10px 15px;
     border: none;
     border-radius: 5px;
-    background-color: #0066cc;
+    background-color: #007bff; /* Bootstrap primary color */
     color: white;
     cursor: pointer;
     margin-top: 10px;
+    font-weight: bold; /* Bold text for button */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transition */
 }
 
 button:hover {
-    background-color: #004a99;
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.05); /* Slightly grow button on hover */
 }
+
 /* Back button styles */
 .back-button {
-    position: fixed; /* Change to fixed to keep it in the same spot when scrolling */
+    position: fixed; /* Keeps it in the same spot when scrolling */
     top: 20px; /* Distance from the top */
     left: 20px; /* Distance from the left */
     background-color: #000000; /* Button color */
@@ -84,7 +88,8 @@ button:hover {
     transition: background-color 0.3s, transform 0.2s; /* Transition effects */
     z-index: 1000; /* Ensure it’s on top of other elements */
 }
+
 .back-button:hover {
-    background-color: #0d0aa8; /* Darker green on hover */
+    background-color: #0d0aa8; /* Darker color on hover */
     transform: scale(1.05); /* Slightly grow button on hover */
 }

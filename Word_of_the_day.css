@@ -5,7 +5,6 @@ h1, h2, ul, p, input, button {
     margin: 0;
     padding: 0;
     box-sizing: border-box; /* Ensure box-sizing consistency */
-    color: #000000; /* Default text color */
 }
 
 /* Basic styling for the entire page */
@@ -80,7 +79,6 @@ header nav ul li a:hover {
     text-align: center;
     margin-bottom: 20px;
     font-size: 24px;
-    color: #333;
 }
 
 /* Post Section */
@@ -95,8 +93,6 @@ header nav ul li a:hover {
     text-align: center;
     margin-bottom: 20px;
     font-size: 28px; /* Slightly larger font size */
-    color: #333; /* Darker color for the header */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Subtle text shadow */
 }
 
 /* Improved Scripture List Styles */
@@ -130,17 +126,37 @@ header nav ul li a:hover {
     color: #888;
 }
 
-.post-item .delete-btn {
-    background-color: #f44336;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    float: right;
+/* Like and Comment section */
+.like-comment {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
 }
 
-.post-item .delete-btn:hover {
-    background-color: #d32f2f;
+.like-button, .comment-button {
+    background-color: #28a745; /* Green background */
+    color: #fff; /* White text */
+    border: none; /* No border */
+    padding: 5px 10px; /* Padding */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer on hover */
+    transition: background-color 0.3s; /* Transition for background color */
+}
+
+.like-button:hover, .comment-button:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+/* Comment section */
+.comment-section {
+    margin-top: 10px;
+    display: none; /* Hide initially */
+}
+
+.comment {
+    margin: 5px 0;
+    font-size: 14px;
 }
 
 /* Modal */
@@ -179,7 +195,6 @@ header nav ul li a:hover {
 .close:hover,
 .close:focus {
     color: #000; /* Change color on hover/focus */
-    text-decoration: none; /* No underline */
 }
 
 /* Form styles */
@@ -202,17 +217,15 @@ header nav ul li a:hover {
     border-radius: 5px; /* Rounded corners */
     padding: 10px; /* Padding inside input */
     margin-bottom: 20px; /* Space below input */
-    font-size: 16px; /* Font size */
 }
 
 /* Submit button styles */
 input[type="submit"] {
     background-color: #28a745; /* Green background */
-    color: #fff; /* White text */
+    color: white; /* White text */
     border: none; /* No border */
-    padding: 10px 15px; /* Padding */
+    padding: 10px; /* Padding */
     border-radius: 5px; /* Rounded corners */
-    font-size: 16px; /* Font size */
     cursor: pointer; /* Pointer on hover */
     transition: background-color 0.3s; /* Transition for background color */
 }
@@ -221,53 +234,49 @@ input[type="submit"]:hover {
     background-color: #218838; /* Darker green on hover */
 }
 
-/* Status message */
-#postStatus {
-    margin-top: 15px; /* Space above status message */
-    text-align: center; /* Centered text */
-    font-size: 14px; /* Font size */
-    color: #f44336; /* Red color for error messages */
-}
-
 /* Footer */
 footer {
     background: rgba(7, 43, 160, 0.9); /* Dark blue background */
-    color: #fff;
+    color: #fff; /* Text color */
     text-align: center;
     padding: 10px 0;
     position: fixed;
-    width: 100%;
-    bottom: 0;
+    width: 100%; /* Full width */
+    bottom: 0; /* Stay at the bottom */
 }
 
 footer p {
-    margin: 0;
-    padding: 0;
-    font-size: 14px;
+    margin: 0; /* No margin */
+    padding: 0; /* No padding */
+    font-size: 14px; /* Font size */
 }
 
 /* Responsive styles */
-@media(max-width: 768px) {
+@media (max-width: 768px) {
     header nav ul {
-        float: none;
+        float: none; /* Stack items */
     }
 
     header nav ul li {
-        display: block;
-        text-align: center;
+        display: block; /* Block display */
+        text-align: center; /* Center align */
     }
 
     #postScripture {
         grid-template-columns: 1fr; /* Stack items on small screens */
     }
+
+    .modal-content {
+        width: 90%; /* Full width on small screens */
+    }
 }
 
 /* Back button styles */
 .back-button {
-    position: fixed; /* Change to fixed to keep it in the same spot when scrolling */
+    position: fixed; /* Keep it fixed */
     top: 20px; /* Distance from the top */
     left: 20px; /* Distance from the left */
-    background-color: #000000; /* Button color */
+    background-color: #000; /* Button color */
     color: white; /* Text color */
     padding: 10px 15px; /* Button padding */
     border: none; /* No border */
@@ -281,4 +290,19 @@ footer p {
 .back-button:hover {
     background-color: #03274e; /* Darker shade on hover */
     transform: scale(1.05); /* Slightly grow button on hover */
+}
+
+/* Delete button styles */
+.delete-button {
+    background-color: #dc3545; /* Red background */
+    color: white; /* White text */
+    border: none; /* No border */
+    padding: 5px 10px; /* Padding */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer on hover */
+    transition: background-color 0.3s; /* Transition for background color */
+}
+
+.delete-button:hover {
+    background-color: #c82333; /* Darker red on hover */
 }
