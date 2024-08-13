@@ -541,39 +541,11 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage }); // Define the upload variable here
 
-// Route to handle podcast uploads (for both audio and video)
-app.post('/api/podcasts/upload', upload.fields([{ name: 'audio', maxCount: 1 }, { name: 'video', maxCount: 1 }]), (req, res) => {
-    const { title, description } = req.body;
-    const audioFile = req.files['audio'] ? `/uploads/podcasts/${req.files['audio'][0].filename}` : null;
-    const videoFile = req.files['video'] ? `/uploads/podcasts/${req.files['video'][0].filename}` : null;
-
-    const query = 'INSERT INTO podcasts (title, description, audio_file, video_file) VALUES (?, ?, ?, ?)';
-    db.query(query, [title, description, audioFile, videoFile], (err) => {
-        if (err) {
-            console.error('Error inserting podcast:', err);
-            return res.status(500).send('Internal server error');
-        }
-        res.status(201).json({ success: true, message: 'Podcast uploaded successfully!' });
-    });
-});
-
-// API endpoint to add podcast link
-app.post('/api/podcasts/link', (req, res) => {
-    const { title, youtube_link, description } = req.body; // Add description
-    const query = 'INSERT INTO podcasts (title, youtube_link, description) VALUES (?, ?, ?)'; // Include description
-    db.query(query, [title, youtube_link, description], (err) => {
-        if (err) {
-            console.error('Error inserting podcast link:', err);
-            return res.status(500).send('Internal server error');
-        }
-        res.json({ success: true, message: 'Podcast link added successfully!' });
-    });
-});
 
 // API endpoint to fetch all podcasts
 app.get('/api/podcasts', (req, res) => {
-    const query = 'SELECT * FROM podcasts';
-    db.query(query, (err, results) => {
+    const sql = 'SELECT * FROM podcasts';
+    db.query(sql, (err, results) => {
         if (err) {
             console.error('Error querying podcasts:', err);
             return res.status(500).send('Internal server error');
@@ -582,11 +554,124 @@ app.get('/api/podcasts', (req, res) => {
     });
 });
 
+// Route to handle podcast uploads
+app.post('/api/podcasts/upload', upload.single('podcast'), (req, res) => {
+    const { title, description } = req.body;
+    const podcastUrl = `/uploads/podcasts/${req.file.filename}`;
+
+    const query = 'INSERT INTO podcasts (title, description, url) VALUES (?, ?, ?)';
+    db.query(query, [title, description, podcastUrl], (err) => {
+        if (err) {
+            console.error('Error inserting podcast:', err);
+            return res.status(500).send('Internal server error');
+        }
+        res.status(201).json({ success: true, message: 'Podcast uploaded successfully!' });
+    });
+});
+
+// API endpoint to handle adding podcast link
+app.post('/api/podcasts/link', (req, res) => {
+    const { title, description, link } = req.body;
+
+    const query = 'INSERT INTO podcasts (title, description, url) VALUES (?, ?, ?)';
+    db.query(query, [title, description, link], (err) => {
+        if (err) {
+            console.error('Error inserting podcast link:', err);
+            return res.status(500).send('Internal server error');
+        }
+        res.status(201).json({ success: true, message: 'Podcast link added successfully!' });
+    });
+});
+
+// API endpoint to handle group creation
+app.post('/api/groups', (req, res) => {
+    const { groupName, episodes } = req.body;
+
+    // Basic validation
+    if (!groupName || typeof groupName !== 'string' || groupName.trim().length === 0) {
+        return res.status(400).json({ success: false, message: 'Invalid group name' });
+    }
+
+    let episodeIds;
+    try {
+        episodeIds = JSON.parse(episodes);
+        if (!Array.isArray(episodeIds)) {
+            return res.status(400).json({ success: false, message: 'Episodes should be an array' });
+        }
+    } catch (error) {
+        return res.status(400).json({ success: false, message: 'Episodes must be a valid JSON array' });
+    }
+
+    // Insert group into database
+    const insertGroupQuery = 'INSERT INTO podcast_groups (name) VALUES (?)';
+    db.query(insertGroupQuery, [groupName], (err, result) => {
+        if (err) {
+            console.error('Error inserting group:', err);
+            return res.status(500).json({ success: false, message: 'Internal server error' });
+        }
+
+        const groupId = result.insertId;
+
+        // Insert episodes into database
+        const insertEpisodesQuery = 'INSERT INTO episode_groups (group_id, episode_id) VALUES ?';
+        const values = episodeIds.map(episodeId => [groupId, episodeId]);
+
+        db.query(insertEpisodesQuery, [values], (err) => {
+            if (err) {
+                console.error('Error inserting episodes:', err);
+                return res.status(500).json({ success: false, message: 'Internal server error' });
+            }
+            res.status(201).json({ success: true, message: 'Group created successfully!' });
+        });
+    });
+});
+
+
 // Ensure uploads/podcasts directory exists
 const podcastsDir = path.join(__dirname, 'uploads/podcasts');
 if (!fs.existsSync(podcastsDir)) {
     fs.mkdirSync(podcastsDir, { recursive: true }); // Create directory if it doesn't exist
 }
+
+
+// Like a scripture
+app.post('/scriptures/:id/like', (req, res) => {
+    const scriptureId = req.params.id;
+    const userId = req.body.user_id; // Pass user ID from client
+
+    db.query('INSERT INTO likes (scripture_id, user_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id)', 
+             [scriptureId, userId], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        if (result.affectedRows === 1) {
+            return res.json({ message: 'Liked successfully' });
+        } else {
+            return res.status(400).json({ message: 'You have already liked this scripture' });
+        }
+    });
+});
+
+// Post a comment on a scripture
+app.post('/scriptures/:id/comments', (req, res) => {
+    const scriptureId = req.params.id;
+    const { user_id, comment_text } = req.body;
+
+    db.query('INSERT INTO comments (scripture_id, user_id, comment_text) VALUES (?, ?, ?)', 
+             [scriptureId, user_id, comment_text], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ id: result.insertId, scripture_id: scriptureId, user_id, comment_text });
+    });
+});
+
+// Get comments for a scripture
+app.get('/scriptures/:id/comments', (req, res) => {
+    const scriptureId = req.params.id;
+
+    db.query('SELECT * FROM comments WHERE scripture_id = ?', [scriptureId], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
+    });
+});
+
 
 
 // Start the server
