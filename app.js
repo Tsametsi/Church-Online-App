@@ -685,12 +685,28 @@ app.get('/api/podcasts', (req, res) => {
 });
 
 
+// Fetch a single podcast by ID
+app.get('/api/podcasts/:id', (req, res) => {
+    const { id } = req.params;
+    const query = 'SELECT * FROM podcasts WHERE id = ?';
+    db.query(query, [id], (err, results) => {
+        if (err) {
+            console.error('Error fetching podcast:', err);
+            return res.status(500).send('Internal server error');
+        }
+        if (results.length === 0) {
+            return res.status(404).send('Podcast not found');
+        }
+        res.json(results[0]);
+    });
+});
+
 
 // API endpoint to like a podcast
 app.post('/api/podcasts/:id/like', (req, res) => {
     const { id } = req.params;
-    const query = 'UPDATE podcasts SET like_count = like_count + 1 WHERE id = ?';
-    db.query(query, [id], (err) => {
+    const updateQuery = 'UPDATE podcasts SET like_count = like_count + 1 WHERE id = ?';
+    db.query(updateQuery, [id], (err) => {
         if (err) {
             console.error('Error liking podcast:', err);
             return res.status(500).send('Internal server error');
@@ -702,11 +718,13 @@ app.post('/api/podcasts/:id/like', (req, res) => {
                 console.error('Error retrieving like count:', err);
                 return res.status(500).send('Internal server error');
             }
+            if (results.length === 0) {
+                return res.status(404).send('Podcast not found');
+            }
             res.json({ success: true, new_like_count: results[0].like_count });
         });
     });
 });
-
 
 // API endpoint to delete a podcast
 app.delete('/api/podcasts/:id', (req, res) => {
@@ -720,6 +738,35 @@ app.delete('/api/podcasts/:id', (req, res) => {
         res.json({ success: true });
     });
 });
+
+// API endpoint to fetch comments for a podcast
+app.get('/api/podcasts/:id/comments', (req, res) => {
+    const podcastId = req.params.id;
+    const sql = 'SELECT * FROM comments WHERE podcast_id = ? ORDER BY comment_date DESC';
+    db.query(sql, [podcastId], (err, results) => {
+        if (err) {
+            console.error('Error querying comments:', err);
+            return res.status(500).send('Internal server error');
+        }
+        res.json(results);
+    });
+});
+
+// API endpoint to add a comment to a podcast
+app.post('/api/podcasts/:id/comments', (req, res) => {
+    const podcastId = req.params.id;
+    const { user_name, comment_text } = req.body;
+
+    const sql = 'INSERT INTO comments (podcast_id, user_name, comment_text) VALUES (?, ?, ?)';
+    db.query(sql, [podcastId, user_name, comment_text], (err) => {
+        if (err) {
+            console.error('Error inserting comment:', err);
+            return res.status(500).send('Internal server error');
+        }
+        res.status(201).json({ success: true, message: 'Comment added successfully!' });
+    });
+});
+
 
 // Start the server
 server.listen(port, () => {

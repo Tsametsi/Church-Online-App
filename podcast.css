@@ -8,6 +8,8 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     opacity: 0.9;
+    margin: 0;
+    padding: 0;
 }
 
 /* Header styles */
@@ -26,6 +28,7 @@ h1 {
 
 p {
     font-size: 1.2rem;
+    margin: 0;
 }
 
 /* Main content styles */
@@ -33,6 +36,7 @@ main {
     padding: 20px;
 }
 
+/* Section Headers */
 h2 {
     border-bottom: 2px solid #000000;
     padding-bottom: 10px;
@@ -56,6 +60,8 @@ h2 {
     background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     margin-bottom: 20px; /* Space below each upload section */
+    max-width: 800px; /* Fixed width for consistency */
+    margin: 20px auto; /* Center horizontally */
 }
 
 .upload-section form {
@@ -101,6 +107,8 @@ h2 {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s; /* Add transition for hover effect */
     position: relative; /* For positioning like/unlike/delete buttons */
+    max-width: 300px; /* Fixed width for consistency */
+    margin: 0 auto; /* Center horizontally */
 }
 
 .episode:hover {
@@ -113,21 +121,20 @@ h2 {
     margin-bottom: 10px;
 }
 
-iframe {
+/* Media elements */
+iframe,
+video {
     max-width: 100%;
-    height: 200px; /* Adjust height as needed */
+    height: auto; /* Adjust height based on content */
     margin: 10px 0;
-    border: none; /* No border for iframe */
+    border: none; /* No border for media elements */
     border-radius: 8px; /* Rounded corners */
 }
 
-/* Like/Unlike button styles */
-.like-button,
+/* Like/Unlike/Delete Button Styles */
 .unlike-button,
 .delete-button {
     position: absolute;
-    top: 10px;
-    right: 10px;
     background: linear-gradient(to bottom, #000, #333); /* Darker gradient for buttons */
     color: white;
     border: none;
@@ -139,16 +146,44 @@ iframe {
     z-index: 1; /* Ensure buttons are on top of other elements */
 }
 
+
+
+/* Like Button Styles */
+.like-button {
+    position: absolute;
+    background: linear-gradient(to bottom, #28a745, #218838); /* Green gradient for like */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 15px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    z-index: 1; /* Ensure it’s on top of other elements */
+    display: flex; /* Flexbox for alignment */
+    align-items: center; /* Center content vertically */
+}
+
+.like-button span {
+    margin-left: 5px; /* Space between icon and like count */
+    font-size: 0.8rem;
+}
 .like-button {
     background: linear-gradient(to bottom, #28a745, #218838); /* Green gradient for like */
+    top: 10px;
+    right: 10px; /* Position like button */
 }
 
 .unlike-button {
     background: linear-gradient(to bottom, #dc3545, #c82333); /* Red gradient for unlike */
+    top: 10px;
+    right: 70px; /* Position unlike button */
 }
 
 .delete-button {
     background: linear-gradient(to bottom, #dc3545, #c82333); /* Red gradient for delete */
+    top: 10px;
+    right: 130px; /* Position delete button */
 }
 
 .like-button:hover,
@@ -156,6 +191,19 @@ iframe {
 .delete-button:hover {
     background-color: #333; /* Darker background on hover */
     transform: scale(1.05); /* Slightly grow button on hover */
+}
+
+/* Like Count Styles */
+.like-count {
+    position: absolute;
+    top: 10px;
+    right: 200px; /* Position like count */
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    z-index: 1; /* Ensure it’s on top of other elements */
 }
 
 /* About, Community, and Subscription sections */
@@ -173,37 +221,30 @@ iframe {
     color: aqua;
     background-color: #000000;
     opacity: 0.7;
-}
-
-/* Button Styles */
-button {
-    background-color: #000000; /* Black */
-    border: none;
-    color: white;
-    padding: 10px 15px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 1rem;
-    margin: 5px 10px; /* Space between buttons */
+    padding: 10px; /* Add padding for better readability */
     border-radius: 5px; /* Rounded corners */
-    cursor: pointer;
-    transition: background-color 0.4s;
 }
 
-button:hover {
-    background-color: #333; /* Darker background on hover */
+/* Comments Section */
+.comments-section {
+    margin-top: 20px;
 }
 
-/* Link styles */
-a {
-    color: #fefffe;
-    text-decoration: none;
-    transition: color 0.3s;
+.comment {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
 }
 
-a:hover {
-    color: #0a07b3; /* Darker blue on hover */
+.comment strong {
+    display: block;
+}
+
+.comment em {
+    color: #888;
+}
+
+.comment p {
+    margin: 5px 0;
 }
 
 /* Footer styles */
@@ -237,10 +278,12 @@ footer p {
 
     .episode {
         padding: 15px;
+        max-width: 100%; /* Allow full width on smaller screens */
     }
 
-    iframe {
-        height: 150px; /* Reduce iframe height on smaller screens */
+    iframe,
+    video {
+        height: 150px; /* Reduce media element height on smaller screens */
     }
 
     .grid-container {
@@ -250,7 +293,7 @@ footer p {
 
 /* Back button styles */
 .back-button {
-    position: fixed; /* Change to fixed to keep it in the same spot when scrolling */
+    position: fixed; /* Fixed to keep it in the same spot when scrolling */
     top: 20px; /* Distance from the top */
     left: 20px; /* Distance from the left */
     background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
@@ -266,25 +309,5 @@ footer p {
 
 .back-button:hover {
     background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
-    transform: scale(1.05); /* Slightly grow button on hover */
-}
-
-.delete-button {
-    position: absolute;
-    top: 10px;
-    right: 50px; /* Adjust position as needed */
-    background: linear-gradient(to bottom, #dc3545, #c82333); /* Red gradient */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-    z-index: 1; /* Ensure it’s on top of other elements */
-}
-
-.delete-button:hover {
-    background-color: #c82333; /* Darker red on hover */
     transform: scale(1.05); /* Slightly grow button on hover */
 }
