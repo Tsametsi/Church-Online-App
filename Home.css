@@ -24,7 +24,7 @@ body {
 
 .social-icon {
     margin: 0 10px;
-    color: #fff;
+    color:#0d0aa8;
     font-size: 24px;
 }
 
@@ -36,20 +36,21 @@ body {
     margin-top: 20px; /* Add some margin to the top */
 }
 
-.horizontal-menu button {
-    background-color: #0956b9;
-    color: white;
+/* Button Styles */
+.like-btn {
+    background-color: #030ea8;
     border: none;
-    padding: 10px 20px;
-    font-size: 16px;
+    color:#0d0aa8;
+    padding: 12px 20px;
+    font-size: 1rem;
     cursor: pointer;
     border-radius: 5px;
-    background-color: black;
-
+    background-color:#0d0aa8;
 }
 
-.horizontal-menu button:hover {
-    background-color: #889aad;
+.like-btn:hover {
+    background-color: #0d0aa8;
+    transform: scale(1.05);
 }
 
 .logout-btn {
