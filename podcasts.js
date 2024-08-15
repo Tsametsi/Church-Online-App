@@ -88,3 +88,139 @@ app.post('/api/podcasts/link', (req, res) => {
         res.status(201).json({ success: true, message: 'Podcast link added successfully!' });
     });
 });
+
+
+
+async function fetchPodcasts() {
+    try {
+        const response = await fetch('/api/podcasts');
+        if (!response.ok) throw new Error('Network response was not ok');
+        const podcasts = await response.json();
+
+        const episodeGrid = document.getElementById('episodeGrid');
+        episodeGrid.innerHTML = ''; // Clear existing content
+
+        podcasts.forEach(podcast => {
+            const episode = document.createElement('div');
+            episode.classList.add('episode');
+            episode.dataset.id = podcast.id; // Add dataset ID to identify the episode
+            episode.innerHTML = `
+                <h3>${podcast.title}</h3>
+                <p>${podcast.description}</p>
+                ${podcast.url.includes('youtube') ? `<iframe width="560" height="315" src="${podcast.url.replace('watch?v=', 'embed/')}" allowfullscreen></iframe>` : ''}
+                ${podcast.url.endsWith('.mp4') ? `<video width="320" height="240" controls>
+                    <source src="${podcast.url}" type="video/mp4">
+                    Your browser does not support the video element.
+                </video>` : ''}
+                <a href="${podcast.url}" target="_blank">Watch/Listen</a>
+                <div>Likes: <span class="like-count">${podcast.like_count || 0}</span></div>
+                <button class="like-button" onclick="likePodcast('${podcast.id}')">Like</button>
+                <button class="delete-button" onclick="deletePodcast('${podcast.id}')">Delete</button>
+            `;
+            episodeGrid.appendChild(episode);
+        });
+    } catch (error) {
+        console.error('Error fetching podcasts:', error);
+    }
+}
+
+async function deletePodcast(id) {
+    try {
+        const response = await fetch(`/api/podcasts/${id}`, {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) throw new Error('Network response was not ok');
+
+        const result = await response.json();
+        if (result.success) {
+            // Remove the podcast from the display
+            const episodeElement = document.querySelector(`.episode[data-id="${id}"]`);
+            if (episodeElement) {
+                episodeElement.remove();
+            }
+            alert('Podcast deleted successfully');
+        } else {
+            alert('Failed to delete podcast');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to delete podcast');
+    }
+}
+
+async function likePodcast(id) {
+    try {
+        const response = await fetch(`/api/podcasts/${id}/like`, {
+            method: 'POST',
+        });
+
+        if (!response.ok) throw new Error('Network response was not ok');
+
+        const result = await response.json();
+        if (result.success) {
+            // Update the like count on the page
+            const likeCountElement = document.querySelector(`.episode[data-id="${id}"] .like-count`);
+            if (likeCountElement) {
+                likeCountElement.textContent = result.new_like_count;
+            }
+            alert('Podcast liked successfully');
+        } else {
+            alert('Failed to like podcast');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to like podcast');
+    }
+}
+
+// Call the fetch function when the page loads
+window.onload = fetchPodcasts;
+
+// Handle form submissions
+document.getElementById('uploadPodcast').onsubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    try {
+        const response = await fetch('/api/podcasts/upload', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert(result.message);
+            fetchPodcasts(); // Refresh the podcast list
+            e.target.reset(); // Reset the form
+        } else {
+            alert('Failed to upload podcast');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to upload podcast');
+    }
+};
+
+document.getElementById('addPodcastLink').onsubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    try {
+        const response = await fetch('/api/podcasts/link', {
+            method: 'POST',
+            body: new URLSearchParams(formData) // Ensure it sends the correct body format
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert(result.message);
+            fetchPodcasts(); // Refresh the podcast list
+            e.target.reset(); // Reset the form
+        } else {
+            alert('Failed to add podcast link');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to add podcast link');
+    }
+};
+

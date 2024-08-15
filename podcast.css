@@ -1,10 +1,4 @@
-/* Reset some default styles */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
+/* Basic styles */
 body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
@@ -106,6 +100,7 @@ h2 {
     background-color: rgb(105, 117, 167);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s; /* Add transition for hover effect */
+    position: relative; /* For positioning like/unlike/delete buttons */
 }
 
 .episode:hover {
@@ -124,6 +119,43 @@ iframe {
     margin: 10px 0;
     border: none; /* No border for iframe */
     border-radius: 8px; /* Rounded corners */
+}
+
+/* Like/Unlike button styles */
+.like-button,
+.unlike-button,
+.delete-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(to bottom, #000, #333); /* Darker gradient for buttons */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    z-index: 1; /* Ensure buttons are on top of other elements */
+}
+
+.like-button {
+    background: linear-gradient(to bottom, #28a745, #218838); /* Green gradient for like */
+}
+
+.unlike-button {
+    background: linear-gradient(to bottom, #dc3545, #c82333); /* Red gradient for unlike */
+}
+
+.delete-button {
+    background: linear-gradient(to bottom, #dc3545, #c82333); /* Red gradient for delete */
+}
+
+.like-button:hover,
+.unlike-button:hover,
+.delete-button:hover {
+    background-color: #333; /* Darker background on hover */
+    transform: scale(1.05); /* Slightly grow button on hover */
 }
 
 /* About, Community, and Subscription sections */
@@ -222,7 +254,6 @@ footer p {
     top: 20px; /* Distance from the top */
     left: 20px; /* Distance from the left */
     background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
-    overflow-y: auto; /* Enable vertical scrolling */
     color: white; /* Text color */
     padding: 10px 15px; /* Button padding */
     border: none; /* No border */
@@ -235,6 +266,25 @@ footer p {
 
 .back-button:hover {
     background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
-    overflow-y: auto; /* Enable vertical scrolling */
+    transform: scale(1.05); /* Slightly grow button on hover */
+}
+
+.delete-button {
+    position: absolute;
+    top: 10px;
+    right: 50px; /* Adjust position as needed */
+    background: linear-gradient(to bottom, #dc3545, #c82333); /* Red gradient */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    z-index: 1; /* Ensure it’s on top of other elements */
+}
+
+.delete-button:hover {
+    background-color: #c82333; /* Darker red on hover */
     transform: scale(1.05); /* Slightly grow button on hover */
 }

@@ -29,7 +29,7 @@
                     <input type="file" name="audio" accept="audio/*">
                     <input type="file" name="video" accept="video/*">
                     <button type="submit">Upload Podcast</button>
-                </form>
+                </form>                
             </div>
 
             <div id="linkSection" class="upload-section" style="display: none;">
@@ -87,46 +87,64 @@
             const podcasts = await response.json();
 
             const episodeGrid = document.getElementById('episodeGrid');
-            const episodeSelection = document.getElementById('episodeSelection');
             episodeGrid.innerHTML = ''; // Clear existing content
-            episodeSelection.innerHTML = ''; // Clear existing content
 
             podcasts.forEach(podcast => {
                 // Populate episode list for display
                 const episode = document.createElement('div');
                 episode.classList.add('episode');
+                episode.dataset.id = podcast.id; // Add dataset ID to identify the episode
                 episode.innerHTML = `
                     <h3>${podcast.title}</h3>
                     <p>${podcast.description}</p>
                     ${podcast.youtube_link ? `<iframe width="560" height="315" src="${podcast.youtube_link.replace('watch?v=', 'embed/')}" allowfullscreen></iframe>` : ''}
-                    <audio controls>
-                        <source src="${podcast.audio_file}" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                    </audio>
-                    <br>
-                    ${podcast.video_file ? `<video width="320" height="240" controls>
-                        <source src="${podcast.video_file}" type="video/mp4">
+                    ${podcast.video_url ? `<video width="320" height="240" controls>
+                        <source src="${podcast.video_url}" type="video/mp4">
                         Your browser does not support the video element.
                     </video>` : ''}
                     <a href="${podcast.youtube_link}" target="_blank">Watch on YouTube</a>
+                    <p>Likes: <span class="like-count" data-id="${podcast.id}">${podcast.like_count}</span></p>
+                    <button class="like-button" onclick="likePodcast('${podcast.id}')">Like</button>
+                    <button class="delete-button" onclick="deletePodcast('${podcast.id}')">Delete</button>
                 `;
                 episodeGrid.appendChild(episode);
-
-                // Populate episode selection for grouping
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.id = `episode-${podcast.id}`;
-                checkbox.name = 'episode';
-                checkbox.value = podcast.id;
-                
-                const label = document.createElement('label');
-                label.htmlFor = checkbox.id;
-                label.textContent = podcast.title;
-                
-                episodeSelection.appendChild(checkbox);
-                episodeSelection.appendChild(label);
-                episodeSelection.appendChild(document.createElement('br'));
             });
+        }
+
+        // Function to delete a podcast
+        async function deletePodcast(id) {
+            const response = await fetch(`/api/podcasts/${id}`, {
+                method: 'DELETE',
+            });
+            const result = await response.json();
+            if (result.success) {
+                // Remove the podcast from the display
+                const episodeElement = document.querySelector(`.episode[data-id="${id}"]`);
+                if (episodeElement) {
+                    episodeElement.remove();
+                }
+                alert('Podcast deleted successfully');
+            } else {
+                alert('Failed to delete podcast');
+            }
+        }
+
+        // Function to like a podcast
+        async function likePodcast(id) {
+            const response = await fetch(`/api/podcasts/${id}/like`, {
+                method: 'POST',
+            });
+            const result = await response.json();
+            if (result.success) {
+                alert('Podcast liked successfully');
+                // Update like count on the UI
+                const likeCountElement = document.querySelector(`.like-count[data-id="${id}"]`);
+                if (likeCountElement) {
+                    likeCountElement.textContent = result.new_like_count; // Update with the new like count
+                }
+            } else {
+                alert('Failed to like podcast');
+            }
         }
 
         // Call the fetch function when the page loads

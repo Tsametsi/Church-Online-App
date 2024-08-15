@@ -553,14 +553,13 @@ app.get('/api/podcasts', (req, res) => {
         res.json(results);
     });
 });
-
 // Route to handle podcast uploads
-app.post('/api/podcasts/upload', upload.single('podcast'), (req, res) => {
+app.post('/api/podcasts/upload', upload.single('video'), (req, res) => {
     const { title, description } = req.body;
-    const podcastUrl = `/uploads/podcasts/${req.file.filename}`;
+    const videoFileUrl = req.file ? `/uploads/podcasts/${req.file.filename}` : null;
 
-    const query = 'INSERT INTO podcasts (title, description, url) VALUES (?, ?, ?)';
-    db.query(query, [title, description, podcastUrl], (err) => {
+    const query = 'INSERT INTO podcasts (title, description, video_url) VALUES (?, ?, ?)';
+    db.query(query, [title, description, videoFileUrl || null], (err) => {
         if (err) {
             console.error('Error inserting podcast:', err);
             return res.status(500).send('Internal server error');
@@ -569,11 +568,13 @@ app.post('/api/podcasts/upload', upload.single('podcast'), (req, res) => {
     });
 });
 
+
+// API endpoint to handle adding podcast link
 // API endpoint to handle adding podcast link
 app.post('/api/podcasts/link', (req, res) => {
     const { title, description, link } = req.body;
 
-    const query = 'INSERT INTO podcasts (title, description, url) VALUES (?, ?, ?)';
+    const query = 'INSERT INTO podcasts (title, description, url, like_count) VALUES (?, ?, ?, 0)';
     db.query(query, [title, description, link], (err) => {
         if (err) {
             console.error('Error inserting podcast link:', err);
@@ -582,6 +583,7 @@ app.post('/api/podcasts/link', (req, res) => {
         res.status(201).json({ success: true, message: 'Podcast link added successfully!' });
     });
 });
+
 
 // API endpoint to handle group creation
 app.post('/api/groups', (req, res) => {
@@ -672,7 +674,52 @@ app.get('/scriptures/:id/comments', (req, res) => {
     });
 });
 
+let podcasts = [
+    // Example podcasts
+    { id: '1', title: 'Episode 1', description: 'Description of Episode 1', youtube_link: 'https://youtube.com/watch?v=xyz', video_url: 'https://example.com/video.mp4', like_count: 10 }
+];
 
+// Get all podcasts
+app.get('/api/podcasts', (req, res) => {
+    res.json(podcasts);
+});
+
+
+
+// API endpoint to like a podcast
+app.post('/api/podcasts/:id/like', (req, res) => {
+    const { id } = req.params;
+    const query = 'UPDATE podcasts SET like_count = like_count + 1 WHERE id = ?';
+    db.query(query, [id], (err) => {
+        if (err) {
+            console.error('Error liking podcast:', err);
+            return res.status(500).send('Internal server error');
+        }
+
+        const getLikeCountQuery = 'SELECT like_count FROM podcasts WHERE id = ?';
+        db.query(getLikeCountQuery, [id], (err, results) => {
+            if (err) {
+                console.error('Error retrieving like count:', err);
+                return res.status(500).send('Internal server error');
+            }
+            res.json({ success: true, new_like_count: results[0].like_count });
+        });
+    });
+});
+
+
+// API endpoint to delete a podcast
+app.delete('/api/podcasts/:id', (req, res) => {
+    const { id } = req.params;
+    const query = 'DELETE FROM podcasts WHERE id = ?';
+    db.query(query, [id], (err) => {
+        if (err) {
+            console.error('Error deleting podcast:', err);
+            return res.status(500).send('Internal server error');
+        }
+        res.json({ success: true });
+    });
+});
 
 // Start the server
 server.listen(port, () => {
