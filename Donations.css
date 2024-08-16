@@ -4,7 +4,7 @@ body {
     color: #333;
     margin: 0;
     padding: 20px;
-    background-image: url('https://media.istockphoto.com/id/171582219/photo/tithe-and-offering.jpg?s=612x612&w=0&k=20&c=YtiR0pHsL_wuKmYGviXftUXpOoRrfVNxyxaTZM2g8bw=');
+    background-image: url('pictures/WhatsApp Image 2024-08-14 at 15.52.59 (1).jpeg');
     background-size:cover; /* Cover the entire background */
     background-repeat: no-repeat; /* No repeating of background */
     background-attachment: fixed; /* Fixed position */
@@ -16,7 +16,7 @@ body {
 h1 {
     text-align: center;
     color: hsl(0, 0%, 100%);
-    background-color: #000000;
+    background-color:  #000000;
     margin-left: 100px;
     margin-right: 100px;
 }
@@ -60,7 +60,7 @@ select:focus {
 button {
     width: 100%;
     padding: 15px;
-    background-color: #03274e;
+    background-color: #03274e ;
     color: white;
     border: none;
     border-radius: 5px;
@@ -69,7 +69,7 @@ button {
 }
 
 button:hover {
-    background-color: #03274e;
+    background-color:  #03274e;
 }
 
 #paypal-button-container {
@@ -79,7 +79,7 @@ button:hover {
 /* Back button styles */
 .back-button {
     position: fixed; /* Change to fixed to keep it in the same spot when scrolling */
-    top: 20px; /* Distance from the top */
+    top: 41px; /* Distance from the top */
     left: 20px; /* Distance from the left */
     background-color: #000000; /* Button color */
     color: white; /* Text color */
@@ -93,7 +93,7 @@ button:hover {
 }
 
 .back-button:hover {
-    background-color: #0d0aa8; /* Darker green on hover */
+    background-color: #03274e; /* Darker green on hover */
     transform: scale(1.05); /* Slightly grow button on hover */
 }
 

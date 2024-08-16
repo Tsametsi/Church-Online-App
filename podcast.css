@@ -293,10 +293,10 @@ footer p {
 
 /* Back button styles */
 .back-button {
-    position: fixed; /* Fixed to keep it in the same spot when scrolling */
+    position: fixed; /* Keeps it in the same spot when scrolling */
     top: 20px; /* Distance from the top */
     left: 20px; /* Distance from the left */
-    background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
+    background-color: #000000; /* Button color */
     color: white; /* Text color */
     padding: 10px 15px; /* Button padding */
     border: none; /* No border */
@@ -308,6 +308,6 @@ footer p {
 }
 
 .back-button:hover {
-    background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
+    background-color: #0d0aa8; /* Darker color on hover */
     transform: scale(1.05); /* Slightly grow button on hover */
 }
