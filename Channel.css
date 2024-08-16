@@ -1,0 +1,154 @@
+/* Reset some default styles */
+h1, h2, ul, p, input, button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Ensure box-sizing consistency */
+}
+
+/* Basic styling for the entire page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #4f32d3; /* Dark background for a dark theme */
+    color: #e0e0e0; /* Light text color for contrast */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Container for layout */
+.container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    height: 80%;
+}
+
+/* Sidebar styling */
+.sidebar {
+    width: 300px;
+    background: #1120fc; /* Darker background for sidebar */
+    border-right: 1px solid #333; /* Subtle border for separation */
+    padding: 15px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Darker shadow for more depth */
+}
+
+/* Main content styling */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header styling */
+.header {
+    background: #003366; /* Dark blue for header */
+    color: #ffd90098; /* Gold text color */
+    padding: 15px;
+    font-size: 24px;
+    text-align: center;
+    border-bottom: 1px solid #002244; /* Slightly darker blue border */
+}
+
+/* Channel list styling */
+.channel-list {
+    margin: 20px 0;
+}
+
+.channel-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.channel-list li {
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.3s;
+    color: #e0e0e0; /* Light text color */
+}
+
+.channel-list li:hover {
+    background-color: #003366; /* Dark blue for hover effect */
+}
+
+.channel-list li.selected {
+    background-color: #2b17e2; /* Gold for selected channel */
+    color: #000; /* Dark text for better readability */
+}
+
+/* Messages container styling */
+.messages {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #333; /* Dark border */
+}
+
+/* Messages content styling */
+#messagesContainer {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    background-color: #1c1c1c; /* Dark background for messages */
+    border-top: 1px solid #333; /* Dark border */
+}
+
+/* Message section styling */
+.message-section {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background: #1c1c1c; /* Dark background for message input section */
+    border-top: 1px solid #333; /* Dark border */
+}
+
+/* Textarea and input styling */
+textarea, input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #333; /* Dark border */
+    background-color: #afb1b3; /* Slightly lighter dark background */
+    color: #e0e0e0; /* Light text color */
+}
+
+/* Button styling */
+button {
+    background-color: #ffd900bb; /* Gold background for buttons */
+    color: #000; /* Black text */
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #d4af37; /* Darker gold for hover effect */
+}
+
+/* Back button styles */
+.back-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: #003366; /* Dark blue background for back button */
+    color: #ffd900d3; /* Gold text color */
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.2s;
+    z-index: 1000;
+}
+
+.back-button:hover {
+    background-color: #002244; /* Darker blue on hover */
+    transform: scale(1.05);
+}

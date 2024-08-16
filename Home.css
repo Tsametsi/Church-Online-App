@@ -4,6 +4,8 @@ body {
     margin: 0;
     padding: 0;
     background-image: url('Untitled-design-7.png');
+    background-size: cover;
+    background-position: center;
     margin-top: 210px;
 }
 
@@ -24,40 +26,86 @@ body {
 
 .social-icon {
     margin: 0 10px;
-    color:#0d0aa8;
+    color: #0d0aa8;
     font-size: 24px;
 }
 
 .horizontal-menu {
     display: flex;
-    flex-wrap: wrap; /* Allow buttons to wrap to the next line if needed */
     justify-content: center;
-    gap: 10px; /* Space between buttons */
-    margin-top: 20px; /* Add some margin to the top */
+    gap: 20px;
+    flex-wrap: wrap; /* Allow wrapping if necessary */
 }
 
-/* Button Styles */
-.like-btn {
-    background-color: #030ea8;
+.menu-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between buttons */
+    max-width: 300px; /* Limit column width */
+}
+
+.menu-btn {
+    background-color: black;
     border: none;
-    color:#0d0aa8;
+    color: white;
     padding: 12px 20px;
     font-size: 1rem;
     cursor: pointer;
     border-radius: 5px;
-    background-color:#0d0aa8;
+    text-align: center; /* Center text inside button */
 }
 
-.like-btn:hover {
-    background-color: #0d0aa8;
+.menu-btn:hover {
+    background-color: #333;
     transform: scale(1.05);
 }
 
-.logout-btn {
-    background-color: #f44336;
-    color: white;
+/* Slideshow Container */
+.slideshow-container {
+    position: relative;
+    max-width: 800px; /* Adjust based on your preference */
+    margin: auto;
+    overflow: hidden;
 }
 
-.menu-toggle {
-    display: none; /* Hidden if not needed */
+.mySlides {
+    display: none; /* Hide slides by default */
+}
+
+.mySlides img {
+    width: 100%;
+    height: auto;
+}
+
+.fade {
+    animation: fade 1.5s ease-in-out;
+}
+
+@keyframes fade {
+    from { opacity: .4 }
+    to { opacity: 1 }
+}
+
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -22px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.8);
 }

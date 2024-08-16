@@ -3,53 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Channels</title>
-    <link rel="stylesheet" href="ChatGroup.css">
+    <title>Chat Application</title>
+    <link rel="stylesheet" href="Channel.css">
 </head>
 <body>
-    <div class="channel-container">
-        <header>
-            <h1>Channel Management</h1>
-        </header>
-
-        <div class="controls">
-            <select id="channelSelect">
-                <option value="">Select a channel</option>
-            </select>
-            <button id="createNewGroupButton">Create New Group</button>
+    <div class="container">
+        <div class="sidebar">
+            <header class="header">Chat Application</header>
+            <div class="controls">
+                <select id="channelSelect">
+                    <option value="">Select a channel</option>
+                </select>
+                <button id="createNewGroupButton">Create New Group</button>
+            </div>
+            <div class="create-channel" style="display: none;">
+                <h2>Create a New Channel</h2>
+                <input type="text" id="channelName" placeholder="Channel Name" required>
+                <button id="createChannelButton">Create Channel</button>
+            </div>
+            <div class="add-users-to-channel" style="display: none;">
+                <h2>Add Users to Channel</h2>
+                <select id="userSelect" multiple>
+                    <!-- Dynamically populated users will go here -->
+                </select>
+                <button id="addUsersButton">Add Users</button>
+            </div>
+            <div class="channel-list">
+                <h2>Select a Channel</h2>
+                <ul id="channelList">
+                    <!-- Dynamically populated channels will go here -->
+                </ul>
+            </div>
         </div>
 
-        <div class="create-channel" style="display: none;">
-            <h2>Create a New Channel</h2>
-            <input type="text" id="channelName" placeholder="Channel Name" required>
-            <button id="createChannelButton">Create Channel</button>
-        </div>
-
-        <div class="add-users-to-channel" style="display: none;">
-            <h2>Add Users to Channel</h2>
-            <select id="userSelect" multiple>
-                <!-- Dynamically populated users will go here -->
-            </select>
-            <button id="addUsersButton">Add Users</button>
-        </div>
-
-        <div class="channel-list">
-            <h2>Select a Channel</h2>
-            <ul id="channelList">
-                <!-- Dynamically populated channels will go here -->
-            </ul>
-        </div>
-
-        <div class="message-section">
-            <h2>Send a Message</h2>
-            <input type="text" id="username" placeholder="Your Name" required>
-            <textarea id="messageContent" placeholder="Type your message here..." required></textarea>
-            <button id="sendMessageButton">Send Message</button>
-        </div>
-
-        <div id="messagesContainer">
-            <h2>Messages</h2>
-            <!-- Messages will be dynamically loaded here -->
+        <div class="main-content">
+            <div class="messages">
+                <div id="messagesContainer">
+                    <h2>Messages</h2>
+                    <!-- Messages will be dynamically loaded here -->
+                </div>
+            </div>
+            <div class="message-section">
+                <h2>Send a Message</h2>
+                <input type="text" id="username" placeholder="Your Name" required>
+                <textarea id="messageContent" placeholder="Type your message here..." required></textarea>
+                <button id="sendMessageButton">Send Message</button>
+            </div>
         </div>
     </div>
 
@@ -181,7 +180,7 @@
             }
         });
 
-        // Load channels on page load
+        // Load channels and users on page load
         window.onload = () => {
             fetchChannels();
             fetchUsers(); // Load users as well

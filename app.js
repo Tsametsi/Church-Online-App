@@ -60,7 +60,7 @@ app.get('/Chat.html', (req, res) => res.sendFile(path.join(__dirname, 'Chat.html
 app.get('/Channel.html', (req, res) => res.sendFile(path.join(__dirname, 'Channel.html')));
 
 // Redirect root URL to Login.html
-app.get('/', (req, res) => res.redirect('/Home.html'));
+app.get('/', (req, res) => res.redirect('/Login.html'));
 
 // Handle login POST request
 app.post('/login', (req, res) => {
