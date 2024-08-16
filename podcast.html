@@ -14,46 +14,10 @@
     </header>
 
     <main>
+        <!-- Existing content -->
+
         <section class="subscription">
-            <h2>Manage Podcasts</h2>
-            <div class="button-group">
-                <button id="toggleUpload">Upload Your Podcast</button>
-                <button id="toggleLink">Add Podcast Link</button>
-                <button id="toggleGroups">Manage Groups</button>
-            </div>
-
-            <div id="uploadSection" class="upload-section" style="display: none;">
-                <form id="uploadPodcast" enctype="multipart/form-data">
-                    <input type="text" name="title" placeholder="Podcast Title" required>
-                    <textarea name="description" placeholder="Description" required></textarea>
-                    <input type="file" name="audio" accept="audio/*">
-                    <input type="file" name="video" accept="video/*">
-                    <button type="submit">Upload Podcast</button>
-                </form>                
-            </div>
-
-            <div id="linkSection" class="upload-section" style="display: none;">
-                <form id="addPodcastLink">
-                    <input type="text" name="title" placeholder="Podcast Title" required>
-                    <textarea name="description" placeholder="Description" required></textarea>
-                    <input type="url" name="youtube_link" placeholder="YouTube Link" required>
-                    <button type="submit">Add Podcast Link</button>
-                </form>
-            </div>
-
-            <div id="groupSection" class="upload-section" style="display: none;">
-                <h2>Create or Manage Groups</h2>
-                <form id="groupForm">
-                    <div>
-                        <label for="groupName">Group Name:</label>
-                        <input type="text" id="groupName" name="groupName" required>
-                    </div>
-                    <div id="episodeSelection">
-                        <!-- Episodes will be dynamically populated here with checkboxes -->
-                    </div>
-                    <button type="submit">Create Group</button>
-                </form>
-            </div>
+            <!-- Existing sections for managing podcasts -->
         </section>
 
         <section class="episode-list">
@@ -78,6 +42,23 @@
         <p>&copy; 2024 Your Podcast Name. All rights reserved.</p>
         <p><a href="mailto:Apostolic@TV.com">Contact Us</a></p>
     </footer>
+
+    <!-- Comment Modal -->
+    <div id="commentModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Comments</h2>
+            <div id="commentList" class="comment-list">
+                <!-- Comments will be dynamically inserted here -->
+            </div>
+            <form id="commentForm">
+                <input type="hidden" id="episodeId" name="podcast_id">
+                <input type="text" id="userName" name="user_name" placeholder="Your Name" required>
+                <textarea id="commentText" name="comment_text" placeholder="Your Comment" required></textarea>
+                <button type="submit">Add Comment</button>
+            </form>
+        </div>
+    </div>
 
     <script src="podcasts.js"></script>
     <script>
@@ -106,6 +87,7 @@
                     <p>Likes: <span class="like-count" data-id="${podcast.id}">${podcast.like_count}</span></p>
                     <button class="like-button" onclick="likePodcast('${podcast.id}')">Like</button>
                     <button class="delete-button" onclick="deletePodcast('${podcast.id}')">Delete</button>
+                    <button class="comment-button" onclick="openCommentModal('${podcast.id}')">Comments</button>
                 `;
                 episodeGrid.appendChild(episode);
             });
@@ -150,6 +132,7 @@
         // Call the fetch function when the page loads
         window.onload = fetchPodcasts;
 
+        // Handle form submissions
         document.getElementById('uploadPodcast').onsubmit = async (e) => {
             e.preventDefault();
             const formData = new FormData(e.target);
@@ -215,6 +198,96 @@
             document.getElementById('uploadSection').style.display = 'none'; // Hide upload section if groups are shown
             document.getElementById('linkSection').style.display = 'none'; // Hide link section if groups are shown
         };
+
+        // Function to open the comment modal and load comments
+        function openCommentModal(episodeId) {
+            const modal = document.getElementById('commentModal');
+            const commentList = document.getElementById('commentList');
+            const closeModal = document.querySelector('.close');
+
+            // Clear existing comments
+            commentList.innerHTML = '';
+
+            // Fetch comments for the episode
+            fetch(`/api/podcasts/${episodeId}/comments`)
+                .then(response => response.json())
+                .then(comments => {
+                    comments.forEach(comment => {
+                        const commentElement = document.createElement('div');
+                        commentElement.classList.add('comment');
+                        commentElement.dataset.id = comment.id;
+                        commentElement.innerHTML = `
+                            <p><strong>${comment.user_name}</strong>: ${comment.comment_text}</p>
+                            ${comment.user_name === getCurrentUsername() ? '<button onclick="deleteComment(this)">Delete</button>' : ''}
+                        `;
+                        commentList.appendChild(commentElement);
+                    });
+                });
+
+            // Set the episode ID in the form
+            document.getElementById('episodeId').value = episodeId;
+
+            // Show modal
+            modal.style.display = 'block';
+
+            // Close modal when clicking the close button
+            closeModal.onclick = () => {
+                modal.style.display = 'none';
+            };
+
+            // Close modal when clicking outside of the modal content
+            window.onclick = (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            };
+
+            // Handle comment form submission
+            document.getElementById('commentForm').onsubmit = async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                formData.append('podcast_id', episodeId);
+
+                const response = await fetch('/api/podcasts/comments', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert('Comment added successfully');
+                    // Reload comments
+                    openCommentModal(episodeId);
+                } else {
+                    alert('Failed to add comment');
+                }
+            };
+        }
+
+        // Function to delete a comment
+        function deleteComment(button) {
+            const commentElement = button.parentElement;
+            const commentId = commentElement.dataset.id;
+
+            fetch(`/api/podcasts/comments/${commentId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    commentElement.remove();
+                    alert('Comment deleted successfully');
+                } else {
+                    alert('Failed to delete comment');
+                }
+            });
+        }
+
+        // Dummy function to simulate getting the current username
+        function getCurrentUsername() {
+            // Replace with actual user authentication logic
+            return 'User123';
+        }
     </script>
 </body>
+
 </html>
