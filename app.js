@@ -21,7 +21,7 @@ const io = socketIo(server);
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Irene@441',
+    password: 'Gwacela30#',
     database: 'church_app_database'
 });
 
@@ -58,7 +58,8 @@ app.get('/Events.html', (req, res) => res.sendFile(path.join(__dirname, 'Events.
 app.get('/Donations.html', (req, res) => res.sendFile(path.join(__dirname, 'Donations.html')));
 app.get('/Chat.html', (req, res) => res.sendFile(path.join(__dirname, 'Chat.html')));
 app.get('/Channel.html', (req, res) => res.sendFile(path.join(__dirname, 'Channel.html')));
-
+app.get('/', (req, res) => {res.sendFile(__dirname + 'podcasts.html');
+});
 // Redirect root URL to Login.html
 app.get('/', (req, res) => res.redirect('/Login.html'));
 
@@ -554,12 +555,13 @@ app.get('/api/podcasts', (req, res) => {
     });
 });
 // Route to handle podcast uploads
-app.post('/api/podcasts/upload', upload.single('video'), (req, res) => {
+app.post('/api/podcasts/upload', upload.fields([{ name: 'audio' }, { name: 'video' }]), (req, res) => {
     const { title, description } = req.body;
-    const videoFileUrl = req.file ? `/uploads/podcasts/${req.file.filename}` : null;
+    const audioUrl = req.files['audio'] ? `/uploads/podcasts/${req.files['audio'][0].filename}` : null;
+    const videoUrl = req.files['video'] ? `/uploads/podcasts/${req.files['video'][0].filename}` : null;
 
-    const query = 'INSERT INTO podcasts (title, description, video_url) VALUES (?, ?, ?)';
-    db.query(query, [title, description, videoFileUrl || null], (err) => {
+    const query = 'INSERT INTO podcasts (title, description, audio_file, video_file) VALUES (?, ?, ?, ?)';
+    db.query(query, [title, description, audioUrl, videoUrl], (err) => {
         if (err) {
             console.error('Error inserting podcast:', err);
             return res.status(500).send('Internal server error');
@@ -701,35 +703,95 @@ app.get('/api/podcasts/:id', (req, res) => {
     });
 });
 
+// Function to add a like
+// Function to add a like and increment the like count
+async function addLike(podcastId, userId) {
+    const addLikeSql = 'INSERT INTO likes (podcast_id, user_id) VALUES (?, ?)';
+    const incrementLikeCountSql = 'UPDATE podcasts SET like_count = like_count + 1 WHERE id = ?';
 
-// API endpoint to like a podcast
-app.post('/api/podcasts/:id/like', (req, res) => {
-    const { id } = req.params;
-    const updateQuery = 'UPDATE podcasts SET like_count = like_count + 1 WHERE id = ?';
-    db.query(updateQuery, [id], (err) => {
+    // Start a transaction to ensure atomicity
+    connection.beginTransaction((err) => {
         if (err) {
-            console.error('Error liking podcast:', err);
-            return res.status(500).send('Internal server error');
+            console.error('Error starting transaction:', err);
+            return;
         }
 
-        const getLikeCountQuery = 'SELECT like_count FROM podcasts WHERE id = ?';
-        db.query(getLikeCountQuery, [id], (err, results) => {
+        // Insert like into the likes table
+        connection.query(addLikeSql, [podcastId, userId], (err, results) => {
             if (err) {
-                console.error('Error retrieving like count:', err);
-                return res.status(500).send('Internal server error');
+                return connection.rollback(() => {
+                    console.error('Error adding like:', err);
+                    return;
+                });
             }
-            if (results.length === 0) {
-                return res.status(404).send('Podcast not found');
-            }
-            res.json({ success: true, new_like_count: results[0].like_count });
+
+            // Update like count in the podcasts table
+            connection.query(incrementLikeCountSql, [podcastId], (err, results) => {
+                if (err) {
+                    return connection.rollback(() => {
+                        console.error('Error incrementing like count:', err);
+                        return;
+                    });
+                }
+
+                // Commit the transaction
+                connection.commit((err) => {
+                    if (err) {
+                        return connection.rollback(() => {
+                            console.error('Error committing transaction:', err);
+                            return;
+                        });
+                    }
+                    console.log('Like added and like count incremented successfully');
+                });
+            });
         });
     });
-});
+}
+
+
+// Function to remove a like
+async function removeLike(podcastId, userId) {
+    const sql = 'DELETE FROM likes WHERE podcast_id = ? AND user_id = ?';
+    connection.query(sql, [podcastId, userId], (err, results) => {
+        if (err) {
+            console.error('Error removing like:', err);
+            return;
+        }
+        console.log('Like removed successfully');
+    });
+}
+
+// Function to increment like count
+async function incrementLikeCount(podcastId) {
+    const sql = 'UPDATE podcasts SET like_count = like_count + 1 WHERE id = ?';
+    connection.query(sql, [podcastId], (err, results) => {
+        if (err) {
+            console.error('Error incrementing like count:', err);
+            return;
+        }
+        console.log('Like count incremented successfully');
+    });
+}
+
+// Function to decrement like count
+async function decrementLikeCount(podcastId) {
+    const sql = 'UPDATE podcasts SET like_count = like_count - 1 WHERE id = ?';
+    connection.query(sql, [podcastId], (err, results) => {
+        if (err) {
+            console.error('Error decrementing like count:', err);
+            return;
+        }
+        console.log('Like count decremented successfully');
+    });
+}
 
 // API endpoint to delete a podcast
 app.delete('/api/podcasts/:id', (req, res) => {
     const { id } = req.params;
     const query = 'DELETE FROM podcasts WHERE id = ?';
+
+    // Use 'db' instead of 'connection'
     db.query(query, [id], (err) => {
         if (err) {
             console.error('Error deleting podcast:', err);
@@ -743,7 +805,7 @@ app.delete('/api/podcasts/:id', (req, res) => {
 app.get('/api/podcasts/:id/comments', (req, res) => {
     const podcastId = req.params.id;
     const sql = 'SELECT * FROM comments WHERE podcast_id = ? ORDER BY comment_date DESC';
-    db.query(sql, [podcastId], (err, results) => {
+    connection.query(sql, [podcastId], (err, results) => {
         if (err) {
             console.error('Error querying comments:', err);
             return res.status(500).send('Internal server error');
@@ -758,7 +820,7 @@ app.post('/api/podcasts/:id/comments', (req, res) => {
     const { user_name, comment_text } = req.body;
 
     const sql = 'INSERT INTO comments (podcast_id, user_name, comment_text) VALUES (?, ?, ?)';
-    db.query(sql, [podcastId, user_name, comment_text], (err) => {
+    connection.query(sql, [podcastId, user_name, comment_text], (err) => {
         if (err) {
             console.error('Error inserting comment:', err);
             return res.status(500).send('Internal server error');
@@ -767,8 +829,7 @@ app.post('/api/podcasts/:id/comments', (req, res) => {
     });
 });
 
-
 // Start the server
-server.listen(port, () => {
+app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
