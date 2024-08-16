@@ -1,42 +1,45 @@
-let cart = [];
-
-function addToCart(name, price) {
-    const item = cart.find(i => i.name === name);
-    if (item) {
-        item.quantity += 1;
-    } else {
-        cart.push({ name, price, quantity: 1 });
-    }
-    updateCart();
-}
-
-function updateCart() {
+function addToCart(productName, price, size) {
     const cartItems = document.getElementById('cart-items');
-    const totalPriceElement = document.getElementById('total-price');
-    const paypalAmount = document.getElementById('paypal-amount');
-    const alipayAmount = document.getElementById('alipay-amount');
+    const listItem = document.createElement('li');
     
-    cartItems.innerHTML = '';
-    let totalPrice = 0;
+    listItem.textContent = `${productName} (${size}) - ZAR ${price.toFixed(2)}`;
 
-    cart.forEach(item => {
-        const li = document.createElement('li');
-        li.innerHTML = `${item.name} (x${item.quantity}) - ZAR ${item.price * item.quantity}
-            <button onclick="removeFromCart('${item.name}')">Remove</button>`;
-        cartItems.appendChild(li);
-        totalPrice += item.price * item.quantity;
+    // Create a cancel button
+    const cancelButton = document.createElement('button');
+    cancelButton.textContent = 'Cancel';
+    cancelButton.style.marginLeft = '10px';
+    
+    // Add an event listener to the cancel button
+    cancelButton.addEventListener('click', function() {
+        removeFromCart(listItem, price);
     });
+    
+    listItem.appendChild(cancelButton);
+    cartItems.appendChild(listItem);
 
-    totalPriceElement.innerText = totalPrice.toFixed(2);
-    paypalAmount.value = totalPrice.toFixed(2);
-    alipayAmount.value = totalPrice.toFixed(2);
+    updateTotalPrice(price);
 }
 
-function removeFromCart(name) {
-    cart = cart.filter(item => item.name !== name);
-    updateCart();
+function updateTotalPrice(price) {
+    const totalPriceElement = document.getElementById('total-price');
+    const currentTotal = parseFloat(totalPriceElement.textContent);
+    const newTotal = currentTotal + price;
+    totalPriceElement.textContent = newTotal.toFixed(2);
+    document.getElementById('paypal-amount').value = newTotal.toFixed(2);
+    document.getElementById('alipay-amount').value = newTotal.toFixed(2);
 }
 
+function removeFromCart(listItem, price) {
+    const cartItems = document.getElementById('cart-items');
+    cartItems.removeChild(listItem);
+
+    const totalPriceElement = document.getElementById('total-price');
+    const currentTotal = parseFloat(totalPriceElement.textContent);
+    const newTotal = currentTotal - price;
+    totalPriceElement.textContent = newTotal.toFixed(2);
+    document.getElementById('paypal-amount').value = newTotal.toFixed(2);
+    document.getElementById('alipay-amount').value = newTotal.toFixed(2);
+}
 function closePopup() {
     document.getElementById('image-popup').style.display = 'none';
 }
