@@ -5,10 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Church Events</title>
     <link rel="stylesheet" href="/Events.css">
-    <a href="javascript:history.back()" class="back-button">←Back</a>
 </head>
 <body>
-    <h1>Upcoming Church Events</h1>
+    <a href="/Home.html" class="back-button">Back</a> <!-- Back button -->
+
+    <header>
+        <h1>Upcoming Church Events</h1>
+        <button id="create-event-btn">Create Event</button> <!-- Button to open the event creation form -->
+    </header>
+
+    <section id="upload-event" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add a New Event</h2>
+            <form id="event-form">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required><br>
+
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required></textarea><br>
+
+                <label for="event_date">Event Date and Time:</label>
+                <input type="datetime-local" id="event_date" name="event_date" required><br>
+
+                <label for="virtual_url">Virtual URL (Optional):</label>
+                <input type="url" id="virtual_url" name="virtual_url"><br>
+
+                <button type="submit">Upload Event</button>
+            </form>
+        </div>
+    </section>
 
     <div id="events-container">
         <!-- Events will be dynamically added here -->
@@ -16,6 +42,25 @@
 
     <script src="/app.js"></script>
     <script>
+        // Modal handling
+        const modal = document.getElementById('upload-event');
+        const createEventBtn = document.getElementById('create-event-btn');
+        const closeModal = document.querySelector('.modal .close');
+
+        createEventBtn.addEventListener('click', () => {
+            modal.style.display = 'block';
+        });
+
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             fetch('/api/events')
                 .then(response => response.json())
@@ -29,36 +74,65 @@
                             <p>${event.description}</p>
                             <p><strong>Date:</strong> ${new Date(event.event_date).toLocaleString()}</p>
                             ${event.virtual_url ? `<p><strong>Virtual URL:</strong> <a href="${event.virtual_url}" target="_blank">${event.virtual_url}</a></p>` : ''}
-                            <button onclick="toggleNotification(${event.id}, ${event.notification_on})">
-                                ${event.notification_on ? 'Disable' : 'Enable'} Notification
-                            </button>
+                            <input type="email" id="email-${event.id}" placeholder="Enter your email to get notified">
+                            <button onclick="notifyMe(${event.id})">Notify Me</button>
                         `;
                         eventsContainer.appendChild(eventDiv);
                     });
                 })
                 .catch(error => console.error('Error fetching events:', error));
         });
-    
-        function toggleNotification(id, currentStatus) {
-            const newStatus = !currentStatus;
-            fetch(`/api/events/${id}/notification`, {
-                method: 'PUT',
+
+        document.getElementById('event-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const formData = new FormData(this);
+            const formObject = Object.fromEntries(formData.entries());
+
+            fetch('/api/events/upload', {
+                method: 'POST',
+                body: JSON.stringify(formObject),
                 headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ notification_on: newStatus })
+                }
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Optionally update the UI to reflect the new status
-                    location.reload(); // Refresh page to reflect changes
+                    alert('Event successfully uploaded!');
+                    document.getElementById('event-form').reset(); // Reset the form
+                    location.reload(); // Refresh the page to show the new event
                 } else {
-                    console.error('Failed to update notification status');
+                    alert('Failed to upload event.');
                 }
             })
-            .catch(error => console.error('Error updating notification status:', error));
+            .catch(error => console.error('Error uploading event:', error));
+        });
+
+        function notifyMe(eventId) {
+            const email = document.getElementById(`email-${eventId}`).value;
+            if (!email) {
+                alert('Please enter your email address.');
+                return;
+            }
+
+            fetch(`/api/events/${eventId}/notify`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('You will be notified at the time of the event.');
+                } else {
+                    alert('Failed to set up notification.');
+                }
+            })
+            .catch(error => console.error('Error notifying:', error));
         }
-    </script>    
+    </script>
 </body>
 </html>

@@ -1,0 +1,119 @@
+/* Apply a gradient background and ensure the page can scroll vertically */
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
+    margin: 0;
+    padding: 0;
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* Style for the header */
+header {
+    text-align: center;
+    padding: 20px;
+    background-color: #007bff;
+    color: white;
+}
+
+/* Style for the main heading */
+h1 {
+    margin: 0;
+    font-size: 2.5em; /* Larger font size for emphasis */
+}
+
+/* Style for paragraphs */
+p {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+/* Center and space out the channel selector buttons */
+.channel-selector {
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* Style for navigation buttons */
+.nav-btn {
+    background-color: #007bff; /* Button color */
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1.5em;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+/* Darker color on hover for navigation buttons */
+.nav-btn:hover {
+    background-color: #0056b3; /* Darker color on hover */
+}
+
+/* Style for the container holding channels with horizontal scrolling */
+.channels-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 90%; /* Limit the width to the viewport */
+}
+
+/* Style for each channel */
+.channel {
+    background-color: #ffffff;
+    border-radius: 10px; /* Rounded corners for a softer look */
+    padding: 20px;
+    margin: 10px;
+    min-width: 300px; /* Fixed width for channel boxes */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Softer and larger shadow */
+    transition: transform 0.3s; /* Transition for scaling effect */
+    scroll-snap-align: start;
+    cursor: pointer;
+}
+
+/* Lift effect on hover for channels */
+.channel:hover {
+    transform: translateY(-2px); /* Lift effect on hover */
+}
+
+/* Style for channel titles */
+.channel h2 {
+    margin: 0;
+    font-size: 1.5em; /* Slightly larger font for channel titles */
+    color: #333; /* Darker color for better readability */
+}
+
+/* Style for channel descriptions */
+.channel p {
+    color: #555; /* Slightly darker gray for better contrast */
+    line-height: 1.6; /* Increase line height for readability */
+}
+
+/* Style for links within channels */
+.channel a {
+    color: #007bff; /* Blue color for links */
+    text-decoration: none;
+    font-weight: bold; /* Bold text for links */
+}
+
+/* Underline links on hover */
+.channel a:hover {
+    text-decoration: underline;
+}
+
+/* Center and space out the player container */
+.player-container {
+    text-align: center;
+    margin: 20px;
+    height: 2000px;
+}
+
+/* Style for the video player */
+#video-player {
+    width: 100%;
+    height: 900px; /* Fixed height for the player */
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Softer and larger shadow */
+}

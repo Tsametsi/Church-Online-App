@@ -9,9 +9,9 @@ h1, h2, ul, p, input, button {
 /* Basic styling for the entire page */
 body {
     font-family: 'Arial', sans-serif;
-   /* background-color: #6e6e6e;
-    background-image: url('Chat_Image.jpg');
-    background-size: cover; /* Ensure the background covers the entire screen */
+    /* background-color: #6e6e6e; */
+    /* background-image: url('Chat_Image.jpg'); */
+    /* background-size: cover; */
     background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
     overflow-y: auto; /* Enable vertical scrolling */
     background-repeat: no-repeat;
@@ -42,26 +42,61 @@ h1 {
 }
 
 /* Message styling */
+.sender, .receiver {
+    background: linear-gradient(145deg, #ffffff, #e0e0e0); /* Light gradient for depth */
+    color: #333; /* Dark text for readability */
+    border-radius: 12px; /* More rounded corners for a softer look */
+    padding: 12px 16px; /* More padding for a spacious feel */
+    margin: 8px 0; /* Spacing between messages */
+    max-width: 70%; /* Max width for responsiveness */
+    position: relative; /* For pseudo-elements positioning */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    transition: all 0.3s ease; /* Smooth transitions for hover effects */
+}
+
+/* Sender specific styles */
 .sender {
-    background-color: rgba(163, 184, 241, 0.9); /* Lighter blue for sender */
+    background: linear-gradient(145deg, #d0e3f0, #a6b7e1); /* Light blue gradient */
     color: #333; /* Dark text for sender messages */
-    text-align: left;
-    border-radius: 8px;
-    padding: 8px;
-    margin: 5px 0;
-    max-width: 70%; /* Set a max width */
     align-self: flex-start; /* Align sender messages to the left */
 }
 
+/* Receiver specific styles */
 .receiver {
-    background-color: rgba(132, 120, 243, 0.9); /* Lighter purple for receiver */
+    background: linear-gradient(145deg, #f0d0f0, #e1a6e1); /* Light purple gradient */
     color: #fff; /* White text for receiver messages */
-    text-align: right;
-    border-radius: 8px;
-    padding: 8px;
-    margin: 5px 0;
-    max-width: 70%; /* Set a max width */
     align-self: flex-end; /* Align receiver messages to the right */
+}
+
+/* Pseudo-elements for added decoration */
+.sender::before, .receiver::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    transform: translateY(-50%);
+    transition: border-color 0.3s ease; /* Smooth transition for the arrow color */
+}
+
+/* Sender message arrow */
+.sender::before {
+    border-top: 15px solid #d0e3f0; /* Arrow color matches background */
+    left: -15px; /* Position arrow on the left */
+}
+
+/* Receiver message arrow */
+.receiver::before {
+    border-top: 15px solid #f0d0f0; /* Arrow color matches background */
+    right: -15px; /* Position arrow on the right */
+}
+
+/* Hover effects for messages */
+.sender:hover, .receiver:hover {
+    background: linear-gradient(145deg, #ffffff, #cfcfcf); /* Slightly lighter gradient on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
 }
 
 /* Styling for the user list container */
@@ -141,7 +176,7 @@ h1 {
 }
 
 #send-button:hover {
-    background-color: #03274e(255, 215, 0, 0.8); /* Darker gold on hover */
+    background-color: #c8873e; /* Darker gold on hover */
 }
 
 /* Responsive adjustments */
@@ -174,6 +209,7 @@ button:hover {
     background-color: #d89140; /* Gold on hover for buttons */
     color: #000; /* Black text on hover */
 }
+
 /* Back button styles */
 .back-button {
     position: fixed; /* Change to fixed to keep it in the same spot when scrolling */

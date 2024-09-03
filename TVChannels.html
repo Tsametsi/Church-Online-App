@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free TV Channels</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-n9xh+SpAdPCDmTMXsBjqGmUfxx/1p0zx9TA3QxtEiZpGGTEp27f9V4N1I7vRKRuplGB6Ei/6/mXE13p9y4ERug==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="TVChannels.css">
+</head>
+<body>
+    <a href="Home.html" class="back-button">Back</a> <!-- Back button -->
+
+    <header style="background-color: black;">
+        <h1>Free TV Channels</h1>
+        <p>Watch free TV channels online. Scroll through the channels and watch content in the player below.</p>
+    </header>
+
+    <div class="channel-selector">
+        <button class="nav-btn" onclick="prevChannel()">&#10094;</button>
+        <button class="nav-btn" onclick="nextChannel()">&#10095;</button>
+    </div>
+
+    <div class="channels-container">
+        <div class="channel" data-url="https://90s.myretrotvs.com">
+            <h2>My 90's TV</h2>
+            <p>Watch live TV and on-demand movies for free.</p>
+        </div>
+        <div class="channel" data-url="https://abcnews.go.com/live/video/special-live-11/">
+            <h2>ABC News</h2>
+            <p>Stream the latest headlines.</p>
+        </div>
+        <div class="channel" data-url="https://www.churchservices.tv/ealingabbey">
+            <h2>ChurchTV</h2>
+            <p></p>
+        </div>
+        <div class="channel" data-url="https://www.cbsnews.com/live/">
+            <h2>CBS Reality TV</h2>
+            <p>Enjoy a variety of TV shows.</p>
+        </div>
+        <div class="channel" data-url="https://www.vudu.com">
+            <h2>Vudu</h2>
+            <p>Stream free, ad-supported movies and TV shows.</p>
+        </div>
+        <div class="channel" data-url="https://www.xumo.tv">
+            <h2>Xumo</h2>
+            <p>Watch free live TV and on-demand content.</p>
+        </div>
+        <div class="channel" data-url="https://www.imdb.com/tv">
+            <h2>IMDb TV</h2>
+            <p>Stream movies and TV shows for free with ads.</p>
+        </div>
+        <div class="channel" data-url="https://therokuchannel.roku.com">
+            <h2>Roku Channel</h2>
+            <p>Watch free movies and TV shows on Roku devices.</p>
+        </div>
+    </div>
+
+    <div class="player-container">
+        <iframe id="video-player" src="" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <script src="TVChannels.js"></script>
+</body>
+</html>

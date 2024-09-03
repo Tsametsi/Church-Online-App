@@ -1,71 +1,86 @@
-/* Reset and base styles */
+/* Base styles and resets */
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern sans-serif font */
     margin: 0;
     padding: 0;
     background-image: url('Untitled-design-7.png');
     background-size: cover;
     background-position: center;
-    margin-top: 210px;
+    color: #ffffff; /* White text for contrast */
+    margin-top: 200px;
 }
 
+/* Main container */
 .home-container {
-    padding-top: 70px; /* Adjust padding to accommodate fixed header */
-    background-color: transparent;
-    padding: 20px;
-    width: 80%;
+    background-color: rgba(15, 15, 15, 0.8); /* Darker, semi-transparent background */
+    backdrop-filter: blur(10px) saturate(180%); /* Glass effect with blur */
+    padding: 40px 30px;
+    width: 75%;
     margin: 0 auto;
-    text-align: center; /* Center the content horizontally */
+    text-align: center;
+    border-radius: 20px; /* Smooth rounded corners */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Elevated shadow */
 }
 
+/* Social icons */
 .social-icons {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    gap: 15px;
+    margin-bottom: 30px;
 }
 
 .social-icon {
-    margin: 0 10px;
     color: #0d0aa8;
-    font-size: 24px;
+    font-size: 26px;
+    transition: transform 0.3s ease, filter 0.3s ease; /* Smooth animation */
 }
 
+.social-icon:hover {
+    transform: translateY(-5px); /* Hover effect: Lift icon upwards */
+    filter: drop-shadow(0 0 8px #0d0aa8); /* Glow effect on hover */
+}
+
+/* Navigation menu */
 .horizontal-menu {
     display: flex;
     justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap; /* Allow wrapping if necessary */
+    gap: 25px;
+    flex-wrap: wrap;
 }
 
 .menu-column {
     display: flex;
     flex-direction: column;
-    gap: 10px; /* Space between buttons */
-    max-width: 300px; /* Limit column width */
+    gap: 12px;
+    max-width: 280px;
 }
 
 .menu-btn {
-    background-color: black;
-    border: none;
-    color: white;
-    padding: 12px 20px;
+    background-color: rgba(255, 255, 255, 0.1); /* Subtle transparent button */
+    border: 2px solid #0d0aa8; /* Border for futuristic feel */
+    color: #ffffff;
+    padding: 14px 24px;
     font-size: 1rem;
     cursor: pointer;
-    border-radius: 5px;
-    text-align: center; /* Center text inside button */
+    border-radius: 10px; /* Rounded corners */
+    transition: background-color 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
 }
 
 .menu-btn:hover {
-    background-color: #333;
-    transform: scale(1.05);
+    background-color: #0d0aa8;
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(13, 10, 168, 0.4); /* Futuristic shadow on hover */
 }
 
-/* Slideshow Container */
+/* Slideshow container */
 .slideshow-container {
     position: relative;
-    max-width: 800px; /* Adjust based on your preference */
+    max-width: 850px;
     margin: auto;
     overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); /* Soft shadow for depth */
 }
 
 .mySlides {
@@ -75,10 +90,12 @@ body {
 .mySlides img {
     width: 100%;
     height: auto;
+    border-radius: 15px;
 }
 
+/* Animation for fading slides */
 .fade {
-    animation: fade 1.5s ease-in-out;
+    animation: fade 1.8s ease-in-out;
 }
 
 @keyframes fade {
@@ -86,26 +103,29 @@ body {
     to { opacity: 1 }
 }
 
+/* Slideshow navigation buttons */
 .prev, .next {
     cursor: pointer;
     position: absolute;
     top: 50%;
-    width: auto;
-    padding: 16px;
-    margin-top: -22px;
+    width: 50px;
+    height: 50px;
+    margin-top: -25px;
     color: white;
     font-weight: bold;
     font-size: 18px;
-    border-radius: 0 3px 3px 0;
+    border-radius: 50%; /* Circular buttons */
     user-select: none;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 2px solid #0d0aa8; /* Highlighted border */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(13, 10, 168, 0.8);
+    transform: scale(1.1); /* Slightly enlarge on hover */
 }
 
 .next {
     right: 0;
-    border-radius: 3px 0 0 3px;
-}
-
-.prev:hover, .next:hover {
-    background-color: rgba(0,0,0,0.8);
 }

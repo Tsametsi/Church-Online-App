@@ -10,6 +10,8 @@ const socketIo = require('socket.io');
 const fs = require('fs'); // Add this line
 const app = express();
 const port = 3000;
+const cron = require('node-cron');
+
 
 // Create HTTP server
 const server = http.createServer(app);
@@ -58,7 +60,7 @@ app.get('/Events.html', (req, res) => res.sendFile(path.join(__dirname, 'Events.
 app.get('/Donations.html', (req, res) => res.sendFile(path.join(__dirname, 'Donations.html')));
 app.get('/Chat.html', (req, res) => res.sendFile(path.join(__dirname, 'Chat.html')));
 app.get('/Channel.html', (req, res) => res.sendFile(path.join(__dirname, 'Channel.html')));
-app.get('/', (req, res) => {res.sendFile(__dirname + 'podcasts.html');
+app.get('/podcasts.html', (req, res) => {res.sendFile(__dirname + 'podcasts.html');
 });
 // Redirect root URL to Login.html
 app.get('/', (req, res) => res.redirect('/Login.html'));
@@ -140,6 +142,98 @@ app.post('/submit-prayer-request', (req, res) => {
     });
 });
 
+
+
+// Handle email notification setup
+app.post('/api/events/:id/notify', (req, res) => {
+    const eventId = req.params.id;
+    const { email } = req.body;
+
+    // Insert email and notification time into database
+    const insertQuery = 'INSERT INTO event_notifications (event_id, email, notified) VALUES (?, ?, 0)';
+    db.query(insertQuery, [eventId, email], (err) => {
+        if (err) {
+            console.error('Error inserting notification:', err);
+            return res.status(500).json({ success: false, message: 'Server error' });
+        }
+        res.json({ success: true, message: 'Notification setup successfully. You will be notified at the time of the event.' });
+    });
+});
+
+
+
+// Handle event upload
+// Handle event upload POST request
+app.post('/api/events/upload', (req, res) => {
+    const { title, description, event_date, virtual_url } = req.body;
+
+    if (!title || !description || !event_date) {
+        return res.status(400).json({ success: false, message: 'Title, description, and event date are required.' });
+    }
+
+    const query = 'INSERT INTO events (title, description, event_date, virtual_url, notification_on, created_at) VALUES (?, ?, ?, ?, 0, NOW())';
+    db.query(query, [title, description, event_date, virtual_url || null], (err, results) => {
+        if (err) {
+            console.error('Error inserting event:', err);
+            return res.status(500).json({ success: false, message: 'Server error' });
+        }
+        res.json({ success: true });
+    });
+});
+
+// Scheduled task to check for upcoming events and send notifications
+cron.schedule('* * * * *', () => { // Check every minute
+    const now = new Date();
+    const query = `
+        SELECT e.id AS event_id, e.title, e.description, e.event_date, e.virtual_url, en.email
+        FROM events e
+        JOIN event_notifications en ON e.id = en.event_id
+        WHERE e.event_date <= ? AND en.notified = 0
+    `;
+    db.query(query, [now], (err, results) => {
+        if (err) {
+            console.error('Error querying the database:', err);
+            return;
+        }
+
+        results.forEach(event => {
+            const mailOptions = {
+                from: 'followme303030@gmail.com',
+                to: event.email,
+                subject: `Reminder: ${event.title}`,
+                text: `Dear user,
+
+This is a reminder that the event titled "${event.title}" is starting soon.
+
+Event Description:
+${event.description}
+
+Event Date: ${new Date(event.event_date).toLocaleString()}
+
+Join us virtually at: ${event.virtual_url || 'N/A'}
+
+Thank you,
+Church Online App`
+            };
+
+            transporter.sendMail(mailOptions, (err, info) => {
+                if (err) {
+                    console.error('Error sending email:', err);
+                } else {
+                    console.log('Email sent: ' + info.response);
+
+                    // Update notification status
+                    const updateQuery = 'UPDATE event_notifications SET notified = 1 WHERE event_id = ? AND email = ?';
+                    db.query(updateQuery, [event.event_id, event.email], (err) => {
+                        if (err) {
+                            console.error('Error updating notification status:', err);
+                        }
+                    });
+                }
+            });
+        });
+    });
+});
 // API endpoint to update event notification status
 app.put('/api/events/:id/notification', (req, res) => {
     const { id } = req.params;
@@ -166,9 +260,10 @@ app.get('/api/events', (req, res) => {
     });
 });
 
+
 // API endpoint to fetch registered users
 app.get('/api/users', (req, res) => {
-    const query = 'SELECT * FROM logged_in_users';
+    const query = 'SELECT id, username, logged_in FROM logged_in_users WHERE logged_in = 1';
     db.query(query, (err, results) => {
         if (err) {
             console.error('Error querying users:', err);
@@ -192,18 +287,15 @@ app.get('/api/chat/messages/:user1/:user2', (req, res) => {
 });
 
 // API endpoint to send chat messages
-app.post('/api/chat/send', multer({
-    storage: multer.diskStorage({
-        destination: (req, file, cb) => {
-            cb(null, 'uploads/');
-        },
-        filename: (req, file, cb) => {
-            cb(null, Date.now() + path.extname(file.originalname));
-        }
-    })
-}).single('attachment'), (req, res) => {
+app.post('/api/chat/send', upload.single('attachment'), (req, res) => {
     const { username, recipient, message } = req.body;
     const attachment = req.file ? `/uploads/${req.file.filename}` : null;
+
+    // Validate inputs
+    if (!username || !recipient || !message) {
+        return res.status(400).send('Bad request: Missing required fields');
+    }
+
     const query = 'INSERT INTO chat_messages (username, recipient, message, attachment) VALUES (?, ?, ?, ?)';
     db.query(query, [username, recipient, message, attachment], (err, result) => {
         if (err) {
@@ -211,7 +303,7 @@ app.post('/api/chat/send', multer({
             return res.status(500).send('Internal server error');
         }
 
-        io.to(recipient).emit('new_message', {
+        io.emit('new_message', {
             id: result.insertId,
             username,
             recipient,
@@ -226,15 +318,29 @@ app.post('/api/chat/send', multer({
 // API endpoint to delete chat messages
 app.delete('/api/chat/delete/:id', (req, res) => {
     const { id } = req.params;
-    const query = 'DELETE FROM chat_messages WHERE id = ?';
-    db.query(query, [id], (err) => {
+
+    // Check if message exists and if the requester is authorized to delete it
+    const checkQuery = 'SELECT * FROM chat_messages WHERE id = ?';
+    db.query(checkQuery, [id], (err, results) => {
         if (err) {
-            console.error('Error deleting chat message:', err);
+            console.error('Error checking chat message:', err);
             return res.status(500).send('Internal server error');
         }
-        res.sendStatus(200);
+        if (results.length === 0) {
+            return res.status(404).send('Message not found');
+        }
+
+        const deleteQuery = 'DELETE FROM chat_messages WHERE id = ?';
+        db.query(deleteQuery, [id], (err) => {
+            if (err) {
+                console.error('Error deleting chat message:', err);
+                return res.status(500).send('Internal server error');
+            }
+            res.sendStatus(200);
+        });
     });
 });
+
 
 // API endpoint to handle donations
 app.post('/donate', async (req, res) => {
@@ -588,48 +694,61 @@ app.post('/api/podcasts/link', (req, res) => {
 
 
 // API endpoint to handle group creation
-app.post('/api/groups', (req, res) => {
-    const { groupName, episodes } = req.body;
 
-    // Basic validation
-    if (!groupName || typeof groupName !== 'string' || groupName.trim().length === 0) {
-        return res.status(400).json({ success: false, message: 'Invalid group name' });
-    }
-
-    let episodeIds;
-    try {
-        episodeIds = JSON.parse(episodes);
-        if (!Array.isArray(episodeIds)) {
-            return res.status(400).json({ success: false, message: 'Episodes should be an array' });
-        }
-    } catch (error) {
-        return res.status(400).json({ success: false, message: 'Episodes must be a valid JSON array' });
-    }
-
-    // Insert group into database
-    const insertGroupQuery = 'INSERT INTO podcast_groups (name) VALUES (?)';
-    db.query(insertGroupQuery, [groupName], (err, result) => {
+// API endpoint to fetch all groups
+app.get('/api/groups', (req, res) => {
+    const sql = `
+        SELECT g.id AS group_id, g.group_name, 
+               JSON_ARRAYAGG(
+                   JSON_OBJECT(
+                       'id', p.id,
+                       'title', p.title
+                   )
+               ) AS episodes
+        FROM podcast_groups g
+        LEFT JOIN podcast_group_podcasts gp ON g.id = gp.group_id
+        LEFT JOIN podcasts p ON p.id = gp.podcast_id
+        GROUP BY g.id
+    `;
+    db.query(sql, (err, results) => {
         if (err) {
-            console.error('Error inserting group:', err);
-            return res.status(500).json({ success: false, message: 'Internal server error' });
+            console.error('Error querying groups:', err);
+            return res.status(500).send('Internal server error');
         }
-
-        const groupId = result.insertId;
-
-        // Insert episodes into database
-        const insertEpisodesQuery = 'INSERT INTO episode_groups (group_id, episode_id) VALUES ?';
-        const values = episodeIds.map(episodeId => [groupId, episodeId]);
-
-        db.query(insertEpisodesQuery, [values], (err) => {
-            if (err) {
-                console.error('Error inserting episodes:', err);
-                return res.status(500).json({ success: false, message: 'Internal server error' });
-            }
-            res.status(201).json({ success: true, message: 'Group created successfully!' });
-        });
+        res.json(results);
     });
 });
 
+// API endpoint to create a new group
+app.post('/api/groups', (req, res) => {
+    const { groupName, episodes } = req.body;
+
+    // Insert new group
+    const queryGroup = 'INSERT INTO podcast_groups (group_name) VALUES (?)';
+    db.query(queryGroup, [groupName], (err, results) => {
+        if (err) {
+            console.error('Error inserting group:', err);
+            return res.status(500).send('Internal server error');
+        }
+
+        const groupId = results.insertId;
+        if (episodes && episodes.length > 0) {
+            // Insert group-podcast relationships
+            const queryGroupPodcasts = 'INSERT INTO podcast_group_podcasts (group_id, podcast_id) VALUES ?';
+            const values = episodes.map(episodeId => [groupId, episodeId]);
+
+            db.query(queryGroupPodcasts, [values], (err) => {
+                if (err) {
+                    console.error('Error inserting group-podcast relationships:', err);
+                    return res.status(500).send('Internal server error');
+                }
+                res.status(201).json({ success: true, message: 'Group created successfully!' });
+            });
+        } else {
+            res.status(201).json({ success: true, message: 'Group created successfully!' });
+        }
+    });
+});
 
 // Ensure uploads/podcasts directory exists
 const podcastsDir = path.join(__dirname, 'uploads/podcasts');
@@ -704,50 +823,32 @@ app.get('/api/podcasts/:id', (req, res) => {
 });
 
 // Function to add a like
-// Function to add a like and increment the like count
-async function addLike(podcastId, userId) {
-    const addLikeSql = 'INSERT INTO likes (podcast_id, user_id) VALUES (?, ?)';
-    const incrementLikeCountSql = 'UPDATE podcasts SET like_count = like_count + 1 WHERE id = ?';
+// Route to like a podcast
+app.post('/api/podcasts/:id/like', (req, res) => {
+    const podcastId = req.params.id;
 
-    // Start a transaction to ensure atomicity
-    connection.beginTransaction((err) => {
+    // Update like count in the database
+    db.query('UPDATE podcasts SET like_count = like_count + 1 WHERE id = ?', [podcastId], (err, results) => {
         if (err) {
-            console.error('Error starting transaction:', err);
-            return;
+            console.error(err);
+            return res.status(500).json({ success: false, message: 'Error updating like count' });
         }
 
-        // Insert like into the likes table
-        connection.query(addLikeSql, [podcastId, userId], (err, results) => {
+        // Retrieve new like count
+        db.query('SELECT like_count FROM podcasts WHERE id = ?', [podcastId], (err, results) => {
             if (err) {
-                return connection.rollback(() => {
-                    console.error('Error adding like:', err);
-                    return;
-                });
+                console.error(err);
+                return res.status(500).json({ success: false, message: 'Error retrieving like count' });
             }
 
-            // Update like count in the podcasts table
-            connection.query(incrementLikeCountSql, [podcastId], (err, results) => {
-                if (err) {
-                    return connection.rollback(() => {
-                        console.error('Error incrementing like count:', err);
-                        return;
-                    });
-                }
-
-                // Commit the transaction
-                connection.commit((err) => {
-                    if (err) {
-                        return connection.rollback(() => {
-                            console.error('Error committing transaction:', err);
-                            return;
-                        });
-                    }
-                    console.log('Like added and like count incremented successfully');
-                });
-            });
+            if (results.length > 0) {
+                res.json({ success: true, new_like_count: results[0].like_count });
+            } else {
+                res.status(404).json({ success: false, message: 'Podcast not found' });
+            }
         });
     });
-}
+});
 
 
 // Function to remove a like

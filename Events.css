@@ -93,3 +93,79 @@ button:hover {
     background-color: #0d0aa8; /* Darker color on hover */
     transform: scale(1.05); /* Slightly grow button on hover */
 }
+
+/* Modal styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.5); /* Dark overlay with opacity */
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto; /* Centered with some top margin */
+    padding: 20px;
+    border-radius: 8px; /* Rounded corners */
+    width: 90%; /* Responsive width */
+    max-width: 600px; /* Maximum width for larger screens */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* Softer shadow */
+    position: relative; /* For close button positioning */
+    animation: fadeIn 0.3s ease-out; /* Fade-in effect */
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal form {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal label {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.modal input, .modal textarea {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+.modal button {
+    background-color: #28a745; /* Green for success */
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.modal button:hover {
+    background-color: #218838; /* Darker green on hover */
+}
