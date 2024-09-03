@@ -108,9 +108,9 @@ app.post('/signup', (req, res) => {
     db.query(query, [username, email, password, church_id, branch_name], (err) => {
         if (err) {
             console.error('Error inserting new user:', err);
-            return res.status(500).send('Server error');
+            return res.status(500).send('Server error'); 
         }
-        res.redirect('/Donations.html');
+        res.redirect('/Login.html');
     });
 });
 
@@ -263,7 +263,7 @@ app.get('/api/events', (req, res) => {
 
 // API endpoint to fetch registered users
 app.get('/api/users', (req, res) => {
-    const query = 'SELECT id, username, logged_in FROM logged_in_users WHERE logged_in = 1';
+    const query = 'SELECT * FROM logged_in_users';
     db.query(query, (err, results) => {
         if (err) {
             console.error('Error querying users:', err);
@@ -287,15 +287,18 @@ app.get('/api/chat/messages/:user1/:user2', (req, res) => {
 });
 
 // API endpoint to send chat messages
-app.post('/api/chat/send', upload.single('attachment'), (req, res) => {
+app.post('/api/chat/send', multer({
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, 'uploads/');
+        },
+        filename: (req, file, cb) => {
+            cb(null, Date.now() + path.extname(file.originalname));
+        }
+    })
+}).single('attachment'), (req, res) => {
     const { username, recipient, message } = req.body;
     const attachment = req.file ? `/uploads/${req.file.filename}` : null;
-
-    // Validate inputs
-    if (!username || !recipient || !message) {
-        return res.status(400).send('Bad request: Missing required fields');
-    }
-
     const query = 'INSERT INTO chat_messages (username, recipient, message, attachment) VALUES (?, ?, ?, ?)';
     db.query(query, [username, recipient, message, attachment], (err, result) => {
         if (err) {
@@ -303,7 +306,7 @@ app.post('/api/chat/send', upload.single('attachment'), (req, res) => {
             return res.status(500).send('Internal server error');
         }
 
-        io.emit('new_message', {
+        io.to(recipient).emit('new_message', {
             id: result.insertId,
             username,
             recipient,
@@ -318,29 +321,28 @@ app.post('/api/chat/send', upload.single('attachment'), (req, res) => {
 // API endpoint to delete chat messages
 app.delete('/api/chat/delete/:id', (req, res) => {
     const { id } = req.params;
-
-    // Check if message exists and if the requester is authorized to delete it
-    const checkQuery = 'SELECT * FROM chat_messages WHERE id = ?';
-    db.query(checkQuery, [id], (err, results) => {
+    const query = 'DELETE FROM chat_messages WHERE id = ?';
+    db.query(query, [id], (err) => {
         if (err) {
-            console.error('Error checking chat message:', err);
+            console.error('Error deleting chat message:', err);
             return res.status(500).send('Internal server error');
         }
-        if (results.length === 0) {
-            return res.status(404).send('Message not found');
-        }
-
-        const deleteQuery = 'DELETE FROM chat_messages WHERE id = ?';
-        db.query(deleteQuery, [id], (err) => {
-            if (err) {
-                console.error('Error deleting chat message:', err);
-                return res.status(500).send('Internal server error');
-            }
-            res.sendStatus(200);
-        });
+        res.sendStatus(200);
     });
 });
 
+// Socket.IO integration
+io.on('connection', (socket) => {
+    console.log('A user connected');
+
+    socket.on('send_message', (data) => {
+        // Handle chat message logic
+    });
+
+    socket.on('disconnect', () => {
+        console.log('A user disconnected');
+    });
+});
 
 // API endpoint to handle donations
 app.post('/donate', async (req, res) => {
@@ -394,6 +396,7 @@ io.on('connection', (socket) => {
         socket.broadcast.emit('user_status', { username: socket.username, status: 'offline' });
     });
 });
+
 
 // API endpoint to fetch products
 app.get('/api/products', (req, res) => {
@@ -527,23 +530,7 @@ db.query(`
     if (err) throw err;
 });
 
-// Routes
-// Get all messages
-app.get('/api/messages', (req, res) => {
-    db.query('SELECT * FROM messages ORDER BY created_at ASC', (err, results) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(results);
-    });
-});
 
-// Create a new message
-app.post('/api/messages', (req, res) => {
-    const { text } = req.body;
-    db.query('INSERT INTO messages (text) VALUES (?)', [text], (err, results) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.status(201).json({ id: results.insertId, text });
-    });
-});
 
 // API endpoint to fetch all channels
 app.get('/api/channels', (req, res) => {
@@ -571,16 +558,6 @@ app.get('/api/channels/:id/channel_messages', (req, res) => {
     });
 });
 
-// API endpoint to send a message to a channel
-app.post('/api/channels/:id/channel_messages', (req, res) => {
-    const channelId = req.params.id;
-    const { username, message } = req.body;
-    db.query('INSERT INTO channel_messages (channel_id, username, message) VALUES (?, ?, ?)', [channelId, username, message], (err, results) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.status(201).json({ success: true, id: results.insertId, message });
-    });
-});
-
 // API endpoint to send a message to a specific channel
 app.post('/api/channels/:id/channel_messages', (req, res) => {
     const channelId = req.params.id;
@@ -601,7 +578,6 @@ app.post('/api/channels/:id/channel_messages', (req, res) => {
         res.status(201).json({ success: true, id: results.insertId, message });
     });
 });
-
 
 // API endpoint to add users to a channel
 app.post('/api/channels/:id/members', (req, res) => {
@@ -635,6 +611,20 @@ app.get('/api/users', (req, res) => {
         res.json(results);
     });
 });
+
+// Socket.IO integration
+io.on('connection', (socket) => {
+    console.log('A user connected');
+
+    socket.on('send_channel_message', (data) => {
+        // Handle channel message logic
+    });
+
+    socket.on('disconnect', () => {
+        console.log('A user disconnected');
+    });
+});
+
 
 // Set up storage for podcasts
 const storage = multer.diskStorage({
