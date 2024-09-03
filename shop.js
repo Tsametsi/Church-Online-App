@@ -29,6 +29,31 @@ function updateTotalPrice(price) {
     document.getElementById('alipay-amount').value = newTotal.toFixed(2);
 }
 
+// shop.js
+
+// Function to filter products based on search input
+function filterProducts() {
+    const searchInput = document.getElementById('search-input').value.toLowerCase();
+    const products = document.querySelectorAll('.product');
+
+    products.forEach(product => {
+        const productName = product.querySelector('h3').textContent.toLowerCase();
+        if (productName.includes(searchInput)) {
+            product.style.display = 'block';
+        } else {
+            product.style.display = 'none';
+        }
+    });
+}
+
+// Add event listener to the search button
+document.getElementById('search-button').addEventListener('click', filterProducts);
+
+// Optional: Add event listener to the search input to filter as user types
+document.getElementById('search-input').addEventListener('input', filterProducts);
+
+
+
 function removeFromCart(listItem, price) {
     const cartItems = document.getElementById('cart-items');
     cartItems.removeChild(listItem);

@@ -44,6 +44,7 @@ body {
 /* Navigation menu */
 .horizontal-menu {
     display: flex;
+    flex-wrap: wrap; /* Allow buttons to wrap to the next line if needed */
     justify-content: center;
     gap: 25px;
     flex-wrap: wrap;
