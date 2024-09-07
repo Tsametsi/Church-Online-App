@@ -5,23 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Member_profile.css">
     <title>Church Executives</title>
-    <a href="javascript:history.back()" class="back-button">←Back</a>
-
 </head>
 <body>
-    <button class="back-btn" onclick="window.history.back();">Back</button>
-    
+    <header>
+        <button class="back-btn" onclick="window.history.back();">← Back</button>
+        <h1>Church Executives</h1>
+    </header>
+
     <div class="search-bar">
         <input type="text" id="search-input" placeholder="Search executives...">
     </div>
 
-    <ul class="executives-list" id="executives-list">
-        <!-- List items will be dynamically generated here -->
-    </ul>
+    <div class="members-container">
+        <ul class="executives-list" id="executives-list">
+            <!-- List items will be dynamically generated here -->
+        </ul>
+    </div>
 
     <div class="profile-popup" id="profile-popup">
-        <button class="close-btn" onclick="closePopup();">Close</button>
-        <img id="profile-picture" src="" alt="Profile Picture">
+        <button class="close-btn" onclick="closePopup();">×</button>
+        <img id="profile-picture" src="" alt="Profile Picture" class="profile-picture">
         <h2 id="profile-name"></h2>
         <p id="profile-position"></p>
         <p id="profile-bio"></p>
@@ -32,7 +35,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             fetchExecutives();
-
             document.getElementById('search-input').addEventListener('input', filterExecutives);
         });
 
@@ -44,7 +46,14 @@
                     list.innerHTML = '';
                     data.forEach(executive => {
                         const li = document.createElement('li');
-                        li.textContent = `${executive.first_name} ${executive.last_name}`;
+                        li.classList.add('executive-item');
+                        li.innerHTML = `
+                            <img src="${executive.profile_picture}" alt="Profile Picture" class="executive-picture">
+                            <div class="executive-info">
+                                <h3>${executive.first_name} ${executive.last_name}</h3>
+                                <p>${executive.position}</p>
+                            </div>
+                        `;
                         li.addEventListener('click', () => showPopup(executive));
                         list.appendChild(li);
                     });
@@ -58,7 +67,6 @@
             document.getElementById('profile-bio').textContent = executive.bio;
             document.getElementById('profile-email').textContent = executive.email;
             document.getElementById('profile-phone').textContent = executive.phone;
-
             document.getElementById('profile-popup').classList.add('show');
         }
 
@@ -68,7 +76,7 @@
 
         function filterExecutives() {
             const query = document.getElementById('search-input').value.toLowerCase();
-            const items = document.querySelectorAll('.executives-list li');
+            const items = document.querySelectorAll('.executives-list .executive-item');
             items.forEach(item => {
                 const text = item.textContent.toLowerCase();
                 item.style.display = text.includes(query) ? 'block' : 'none';
