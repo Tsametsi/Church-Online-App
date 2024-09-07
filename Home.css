@@ -79,7 +79,8 @@ body {
 /* Slideshow Styles */
 .slideshow-container {
     position: relative;
-    max-width: 100%;
+    max-width: 50%;
+    height: 30%;
     margin: 0 auto;
     overflow: hidden;
     border-radius: 15px;
