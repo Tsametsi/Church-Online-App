@@ -125,11 +125,12 @@
     margin-bottom: 8px;
     cursor: pointer;
     background: rgba(44, 62, 80, 0.8); /* Semi-transparent blue background */
-    transition: background 0.3s;
+    transition: background 0.3s, box-shadow 0.3s;
 }
 
 .channel-list li:hover {
     background: rgba(44, 62, 80, 0.9); /* Slightly darker on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .channel-list li.selected {
@@ -145,28 +146,65 @@
     flex-direction: column;
     background: rgba(44, 62, 80, 0.8); /* Semi-transparent blue background */
     border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
+/* Messages container */
 .messages {
     flex: 1;
     border-radius: 8px;
     padding: 15px;
     margin-bottom: 20px;
-    background: rgba(28, 28, 28, 0.8); /* Semi-transparent black background */
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.5), rgba(28, 28, 28, 0.7)); /* Futuristic gradient */
     border: 1px solid rgba(44, 62, 80, 0.6); /* Semi-transparent blue border */
     overflow-y: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px); /* Blurred background effect */
 }
 
-.messages h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
-    color: #3498db; /* Blue color */
+/* Message container */
+.message {
+    padding: 12px;
+    border-radius: 12px;
+    background: #2c3e50; /* Darker background for the message bubble */
+    color: #ecf0f1; /* Light text color */
+    margin-bottom: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    position: relative;
+    transition: background 0.3s, transform 0.3s;
 }
 
-.messages div {
-    margin-bottom: 10px;
+/* Message author name */
+.message .author {
+    font-weight: bold;
+    color: #3498db; /* Blue color for author name */
 }
 
+/* Different colors for different messages */
+.message.incoming {
+    background: linear-gradient(135deg, #16a085, #1abc9c); /* Green gradient for incoming messages */
+}
+
+.message.outgoing {
+    background: linear-gradient(135deg, #2980b9, #3498db); /* Blue gradient for outgoing messages */
+}
+
+/* Message hover effect */
+.message:hover {
+    background: rgba(255, 255, 255, 0.2); /* Slightly less transparent on hover */
+    transform: translateY(-2px); /* Subtle lift effect */
+}
+
+/* Message time stamp */
+.message .timestamp {
+    font-size: 12px;
+    color: #bdc3c7; /* Light gray color for timestamp */
+    position: absolute;
+    bottom: 8px;
+    right: 12px;
+}
+
+/* Message input section */
 .message-section {
     border-top: 1px solid rgba(44, 62, 80, 0.6); /* Semi-transparent blue border */
     padding-top: 15px;
@@ -187,6 +225,7 @@
     border: none;
     background: rgba(44, 62, 80, 0.8); /* Semi-transparent blue background */
     color: #e0e0e0;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .message-section button {
@@ -197,11 +236,12 @@
     background: #2980b9; /* Blue button */
     color: #fff;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.3s, transform 0.3s;
 }
 
 .message-section button:hover {
     background: #1f618d; /* Darker blue on hover */
+    transform: scale(1.05); /* Slight zoom effect on hover */
 }
 
 /* Styling for file input */

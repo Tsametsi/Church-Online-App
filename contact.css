@@ -28,6 +28,7 @@ header h1 {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Shadow for text */
 }
 
+/* Back button styles */
 .back-button {
     position: absolute;
     top: 20px;

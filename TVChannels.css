@@ -122,7 +122,7 @@ p {
     position: fixed; /* Change to fixed to keep it in the same spot when scrolling */
     top: 41px; /* Distance from the top */
     left: 20px; /* Distance from the left */
-    background-color: #5282b9; /* Button color */
+    background-color: #444343; /* Button color */
     color: white; /* Text color */
     padding: 10px 15px; /* Button padding */
     border: none; /* No border */
@@ -134,6 +134,8 @@ p {
 }
 
 .back-button:hover {
-    background-color: #2e5d8f; /* Darker green on hover */
+    background-color: #03274e; /* Darker green on hover */
     transform: scale(1.05); /* Slightly grow button on hover */
 }
+
+

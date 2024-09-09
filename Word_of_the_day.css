@@ -273,10 +273,10 @@ footer p {
 
 /* Back button styles */
 .back-button {
-    position: fixed; /* Keep it fixed */
-    top: 20px; /* Distance from the top */
+    position: fixed; /* Change to fixed to keep it in the same spot when scrolling */
+    top: 41px; /* Distance from the top */
     left: 20px; /* Distance from the left */
-    background-color: #000; /* Button color */
+    background-color: #444343; /* Button color */
     color: white; /* Text color */
     padding: 10px 15px; /* Button padding */
     border: none; /* No border */
@@ -288,9 +288,10 @@ footer p {
 }
 
 .back-button:hover {
-    background-color: #03274e; /* Darker shade on hover */
+    background-color: #03274e; /* Darker green on hover */
     transform: scale(1.05); /* Slightly grow button on hover */
 }
+
 
 /* Delete button styles */
 .delete-button {
