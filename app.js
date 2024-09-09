@@ -371,29 +371,32 @@ app.post('/donate', async (req, res) => {
     }
 });
 
-// Socket.IO connections and events
+// Handle Socket.IO connections and events
 io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
 
     // Join chat room
     socket.on('join', (username) => {
         socket.username = username;
-        socket.join(username);
-        // Broadcast login status
-        socket.broadcast.emit('user_status', { username, status: 'online' });
+        console.log(`${username} joined`);
+        // Notify all clients about the new user
+        io.emit('user_status', { username, status: 'online' });
     });
 
     // Handle sending messages
     socket.on('send_message', (data) => {
         const { username, recipient, message, attachment } = data;
-        io.to(recipient).emit('new_message', data);
+        // Send the message to the specified recipient
+        io.to(recipient).emit('new_message', { username, message, attachment });
     });
 
     // Handle disconnection
     socket.on('disconnect', () => {
         console.log('A user disconnected:', socket.id);
-        // Broadcast logout status
-        socket.broadcast.emit('user_status', { username: socket.username, status: 'offline' });
+        if (socket.username) {
+            // Notify all clients about the user going offline
+            io.emit('user_status', { username: socket.username, status: 'offline' });
+        }
     });
 });
 

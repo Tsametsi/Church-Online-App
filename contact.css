@@ -26,11 +26,12 @@ header h1 {
     margin: 0;
 }
 
+/* Back button styles */
 .back-button {
-    position: absolute;
-    top: 20px; /* Adjust the position */
-    left: 20px; /* Adjust the position */
-    background-color: #0a0a0a; /* Button color */
+    position: fixed; /* Change to fixed to keep it in the same spot when scrolling */
+    top: 41px; /* Distance from the top */
+    left: 20px; /* Distance from the left */
+    background-color: #444343; /* Button color */
     color: white; /* Text color */
     padding: 10px 15px; /* Button padding */
     border: none; /* No border */
@@ -42,10 +43,9 @@ header h1 {
 }
 
 .back-button:hover {
-    background-color: #0d0aa8; /* Darker green on hover */
+    background-color: #03274e; /* Darker green on hover */
     transform: scale(1.05); /* Slightly grow button on hover */
 }
-
 
 .container {
     max-width: 800px;

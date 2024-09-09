@@ -76,7 +76,7 @@ header h1 {
 .executive-item {
     display: flex;
     align-items: center;
-    background: #ffffff;
+    background: #000000;
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;

@@ -177,9 +177,9 @@ button:hover {
 /* Back button styles */
 .back-button {
     position: fixed; /* Change to fixed to keep it in the same spot when scrolling */
-    top: 23px; /* Distance from the top */
-    left: 10px; /* Distance from the left */
-    background-color: #000000; /* Button color */
+    top: 41px; /* Distance from the top */
+    left: 20px; /* Distance from the left */
+    background-color: #444343; /* Button color */
     color: white; /* Text color */
     padding: 10px 15px; /* Button padding */
     border: none; /* No border */
@@ -189,6 +189,12 @@ button:hover {
     transition: background-color 0.3s, transform 0.2s; /* Transition effects */
     z-index: 1000; /* Ensure it’s on top of other elements */
 }
+
+.back-button:hover {
+    background-color: #03274e; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly grow button on hover */
+}
+
 
 /* Shop.css */
 
