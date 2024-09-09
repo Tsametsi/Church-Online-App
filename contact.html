@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us</title>
     <link rel="stylesheet" href="contact.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 </head>
 <body>
     <header>
-        <a href="javascript:history.back()" class="back-button">←Back</a>
-        <h1>Contact Us</h1>
+        <div class="container">
+            <a href="javascript:history.back()" class="back-button">← Back</a>
+            <h1>Contact Us</h1>
+        </div>
     </header>
 
     <div class="container">
@@ -20,47 +23,32 @@
             <p><strong>Email:</strong> contact@yourwebsite.com</p>
         </section>
 
-        <section class="contact-form">
-            <h2>Send Us a Message</h2>
-            <form id="contactForm" action="your-server-endpoint" method="post">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-
-                <label for="message">Message:</label>
-                <textarea id="message" name="message" rows="5" required></textarea>
-
-                <button type="submit">Send Message</button>
-            </form>
-            <div id="successMessage" class="success-message">
-                Your message has been sent successfully!
-            </div>
-        </section>
-
         <section class="map">
             <h2>Find Us Here</h2>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14361.49336049153!2d28.1965102!3d-25.8571871!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e95642e7a222f59%3A0xddae820f92a6b3f1!2sNetcampus!5e0!3m2!1sen!2sza!4v1722288644093!5m2!1sen!2sza" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>" allowfullscreen="" loading="lazy"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14361.49336049153!2d28.1965102!3d-25.8571871!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e95642e7a222f59%3A0xddae820f92a6b3f1!2sNetcampus!5e0!3m2!1sen!2sza!4v1722288644093!5m2!1sen!2sza" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </section>
     </div>
 
-    <footer>
-        <p>&copy; 2024 Your Company. All rights reserved.</p>
+    <!-- Footer from the Church App -->
+    <footer class="footer">
+        <ul class="footer-links">
+            <li><a href="#">© 2024 Church App. All rights reserved. <br>Address: Block 6, Lords Office Estate, 276 West Ave, Centurion, 0163</a></li>
+        </ul>
+        <div class="social-media">
+            <a href="https://www.facebook.com/login/" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://x.com/i/flow/login?input_flow_data=%7B%22requested_variant%22%3A%22eyJteCI6IjIifQ%3D%3D%22%7D" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/accounts/login/" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/#!%20/" class="social-icon"><i class="fab fa-youtube"></i></a>
+        </div>
+        <button onclick="window.location.href='Login.html'" class="logout-btn">Log out?</button>
     </footer>
 
     <script>
         document.getElementById('contactForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the form from submitting the traditional way
-
-            // Here you can add code to send the form data via AJAX if needed
-            
-            // Show success message
+            event.preventDefault(); // Prevent the form from submitting traditionally
             const successMessage = document.getElementById('successMessage');
-            successMessage.style.display = 'block';
-            
-            // Optionally, you can reset the form fields
-            this.reset();
+            successMessage.style.display = 'block'; // Show the success message
+            this.reset(); // Optionally reset the form fields
         });
     </script>
 </body>
