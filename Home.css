@@ -271,3 +271,19 @@ button:hover {
     background: linear-gradient(45deg, #d32f2f, #c62828); /* Darker gradient on hover */
     transform: scale(1.05); /* Slight scale effect on hover */
 }
+
+
+.nav-links li {
+    position: relative; /* Ensure that the red dot is positioned correctly */
+}
+
+.red-dot {
+    position: absolute;
+    top: -5px; /* Adjust according to your layout */
+    right: -10px; /* Adjust according to your layout */
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    display: none; /* Initially hidden */
+}

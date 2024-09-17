@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mysql = require('mysql2');
-const stripe = require('stripe')('your-stripe-secret-key');
+const db = require('./config/db');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const nodemailer = require('nodemailer');
 const multer = require('multer');
 const path = require('path');
@@ -11,7 +11,12 @@ const fs = require('fs'); // Add this line
 const app = express();
 const port = 3000;
 const cron = require('node-cron');
-
+const saltRounds = 10;
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+const authRoutes = require('./routes/auth');
+const bcrypt = require('bcrypt');
+require('dotenv').config();
 
 // Create HTTP server
 const server = http.createServer(app);
@@ -19,35 +24,22 @@ const server = http.createServer(app);
 // Initialize Socket.IO
 const io = socketIo(server);
 
-// Connect to the database
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'Lookyard75',
-    database: 'church_app_database'
-});
-
-db.connect((err) => {
-    if (err) {
-        console.error('Error connecting to the database:', err);
-        return;
-    }
-    console.log('Connected to the database');
-});
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use('/auth', authRoutes);
+
 
 // Serve static files (CSS, images, etc.)
 app.use(express.static(__dirname));
 
 // Configure Nodemailer transporter
 const transporter = nodemailer.createTransport({
-    service: 'gmail', // or your email service provider
+    service: 'gmail',
     auth: {
-        user: 'followme303030@gmail.com',
-        pass: 'fich ohaw cohm fugc'
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
     }
 });
 
@@ -64,53 +56,24 @@ app.get('/podcasts.html', (req, res) => {res.sendFile(__dirname + 'podcasts.html
 });
 // Redirect root URL to Login.html
 app.get('/', (req, res) => res.redirect('/Login.html'));
+//Use Helmet
+app.use(helmet());
 
-// Handle login POST request
-app.post('/login', (req, res) => {
-    const { username, password } = req.body;
-    const query = 'SELECT * FROM logged_in_users WHERE username = ? AND password = ?';
-    db.query(query, [username, password], (err, results) => {
-        if (err) {
-            console.error('Error querying the database:', err);
-            return res.status(500).json({ success: false, message: 'Server error' });
-        }
-        if (results.length > 0) {
-            const updateQuery = 'UPDATE logged_in_users SET logged_in = 1 WHERE username = ?';
-            db.query(updateQuery, [username], (err) => {
-                if (err) {
-                    console.error('Error updating user login status:', err);
-                }
-                return res.json({ success: true, username: results[0].username });
-            });
-        } else {
-            return res.status(401).json({ success: false, message: 'Invalid username or password.' });
-        }
-    });
-});
-
-// Handle logout POST request
-app.post('/logout', (req, res) => {
-    const { username } = req.body;
-    const query = 'UPDATE logged_in_users SET logged_in = 0 WHERE username = ?';
-    db.query(query, [username], (err) => {
-        if (err) {
-            console.error('Error updating user logout status:', err);
-            return res.status(500).send('Server error');
-        }
-        res.sendStatus(200);
-    });
-});
-
-// Handle sign-up POST request
+// Sign-up
 app.post('/signup', (req, res) => {
     const { username, email, password, church_id, branch_name } = req.body;
-    const query = 'INSERT INTO logged_in_users (username, email, password, church_id, branch_name) VALUES (?, ?, ?, ?, ?)';
-    db.query(query, [username, email, password, church_id, branch_name], (err) => {
+    bcrypt.hash(password, saltRounds, (err, hash) => {
         if (err) {
-            console.error('Error inserting new user:', err);
-            return res.status(500).send('Server error'); 
+            return res.status(500).send('Server error');
         }
-        res.redirect('/Login.html');
+        const query = 'INSERT INTO logged_in_users (username, email, password, church_id, branch_name) VALUES (?, ?, ?, ?, ?)';
+        db.query(query, [username, email, hash, church_id, branch_name], (err) => {
+            if (err) {
+                console.error('Error inserting new user:', err);
+                return res.status(500).send('Server error');
+            }
+            res.redirect('/Login.html');
+        });
     });
 });
 
@@ -141,8 +104,6 @@ app.post('/submit-prayer-request', (req, res) => {
         });
     });
 });
-
-
 
 // Handle email notification setup
 app.post('/api/events/:id/notify', (req, res) => {
@@ -317,6 +278,7 @@ app.post('/api/chat/send', multer({
         res.sendStatus(200);
     });
 });
+
 
 // API endpoint to delete chat messages
 app.delete('/api/chat/delete/:id', (req, res) => {
@@ -920,6 +882,47 @@ app.post('/api/podcasts/:id/comments', (req, res) => {
             return res.status(500).send('Internal server error');
         }
         res.status(201).json({ success: true, message: 'Comment added successfully!' });
+    });
+});
+
+// Endpoint to get topics
+app.get('/api/topics', (req, res) => {
+    db.query('SELECT * FROM topics', (err, results) => {
+        if (err) {
+            console.error('Error fetching topics:', err);
+            res.status(500).json({ error: 'Failed to fetch topics' });
+            return;
+        }
+        res.json(results);
+    });
+});
+
+// Endpoint to get verses based on topicId
+app.get('/api/verses', (req, res) => {
+    const topicId = parseInt(req.query.topicId, 10);
+    if (isNaN(topicId)) {
+        return res.status(400).json({ error: 'Invalid topicId' });
+    }
+    db.query('SELECT * FROM verses WHERE topic_id = ?', [topicId], (err, results) => {
+        if (err) {
+            console.error('Error fetching verses:', err);
+            res.status(500).json({ error: 'Failed to fetch verses' });
+            return;
+        }
+        res.json(results);
+    });
+});
+
+// Example endpoint for posting scriptures
+app.post('/api/postScripture', (req, res) => {
+    const { scriptureText, username } = req.body;
+    db.query('INSERT INTO scriptures (text, username) VALUES (?, ?)', [scriptureText, username], (err, results) => {
+        if (err) {
+            console.error('Error posting scripture:', err);
+            res.status(500).json({ error: 'Failed to post scripture' });
+            return;
+        }
+        res.json({ success: true, id: results.insertId });
     });
 });
 

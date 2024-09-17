@@ -5,7 +5,6 @@ body {
     padding: 0;
     background-color: #6284c2;
     overflow-y: auto; /* Enable vertical scrolling */
-
 }
 
 header {
@@ -19,6 +18,7 @@ header {
     left: 0;
     z-index: 1000; /* Ensure it's above other content */
 }
+
 .home-container {
     padding-top: 50px; /* Adjust padding to accommodate fixed header */
     background-color: transparent;
@@ -26,9 +26,7 @@ header {
     width: 80%; /* Adjusted width */
     margin: 0 auto; /* Centering the container horizontally */
     opacity: 0.9;
-
 }
-
 
 .options {
     text-align: center;
@@ -45,7 +43,6 @@ header {
     border-radius: 5px;
     cursor: pointer;
     width: 100%; /* Ensure button takes full width */
-
 }
 
 .options button:hover {
@@ -56,7 +53,6 @@ header {
     position: fixed;
     top: 20px;
     right: 20px;
-    
 }
 
 .logout-btn {
@@ -127,8 +123,6 @@ header {
     margin-top: 50px;
     max-width: 350px;
     margin: 0 auto;
-    margin-top: 50px;
-
 }
 
 .login-container h2,
@@ -211,4 +205,34 @@ button:hover {
 
 .social-icons .social-icon:hover {
     color: #ffc107; /* Change to desired hover color */
+}
+
+/* Slogan styling with sliding effect */
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    z-index: 1000; /* Ensure it's above other content */
+}
+
+.slogan {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0;
+    position: relative;
+    left: -100%; /* Start off-screen to the left */
+    transform: translateX(0); /* Ensure initial position is set */
+    opacity: 0;
+    transition: left 1s ease, opacity 1s ease;
+}
+
+/* Trigger the slide effect when the page loads */
+body.loaded .slogan {
+    left: 20px; /* Move into view from the left */
+    opacity: 1;
 }

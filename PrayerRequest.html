@@ -6,54 +6,38 @@
     <title>Prayer Request</title>
     <link rel="stylesheet" href="Prayer Request.css">
     <a href="javascript:history.back()" class="back-button">←Back</a>
+
 </head>
+    <!-- Add this back button inside the header -->
+<a href="javascript:history.back()" class="back-button">← Back</a>
+
 <body style="background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
     overflow-y: auto; /* Enable vertical scrolling */">
-    <h2>Prayer Request</h2>
-
-    <!-- Success message container (hidden by default) -->
-    <div id="success-message" style="display: none; color: white; text-align: center; margin-top: 20px;">
-        Your prayer request has been successfully submitted. Thank you!
+        <h2>Prayer Request</h2>
+        <form action="/submit-prayer-request" method="POST">
+            <div class="form-group">
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" required aria-label="Your Name">
+            </div>
+            <div class="form-group">
+                <label for="email">Your Email:</label>
+                <input type="email" id="email" name="email" required aria-label="Your Email">
+            </div>
+            <div class="form-group">
+                <label for="prayer_request">Prayer Request:</label>
+                <textarea id="prayer_request" name="prayer_request" required aria-label="Prayer Request"></textarea>
+            </div>
+            <button type="submit">Submit</button>
+            <button type="reset">Reset</button>
+        </form>
     </div>
-
-    <form id="prayer-form" action="/submit-prayer-request" method="POST">
-        <div class="form-group">
-            <label for="name">Your Name:</label>
-            <input type="text" id="name" name="name" required aria-label="Your Name">
-        </div>
-        <div class="form-group">
-            <label for="email">Your Email:</label>
-            <input type="email" id="email" name="email" required aria-label="Your Email">
-        </div>
-        <div class="form-group">
-            <label for="prayer_request">Prayer Request:</label>
-            <textarea id="prayer_request" name="prayer_request" required aria-label="Prayer Request"></textarea>
-        </div>
-        <button type="submit">Submit</button>
-        <button type="reset">Reset</button>
-    </form>
-
     <p style="text-align: center; margin-top: 13%;">
-        In times of joy or struggle, the act of requesting prayer is a powerful step towards finding peace and support. 
-        Whether you're facing challenges that seem overwhelming or celebrating moments of gratitude, sharing your intentions with others through prayer connects you with a community of empathy and compassion.
+        In times of joy or struggle, the act of requesting prayer is a powerful step towards finding peace and support. Whether you're facing challenges that seem overwhelming or celebrating moments of gratitude, sharing your intentions with others through prayer connects you with a community of empathy and compassion.
         
-        Remember, your request for prayer is not just a plea for help but a declaration of faith in the healing power of collective prayer. 
-        It's a reminder that you are never alone in your journey. Together, we uplift each other, share burdens, and celebrate victories.
+        Remember, your request for prayer is not just a plea for help but a declaration of faith in the healing power of collective prayer. It's a reminder that you are never alone in your journey. Together, we uplift each other, share burdens, and celebrate victories.
         
         So, take heart and reach out. Let us join hands in prayer, knowing that in our shared moments of vulnerability, we find strength, hope, and the comforting presence of love.
+        
     </p>
-
-    <script>
-        document.getElementById('prayer-form').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent form from submitting the traditional way
-
-            // Normally, here you would send the form data using AJAX and handle the response
-            // Assuming the submission is successful, show the success message
-            document.getElementById('success-message').style.display = 'block';
-
-            // Optionally, you could reset the form
-            document.getElementById('prayer-form').reset();
-        });
-    </script>
 </body>
 </html>

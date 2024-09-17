@@ -186,3 +186,246 @@ document.addEventListener('DOMContentLoaded', function() {
         loadPostedScriptures(); // Reload posted scriptures
     }
 });
+
+// Word_of_the_day.js
+
+document.addEventListener('DOMContentLoaded', function () {
+    const topicsList = document.getElementById('topicsList');
+    const postModal = document.getElementById('postModal');
+    const closeModal = document.querySelector('.modal .close');
+
+    // Function to fetch and display topics
+    function loadTopics() {
+        fetch('/api/topics')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                topicsList.innerHTML = data.map(topic => 
+                    `<button class="topic-button" data-id="${topic.id}">${topic.name}</button>`
+                ).join('');
+                addTopicClickEvent();
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // Function to add click events to topic buttons
+    function addTopicClickEvent() {
+        const buttons = document.querySelectorAll('.topic-button');
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+                const topicId = this.getAttribute('data-id');
+                loadVerses(topicId);
+            });
+        });
+    }
+
+    // Function to fetch and display verses based on selected topic
+    function loadVerses(topicId) {
+        fetch(`/api/verses?topicId=${topicId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const versesContainer = document.getElementById('postScripture');
+                versesContainer.innerHTML = data.map(verse =>
+                    `<div class="verse">
+                        <h3>${verse.title}</h3>
+                        <p>${verse.text}</p>
+                    </div>`
+                ).join('');
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // Close modal functionality
+    closeModal.addEventListener('click', function () {
+        postModal.style.display = 'none';
+    });
+
+    // Initial load of topics
+    loadTopics();
+});
+
+// Word_of_the_day.js
+
+document.addEventListener('DOMContentLoaded', function () {
+    const topicsList = document.getElementById('topicsList');
+    const postModal = document.getElementById('postModal');
+    const closeModal = document.querySelector('.modal .close');
+
+    // Function to fetch and display topics
+    function loadTopics() {
+        fetch('/api/topics')  // Adjust URL as necessary
+            .then(response => response.json())
+            .then(data => {
+                topicsList.innerHTML = data.map(topic => 
+                    `<button class="topic-button" data-id="${topic.id}">${topic.name}</button>`
+                ).join('');
+                addTopicClickEvent();
+            });
+    }
+
+    // Function to add click events to topic buttons
+    function addTopicClickEvent() {
+        const buttons = document.querySelectorAll('.topic-button');
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+                const topicId = this.getAttribute('data-id');
+                loadVerses(topicId);
+            });
+        });
+    }
+
+    // Function to fetch and display verses based on selected topic
+    function loadVerses(topicId) {
+        fetch(`/api/verses?topicId=${topicId}`)  // Adjust URL as necessary
+            .then(response => response.json())
+            .then(data => {
+                const versesContainer = document.getElementById('postScripture');
+                versesContainer.innerHTML = data.map(verse =>
+                    `<div class="verse">
+                        <h3>${verse.title}</h3>
+                        <p>${verse.text}</p>
+                    </div>`
+                ).join('');
+            });
+    }
+
+    // Close modal functionality
+    closeModal.addEventListener('click', function () {
+        postModal.style.display = 'none';
+    });
+
+    // Initial load of topics
+    loadTopics();
+});
+document.addEventListener('DOMContentLoaded', () => {
+    const shareButtons = {
+        facebook: document.querySelector('.share-button.facebook'),
+        twitter: document.querySelector('.share-button.twitter'),
+        email: document.querySelector('.share-button.email')
+    };
+
+    // Function to update share buttons
+    function updateShareButtons(scripture) {
+        const scriptureUrl = encodeURIComponent(window.location.href);
+        const scriptureText = encodeURIComponent(scripture);
+
+        shareButtons.facebook.href = `https://www.facebook.com/sharer/sharer.php?u=${scriptureUrl}`;
+        shareButtons.twitter.href = `https://twitter.com/intent/tweet?url=${scriptureUrl}&text=${scriptureText}`;
+        shareButtons.email.href = `mailto:?subject=Check out this scripture&body=${scriptureText}%20${scriptureUrl}`;
+    }
+
+    // Example of setting scripture and updating share buttons
+    function setScripture(scripture) {
+        document.getElementById('dailyScripture').innerText = scripture;
+        updateShareButtons(scripture);
+    }
+
+    // Simulate setting a scripture for demonstration
+    const exampleScripture = "For God so loved the world that he gave his one and only Son...";
+    setScripture(exampleScripture);
+
+    // Add event listener to modal form for posting scriptures
+    document.getElementById('scriptureForm').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const scriptureText = document.getElementById('scriptureText').value;
+        setScripture(scriptureText);
+        document.getElementById('postModal').style.display = 'none'; // Close the modal
+    });
+
+    // Add event listener to close modal
+    document.querySelector('.modal .close').addEventListener('click', () => {
+        document.getElementById('postModal').style.display = 'none';
+    });
+});
+document.addEventListener('DOMContentLoaded', () => {
+    const bibleForm = document.getElementById('bibleSearchForm');
+    const bibleResult = document.getElementById('bibleResult');
+
+    bibleForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const reference = document.getElementById('bibleReference').value;
+        try {
+            const response = await fetch(`https://bible-api.com/${encodeURIComponent(reference)}`);
+            const data = await response.json();
+            if (data && data.text) {
+                bibleResult.innerHTML = `
+                    <h3>${data.reference}</h3>
+                    <p>${data.text}</p>
+                `;
+            } else {
+                bibleResult.innerHTML = '<p>No results found. Please check the reference and try again.</p>';
+            }
+        } catch (error) {
+            bibleResult.innerHTML = '<p>Error fetching the Bible verse. Please try again later.</p>';
+        }
+    });
+});
+document.addEventListener('DOMContentLoaded', () => {
+    const bibleModal = document.getElementById('bibleModal');
+    const openBibleButton = document.getElementById('bibleLink');
+    const closeBibleButton = document.querySelector('#bibleModal .close');
+    const bibleContent = document.getElementById('bibleContent');
+    const loadChapterButton = document.getElementById('loadChapter');
+    const bibleBookSelect = document.getElementById('bibleBookSelect');
+    const bibleChapterInput = document.getElementById('bibleChapter');
+    const bibleVerseInput = document.getElementById('bibleVerse');
+    const prevPageButton = document.getElementById('prevPage');
+    const nextPageButton = document.getElementById('nextPage');
+
+    // Open Bible modal
+    openBibleButton.addEventListener('click', () => {
+        bibleModal.style.display = 'block';
+    });
+
+    // Close Bible modal
+    closeBibleButton.addEventListener('click', () => {
+        bibleModal.style.display = 'none';
+        bibleContent.innerHTML = ''; // Clear content
+    });
+
+    // Close modal when clicking outside of the modal content
+    window.addEventListener('click', (event) => {
+        if (event.target === bibleModal) {
+            bibleModal.style.display = 'none';
+            bibleContent.innerHTML = ''; // Clear content
+        }
+    });
+
+    // Load selected chapter and verse
+    loadChapterButton.addEventListener('click', async () => {
+        const book = bibleBookSelect.value;
+        const chapter = bibleChapterInput.value;
+        const verse = bibleVerseInput.value;
+
+        if (book && chapter) {
+            try {
+                const response = await fetch(`https://bible-api.com/${book}%20${chapter}:${verse}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok.');
+                }
+                const data = await response.json();
+                bibleContent.innerHTML = `<p>${data.text}</p>`;
+            } catch (error) {
+                bibleContent.innerHTML = `<p>Error fetching Bible content: ${error.message}</p>`;
+            }
+        }
+    });
+
+    // Navigation buttons (not functional in this example, but can be implemented if needed)
+    prevPageButton.addEventListener('click', () => {
+        // Implement page navigation if applicable
+    });
+
+    nextPageButton.addEventListener('click', () => {
+        // Implement page navigation if applicable
+    });
+});

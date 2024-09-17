@@ -10,7 +10,7 @@ h1, h2, ul, p, input, button {
 /* Basic styling for the entire page */
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
+    background: linear-gradient(to bottom, #0956b9, #778ac7); /* White to blue gradient */
     overflow-y: auto; /* Enable vertical scrolling */
     background-repeat: no-repeat;
     color: #fff; /* Default text color */
@@ -306,4 +306,187 @@ footer p {
 
 .delete-button:hover {
     background-color: #c82333; /* Darker red on hover */
+}
+/* Word_of_the_day.css */
+
+/* Existing styles... */
+
+.topics-section {
+    margin: 20px 0;
+}
+
+#topicsList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.topic-button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.topic-button:hover {
+    background-color: #0056b3;
+}
+
+.verse {
+    margin-bottom: 20px;
+}
+/* Share buttons styling */
+.share-buttons {
+    display: flex;
+    gap: 10px; /* Space between buttons */
+    justify-content: center; /* Center the buttons */
+    margin-top: 20px; /* Space above buttons */
+}
+
+.share-button {
+    background-color: #3b5998; /* Facebook color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.share-button.facebook {
+    background-color: #3b5998; /* Facebook blue */
+}
+
+.share-button.twitter {
+    background-color: #1da1f2; /* Twitter blue */
+}
+
+.share-button.email {
+    background-color: #d44638; /* Email color */
+}
+
+.share-button:hover {
+    opacity: 0.8; /* Slightly fade the button on hover */
+    transform: scale(1.05); /* Slightly grow button on hover */
+}
+
+.share-button.facebook:hover {
+    background-color: #2d4373; /* Darker Facebook blue on hover */
+}
+
+.share-button.twitter:hover {
+    background-color: #0d95e8; /* Darker Twitter blue on hover */
+}
+
+.share-button.email:hover {
+    background-color: #b33b2e; /* Darker email color on hover */
+}
+/* Bible Section */
+.bible-section {
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.1); /* Light background */
+    border-radius: 10px; /* Rounded corners */
+    margin: 20px; /* Margin around the section */
+}
+
+.bible-section h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+#bibleSearchForm {
+    display: flex;
+    justify-content: center; /* Center the form */
+    gap: 10px; /* Space between input and button */
+    margin-bottom: 20px; /* Space below the form */
+}
+
+#bibleReference {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 70%; /* Make input larger */
+}
+
+#bibleSearchForm input[type="submit"] {
+    background-color: #28a745; /* Green background */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+#bibleSearchForm input[type="submit"]:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+#bibleResult {
+    text-align: center; /* Center align results */
+}
+/* Modal styling */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.7); /* Black background with transparency */
+}
+
+/* Modal content */
+.modal-content {
+    background-color: #fff; /* White background */
+    margin: 5% auto; /* 5% from the top and centered */
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Soft shadow */
+    width: 80%; /* Width of modal */
+    max-width: 900px; /* Max width */
+}
+
+/* Close button styles */
+.close {
+    color: #aaa; /* Light color for the close button */
+    float: right;
+    font-size: 28px; /* Font size */
+    font-weight: bold;
+    cursor: pointer; /* Pointer on hover */
+}
+
+.close:hover,
+.close:focus {
+    color: #000; /* Change color on hover/focus */
+}
+
+/* Back button styles (if needed) */
+.back-button {
+    position: fixed; /* Change to fixed to keep it in the same spot when scrolling */
+    top: 41px; /* Distance from the top */
+    left: 20px; /* Distance from the left */
+    background-color: #444343; /* Button color */
+    color: white; /* Text color */
+    padding: 10px 15px; /* Button padding */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* No underline */
+    font-size: 1rem; /* Font size */
+    transition: background-color 0.3s, transform 0.2s; /* Transition effects */
+    z-index: 1000; /* Ensure it’s on top of other elements */
+}
+
+.back-button:hover {
+    background-color: #03274e; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly grow button on hover */
 }

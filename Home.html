@@ -6,6 +6,26 @@
     <title>Church App</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <link rel="stylesheet" href="Home.css">
+    <style>
+        /* Home.css */
+
+        /* Other existing styles... */
+
+        .nav-links li {
+            position: relative; /* Ensure that the red dot is positioned correctly */
+        }
+
+        .red-dot {
+            position: absolute;
+            top: -5px; /* Adjust according to your layout */
+            right: -10px; /* Adjust according to your layout */
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            border-radius: 50%;
+            display: none; /* Initially hidden */
+        }
+    </style>
 </head>
 <body>
     <div class="main-container">
@@ -20,16 +40,18 @@
                         <li><a href="Word_of_the_day.html">Scripture</a></li>
                         <li><a href="Donations.html">Donation</a></li>
                         <li><a href="podcast.html">Podcast</a></li>
-                        <li><a href="Member_profile.html">Members</a></li>
+                        <li><a href="Member_profile.html">Membership</a></li>
                         <li><a href="Events.html">Events</a></li>
                         <li><a href="TVChannels.html">TV</a></li>
                         <li><a href="PrayerRequest.html">Prayer Request</a></li>
-                        <li><a href="Chat.html">Chat</a></li>
+                        <li>
+                            <a href="Chat.html">Chat</a>
+                            <span class="red-dot" id="new-message-dot"></span>
+                        </li>
                     </ul>
                 </nav>
             </div>
         </header>
-
 
         <div class="content">
             <h2 class="main-heading">Apostolic App</h2>
@@ -48,7 +70,7 @@
             
             <button class="cta-button" onclick="window.location.href='AboutUs.html'">About Us</button>
 
-                        <!-- Slideshow -->
+            <!-- Slideshow -->
             <h2>Partners:</h2>
             <h1>Partners</h1>
             <div class="slideshow-container">
@@ -64,11 +86,10 @@
                 <a class="next" onclick="plusSlides(1)">&#10095;</a>
             </div>
 
-
             <h2 class="main-heading">Prayer Request</h2>
             <div class="text-and-image prayer-request-section">
                 <a href="PrayerRequest.html">
-                    <img src="prayer.png" alt="Church Image" class="side-image">
+                    <img src="prayer.png" alt="Prayer Request Image" class="side-image">
                 </a>
                 <p class="sub-text">
                     The Prayer Request feature plays a crucial role in strengthening the 
@@ -89,14 +110,14 @@
                     recurring donations and provides transparency through digital receipts.
                 </p>
                 <a href="Donations.html">
-                    <img src="donation.png" alt="Church Image" class="side-image">
+                    <img src="donation.png" alt="Donation Image" class="side-image">
                 </a>
             </div>
 
             <h1 class="main-heading">Shop</h1>
             <div class="text-and-image reverse-text-and-image">
                 <a href="Shop.html">
-                    <img src="shop.jpg" alt="Church Image" class="side-image">
+                    <img src="shop.jpg" alt="Shop Image" class="side-image">
                 </a>
                 <p class="sub-text">With Shop Online, churches can integrate an e-commerce aspect into their 
                     app, allowing users to purchase religious materials, church merchandise, or even event 
@@ -117,13 +138,13 @@
                 seamless planning and coordination for both small and large-scale church functions.
             </p>
             <a href="Events.html">
-                <img src="events.png" alt="Church Image" class="side-image">
+                <img src="events.png" alt="Events Image" class="side-image">
             </a>
         </div>
 
         <h1 class="main-heading">TV</h1>
         <div class="text-and-image reverse-text-and-image">
-            <img src="TV.jpg" alt="Church Image" class="side-image">
+            <img src="TV.jpg" alt="TV Image" class="side-image">
             <p class="sub-text">The Channels feature allows users to explore various ministries or 
                 departments within the church, such as youth groups, Bible study classes, or women’s and 
                 men’s ministries. These channels are dedicated spaces where members can receive specific 
@@ -141,17 +162,17 @@
                  reflection is shared, allowing members to start or end their day with a message of 
                  hope and guidance. This feature keeps the congregation spiritually engaged on a regular
                   basis and serves as a tool for personal growth. The simplicity of daily scripture in the
-                   app makes it easy for users to stay connected to their faith, even amidst a busy schedule..
+                   app makes it easy for users to stay connected to their faith, even amidst a busy schedule.
             </p>
             <a href="Word_of_the_day.html">
-                <img src="word.png" alt="Church Image" class="side-image">
+                <img src="word.png" alt="Scripture Image" class="side-image">
             </a>
         </div>
 
         <h1 class="main-heading">Podcast</h1>
         <div class="text-and-image reverse-text-and-image">
             <a href="podcast.html">
-                <img src="podcast.png" alt="Church Image" class="side-image">
+                <img src="podcast.png" alt="Podcast Image" class="side-image">
             </a>
             <p class="sub-text">The Podcast feature extends the reach of the church’s teachings by offering
                  audio content, such as recorded sermons, devotionals, or religious discussions, that users
@@ -173,14 +194,14 @@
                 most out of your membership experience, ensuring that all your preferences and needs are just a tap away.
             </p>
             <a href="Member_profile.html">
-                <img src="members.jpg" alt="Church Image" class="side-image">
+                <img src="members.jpg" alt="Members Image" class="side-image">
             </a>
         </div>
 
         <h1 class="main-heading">Chat</h1>
         <div class="text-and-image reverse-text-and-image">
             <a href="Chat.html">
-                <img src="chaticon.jpg" alt="Church Image" class="side-image">
+                <img src="chaticon.jpg" alt="Chat Image" class="side-image">
             </a>
             <p class="sub-text">Chat is your go-to solution for seamless, real-time conversations. Whether you're catching up with friends,
                  collaborating with colleagues, or meeting new people, our app offers a smooth, intuitive chat experience.
@@ -189,12 +210,9 @@
             </p>
         </div>
 
-
-
-
         <footer class="footer">
             <ul class="footer-links">
-                <li><a href="#">© 2024 Church App. All rights reserved. <br>Address:Block 6,
+                <li><a href="#">© 2024 Church App. All rights reserved. <br>Address: Block 6,
                      Lords Office Estate, 276 West Ave, Centurion, 0163</a></li>
             </ul>
             <div class="social-media">
@@ -220,11 +238,32 @@
             slideIndex++;
             if (slideIndex > slides.length) { slideIndex = 1 }
             slides[slideIndex - 1].style.display = "block";
-            setTimeout(showSlides, 8000); // Change slide every 3 seconds
+            setTimeout(showSlides, 8000); // Change slide every 8 seconds
         }
 
         function plusSlides(n) {
             showSlides(slideIndex += n);
+        }
+
+        // Function to show the red dot
+        function showRedDot() {
+            document.getElementById('new-message-dot').style.display = 'block';
+        }
+
+        // Function to hide the red dot
+        function hideRedDot() {
+            document.getElementById('new-message-dot').style.display = 'none';
+        }
+
+        // Example: Call this function when a new message arrives
+        // This function should be triggered by your chat application logic
+        function onNewMessage() {
+            showRedDot();
+        }
+
+        // Example: Call this function when a user views the messages
+        function onViewMessages() {
+            hideRedDot();
         }
     </script>
 </body>

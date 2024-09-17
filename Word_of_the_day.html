@@ -5,15 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Word of the Day</title>
     <link rel="stylesheet" href="Word_of_the_day.css">
-    <a href="javascript:history.back()" class="back-button">←Back</a>
 </head>
 <body>
+    <a href="javascript:history.back()" class="back-button">← Back</a>
+
     <header>
         <div class="container">
             <h1>Word of the Day</h1>
             <nav>
                 <ul>
                     <li><a href="#" id="postLink">Post a Scripture</a></li>
+                    <li><a href="#" id="bibleLink">Open Bible</a></li>
                 </ul>
             </nav>
         </div>
@@ -25,6 +27,25 @@
             <div id="dailyScripture">
                 <!-- Daily scripture will be loaded here -->
             </div>
+            <div class="share-section">
+                <h2>Share This Scripture</h2>
+                <div class="share-buttons">
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=YOUR_URL_HERE" target="_blank" class="share-button facebook">Share on Facebook</a>
+                    <a href="https://twitter.com/intent/tweet?url=YOUR_URL_HERE&text=YOUR_TEXT_HERE" target="_blank" class="share-button twitter">Share on Twitter</a>
+                    <a href="mailto:?subject=Check out this scripture&body=I thought you might like this scripture: YOUR_URL_HERE" class="share-button email">Share via Email</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="topics-section">
+        <div class="container">
+            <h2>Topics</h2>
+            <div id="topicsList">
+                <button class="topic-button">Topic 1</button>
+                <button class="topic-button">Topic 2</button>
+                <button class="topic-button">Topic 3</button>
+            </div>
         </div>
     </section>
 
@@ -33,14 +54,52 @@
             <h2>Posted Scriptures</h2>
             <div id="postScripture">
                 <!-- Scriptures posted by users will be displayed here -->
+                <div class="post-item">
+                    <p>Scripture text here...</p>
+                    <div class="post-info">Posted by Username on Date</div>
+                    <div class="like-comment">
+                        <button class="like-button">Like</button>
+                        <button class="comment-button">Comment</button>
+                    </div>
+                    <div class="comment-section">
+                        <div class="comment">Comment text here...</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <footer>
-        <div class="container"></div>
+        <div class="container">
+            <p>&copy; 2024 Word of the Day</p>
+        </div>
     </footer>
 
+    <!-- Bible Popup Modal -->
+    <div id="bibleModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Read the Bible</h2>
+            <div class="bible-selection">
+                <select id="bibleBookSelect">
+                    <option value="Genesis">Genesis</option>
+                    <option value="Exodus">Exodus</option>
+                    <option value="Leviticus">Leviticus</option>
+                    <!-- Add more books here -->
+                </select>
+                <input type="number" id="bibleChapter" min="1" placeholder="Chapter">
+                <input type="number" id="bibleVerse" min="1" placeholder="Verse">
+                <button id="loadChapter">Load Chapter</button>
+            </div>
+            <div id="bibleContent">
+                <!-- Bible content will be displayed here -->
+            </div>
+            <button id="prevPage" class="nav-button">Previous</button>
+            <button id="nextPage" class="nav-button">Next</button>
+        </div>
+    </div>
+
+    <!-- Post Scripture Modal -->
     <div id="postModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>

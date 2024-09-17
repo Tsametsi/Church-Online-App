@@ -9,9 +9,6 @@ h1, h2, ul, p, input, button {
 /* Basic styling for the entire page */
 body {
     font-family: 'Arial', sans-serif;
-    /* background-color: #6e6e6e; */
-    /* background-image: url('Chat_Image.jpg'); */
-    /* background-size: cover; */
     background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
     overflow-y: auto; /* Enable vertical scrolling */
     background-repeat: no-repeat;
@@ -119,11 +116,24 @@ h1 {
 }
 
 #user-list li {
+    display: flex; /* Flexbox for aligning items */
+    align-items: center; /* Center items vertically */
     padding: 10px;
     cursor: pointer;
     border-bottom: 1px solid #d89140; /* Gold border */
     border-radius: 4px;
     transition: background-color 0.3s;
+}
+
+#user-list li img {
+    width: 40px; /* Fixed width */
+    height: 40px; /* Fixed height */
+    border-radius: 50%; /* Round profile picture */
+    margin-right: 10px; /* Space between image and text */
+}
+
+#user-list li span {
+    flex: 1; /* Take up remaining space */
 }
 
 #user-list li:hover {
@@ -191,10 +201,10 @@ h1 {
 /* Online indicator styling */
 .online-indicator {
     display: inline-block;
-    width: 10px;
-    height: 10px;
+    width: 1px;
+    height: 1px;
     background-color: green;
-    border-radius: 50%;
+    border-radius: 20%;
     margin-left: 5px;
     vertical-align: middle; /* Align the dot with the text */
 }
@@ -231,4 +241,74 @@ button:hover {
     transform: scale(1.05); /* Slightly grow button on hover */
 }
 
+.delete-bin {
+    cursor: pointer;
+    margin-left: 10px;
+    color: #ff0000; /* Set desired color for the delete bin icon */
+    font-size: 0.9em;
+    display: inline-block;
+    vertical-align: middle;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
 
+.user-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.message-container {
+    display: flex;
+    align-items: center;
+}
+
+.delete-icon {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+#emoji-picker {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    display: none;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+#emoji-picker button {
+    border: none;
+    background: none;
+    font-size: 20px;
+    cursor: pointer;
+    margin: 2px;
+}
+
+#user-search {
+    margin-bottom: 10px;
+    padding: 5px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: black;
+}
+.block-button {
+    background-color: rgb(33, 34, 36);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.unblock-button {
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}

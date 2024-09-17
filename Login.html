@@ -24,31 +24,59 @@
         </form>
     </div>
 
-<script>
-        document.getElementById('login-form').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent default form submission
+    <footer>
+        <div class="slogan"> Apostles of Christ <br> "Uniting Apostles Everywhere – A Place for Every Believer to Connect and Grow"
 
-    const formData = new FormData(this);
-    fetch('/login', {
-        method: 'POST',
-        body: JSON.stringify(Object.fromEntries(formData)),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json()) // Ensure response is JSON
-    .then(data => {
-        if (data.success) {
-            localStorage.setItem('username', data.username); // Store username
-            window.location.href = '/Home.html'; // Redirect to Home.html
-        } else {
-            alert(data.message); // Show error message
-        }
-    })
-    .catch(error => {
-        console.error('There was an error with the fetch operation:', error);
-        alert('An error occurred. Please try again.'); // Handle fetch errors
-    });
-});
-</script>
+        </div>
+    </footer>
+
+    <script>
+        // Add event listener for form submission
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Get form data
+            const formData = new FormData(this);
+            const data = {
+                username: formData.get('username'),
+                password: formData.get('password')
+            };
+
+            // Send login request to the backend
+            fetch('http://localhost:3000/auth/login', { // Use the correct backend route
+                method: 'POST',
+                body: JSON.stringify(data), // Send data as JSON
+                headers: {
+                    'Content-Type': 'application/json' // Set content type to JSON
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse the response as JSON
+            })
+            .then(data => {
+                if (data.success) {
+                    // Store username in localStorage
+                    localStorage.setItem('username', data.username);
+                    // Redirect to home page on successful login
+                    window.location.href = '/Home.html';
+                } else {
+                    // Show error message if login fails
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('There was an error with the fetch operation:', error);
+                alert('An error occurred. Please try again.'); // Handle any fetch errors
+            });
+        });
+
+        // Add class to body when the page loads to trigger the animation
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+    </script>
+</body>
 </html>
