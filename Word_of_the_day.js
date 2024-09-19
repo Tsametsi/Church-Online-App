@@ -197,21 +197,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to fetch and display topics
     function loadTopics() {
         fetch('/api/topics')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 topicsList.innerHTML = data.map(topic => 
-                    `<button class="topic-button" data-id="${topic.id}">${topic.name}</button>`
+                    `<button class="topic-button" data-id="${topic.id}">${topic.topic_name}</button>`
                 ).join('');
                 addTopicClickEvent();
             })
             .catch(error => console.error('Error:', error));
     }
-
+    
     // Function to add click events to topic buttons
     function addTopicClickEvent() {
         const buttons = document.querySelectorAll('.topic-button');
@@ -429,3 +424,18 @@ document.addEventListener('DOMContentLoaded', () => {
         // Implement page navigation if applicable
     });
 });
+function saveTopic(topicName) {
+    fetch('/api/topics', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ topic_name: topicName }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Topic saved:', data);
+        loadTopics(); // Reload topics
+    })
+    .catch(error => console.error('Error:', error));
+}

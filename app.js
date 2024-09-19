@@ -926,6 +926,108 @@ app.post('/api/postScripture', (req, res) => {
     });
 });
 
+
+
+// Get all discussions
+app.get('/api/discussions', (req, res) => {
+    db.query('SELECT * FROM discussions ORDER BY created_at DESC', (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.json(results);
+    });
+});
+
+// Create new discussion
+app.post('/api/discussions', (req, res) => {
+    const { title, content } = req.body;
+
+    if (!title || !content) {
+        return res.status(400).json({ message: 'Title and content are required' });
+    }
+
+    db.query('INSERT INTO discussions (title, content) VALUES (?, ?)', [title, content], (err, result) => {
+        if (err) return res.status(500).send(err);
+        res.status(201).json({ id: result.insertId, title, content });
+    });
+});
+
+// Get comments for a discussion
+app.get('/api/discussions/:id/comments', (req, res) => {
+    const discussionId = req.params.id;
+    db.query('SELECT * FROM discussion_comments WHERE discussion_id = ?', [discussionId], (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.json(results);
+    });
+});
+
+// Create a new comment
+app.post('/api/discussions/:id/comments', (req, res) => {
+    const discussionId = req.params.id;
+    const { content } = req.body;
+
+    if (!content) {
+        return res.status(400).json({ message: 'Content is required' });
+    }
+
+    db.query('INSERT INTO discussion_comments (discussion_id, content) VALUES (?, ?)', [discussionId, content], (err, result) => {
+        if (err) return res.status(500).send(err);
+        res.status(201).json({ id: result.insertId, content });
+    });
+});
+
+// Like a comment
+app.post('/api/comments/:id/like', (req, res) => {
+    const commentId = req.params.id;
+    const userId = req.body.userId; // This should come from the user's session or token
+
+    db.query('INSERT INTO discussion_likes (comment_id, user_id) VALUES (?, ?)', [commentId, userId], (err, result) => {
+        if (err) return res.status(500).send(err);
+        res.status(201).json({ message: 'Liked successfully' });
+    });
+});
+// Get replies for a comment
+app.get('/api/comments/:id/replies', (req, res) => {
+    const commentId = req.params.id;
+    db.query('SELECT * FROM discussion_comment_replies WHERE comment_id = ?', [commentId], (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.json(results);
+    });
+});
+
+// Create a new reply
+app.post('/api/comments/:id/replies', (req, res) => {
+    const commentId = req.params.id;
+    const { content } = req.body;
+
+    if (!content) {
+        return res.status(400).json({ message: 'Content is required' });
+    }
+
+    db.query('INSERT INTO discussion_comment_replies (comment_id, content) VALUES (?, ?)', [commentId, content], (err, result) => {
+        if (err) return res.status(500).send(err);
+        res.status(201).json({ id: result.insertId, content });
+    });
+});
+
+
+// Endpoint to add a topic
+app.post('/api/topics', (req, res) => {
+    const { topic_name } = req.body;
+    const sql = 'INSERT INTO Scripture_topics (topic_name) VALUES (?)';
+    db.query(sql, [topic_name], (err, result) => {
+        if (err) return res.status(500).json(err);
+        res.status(201).json({ id: result.insertId, topic_name });
+    });
+});
+
+// Endpoint to get all topics
+app.get('/api/topics', (req, res) => {
+    const sql = 'SELECT * FROM Scripture_topics ORDER BY created_at DESC';
+    db.query(sql, (err, results) => {
+        if (err) return res.status(500).json(err);
+        res.json(results);
+    });
+});
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);

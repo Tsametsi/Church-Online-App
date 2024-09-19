@@ -5,19 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat</title>
     <link rel="stylesheet" href="Chat.css">
-    <!-- Include Socket.IO client library -->
+    <link rel="stylesheet" href="Username.css">
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
 </head>
 <body>
     <h1>Chat</h1>
+    <div id="username-display">
+        <!-- Username will be inserted here -->
+    </div>
+
     <div id="users">
         <h2>Users</h2>
-        <!-- Search input for filtering users -->
         <input type="text" id="user-search" placeholder="Search users...">
         <ul id="user-list"></ul>
     </div>
-    <!-- Add this back button inside the header -->
+
     <a href="javascript:history.back()" class="back-button">←Back</a>
+    
     <div>
         <div id="chat">
             <h2>Chat with <span id="chat-with">Select a user</span></h2>
@@ -25,12 +29,8 @@
             <input type="file" id="attachment-input">
             <input type="text" id="message-input" placeholder="Type a message...">
             <button id="send-button">Send</button>
-            <!-- Emoji Button -->
             <button id="emoji-button">😀</button>
-            <!-- Emoji Picker -->
-            <div id="emoji-picker" style="display: none;">
-                <!-- Emojis will be added here dynamically -->
-            </div>
+            <div id="emoji-picker" style="display: none;"></div>
         </div>
     </div>
 
@@ -46,17 +46,17 @@
         const userSearch = document.getElementById('user-search');
 
         let selectedUser = '';
-        let blockedUsers = []; // Array to keep track of blocked users
-        const socket = io();  // This will now work because the Socket.IO client library is included
-
-        // Get logged-in username from localStorage
+        let blockedUsers = [];
+        const socket = io();
         const yourUsername = localStorage.getItem('username');
 
         if (!yourUsername) {
             window.location.href = '/Login.html';
         }
 
-        // Fetch and display users
+        // Set username display
+        document.getElementById('username-display').textContent = `Logged in as: ${yourUsername}`;
+
         function loadUsers() {
             fetch('/api/users')
                 .then(response => response.json())
@@ -80,7 +80,6 @@
                                 li.appendChild(greenDot);
                             }
 
-                            // Block/Unblock button
                             const toggleBlockButton = document.createElement('button');
                             if (blockedUsers.includes(user.username)) {
                                 toggleBlockButton.textContent = 'Unblock';
@@ -104,7 +103,6 @@
                 });
         }
 
-        // Filter users based on search input
         function filterUsers() {
             const query = userSearch.value.toLowerCase();
             const users = userList.querySelectorAll('li');
@@ -116,32 +114,29 @@
 
         userSearch.addEventListener('input', filterUsers);
 
-        // Fetch and display messages between users
         function loadMessages(user) {
             fetch(`/api/chat/messages/${yourUsername}/${user}`)
                 .then(response => response.json())
                 .then(messages => {
                     messageBox.innerHTML = '';
                     messages.forEach(message => {
-                        // Check if the message should be blocked
                         if (blockedUsers.includes(message.username)) return;
 
                         const messageContainer = document.createElement('div');
                         messageContainer.classList.add('message-container');
-                        
+
                         const p = document.createElement('p');
-                        p.classList.add('message');
-                        p.classList.add(message.username === yourUsername ? 'sender' : 'receiver');
+                        p.classList.add('message', message.username === yourUsername ? 'sender' : 'receiver');
                         p.textContent = `${message.username}: ${message.message}`;
                         p.dataset.id = message.id;
-                        
+
                         if (message.attachment) {
                             const link = document.createElement('a');
                             link.href = message.attachment;
                             link.textContent = 'Attachment';
                             p.appendChild(link);
                         }
-                        
+
                         messageContainer.appendChild(p);
                         messageBox.appendChild(messageContainer);
                     });
@@ -150,14 +145,12 @@
                 });
         }
 
-        // Select user and load messages
         function selectUser(user) {
             selectedUser = user;
             chatWith.textContent = user;
             loadMessages(user);
         }
 
-        // Send a new message with optional attachment
         function sendMessage() {
             const message = messageInput.value;
             const attachment = attachmentInput.files[0];
@@ -188,7 +181,6 @@
             });
         }
 
-        // Delete a message
         function deleteMessage(messageId) {
             fetch(`/api/chat/delete/${messageId}`, {
                 method: 'DELETE'
@@ -197,7 +189,6 @@
             });
         }
 
-        // Add delete icons to messages
         function addDeleteIcons() {
             const messages = document.querySelectorAll('#message-box .message');
             messages.forEach(message => {
@@ -214,14 +205,12 @@
             });
         }
 
-        // Block a user
         function blockUser(username) {
             blockedUsers.push(username);
             loadUsers();
             alert(`${username} has been blocked.`);
         }
 
-        // Unblock a user
         function unblockUser(username) {
             blockedUsers = blockedUsers.filter(user => user !== username);
             loadUsers();
@@ -233,25 +222,22 @@
             if (e.key === 'Enter') sendMessage();
         });
 
-        // Handle incoming messages
         socket.on('new_message', (data) => {
-            // Check if the message should be blocked
             if (blockedUsers.includes(data.username)) return;
 
             if (data.username === selectedUser || data.recipient === selectedUser) {
                 const p = document.createElement('p');
-                p.classList.add('message');
-                p.classList.add(data.username === yourUsername ? 'sender' : 'receiver');
+                p.classList.add('message', data.username === yourUsername ? 'sender' : 'receiver');
                 p.textContent = `${data.username}: ${data.message}`;
                 p.dataset.id = data.id;
-                
+
                 if (data.attachment) {
                     const link = document.createElement('a');
                     link.href = data.attachment;
                     link.textContent = 'Attachment';
                     p.appendChild(link);
                 }
-                
+
                 const deleteIcon = document.createElement('span');
                 deleteIcon.textContent = '🗑️';
                 deleteIcon.classList.add('delete-icon');
@@ -260,7 +246,6 @@
                         deleteMessage(data.id);
                     }
                 });
-                deleteIcon.classList.add('delete-icon');
                 p.appendChild(deleteIcon);
 
                 messageBox.appendChild(p);
@@ -268,26 +253,20 @@
             }
         });
 
-        // Join the chat
-        // Join the chat room for the logged-in user
         socket.emit('join', yourUsername);
 
-        // Handle user status updates
         socket.on('user_status', (data) => {
             loadUsers();
         });
 
-        // Initial load of users
         loadUsers();
 
-        // Refresh messages every 4 seconds
         setInterval(() => {
             if (selectedUser) {
                 loadMessages(selectedUser);
             }
         }, 4000);
 
-        // Emoji picker functionality
         const emojis = [
             '😀', '😁', '😂', '🤣', '😃', '😄', '😅', '😆', '😉', '😊',
             '😎', '😍', '😘', '😗', '😙', '😚', '☺️', '😋', '😛', '😜',
