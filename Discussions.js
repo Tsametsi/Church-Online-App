@@ -19,6 +19,20 @@ async function fetchDiscussions() {
     `).join('');
 }
 
+async function fetchTrendingTopics() {
+    const response = await fetch('YOUR_API_URL_FOR_TRENDING_TOPICS'); // Replace with your API URL
+    const topics = await response.json();
+
+    const topicsContainer = document.getElementById('topics-container');
+    topicsContainer.innerHTML = topics.map(topic => `
+        <div class="topic" onclick="setDiscussionTitle('${topic}')">${topic}</div>
+    `).join('');
+}
+
+function setDiscussionTitle(title) {
+    document.getElementById('discussion-title').value = title;
+}
+
 function toggleCommentInput(discussionId) {
     const commentInput = document.getElementById(`comment-input-${discussionId}`);
     const commentButton = document.getElementById(`comment-button-${discussionId}`);
@@ -190,5 +204,6 @@ function toggleEmojiPicker(inputId) {
     document.getElementById(inputId).focus();  // Focus on the text input when showing the picker
 }
 
-// Fetch discussions on page load
+// Fetch discussions and trending topics on page load
 fetchDiscussions();
+fetchTrendingTopics();

@@ -10,14 +10,32 @@
 
 <h1>Discussions</h1>
 
-<div id="new-discussion">
+<div id="trending-topics" class="trending-bar">
+    <h2>Trending Topics</h2>
+    <div id="topics-container"></div>
+</div>
+
+<div id="notifications" class="notifications-bar">
+    <h2>Notifications</h2>
+    <div id="notifications-container"></div>
+</div>
+
+<!-- Button to show discussion input -->
+<button id="show-discussion-btn" onclick="toggleDiscussionInput()">Create a Discussion</button>
+
+<div id="new-discussion" style="display: none;">
     <input type="text" id="discussion-username" placeholder="Enter your username" />
     <input type="text" id="discussion-title" placeholder="Discussion Title" />
     <textarea id="discussion-content" placeholder="Discussion Content"></textarea>
-    <button onclick="submitDiscussion()">Create a Discussion</button>
+    <button onclick="submitDiscussion()">Submit Discussion</button>
 </div>
 
-<div id="discussions" class="discussion-grid"></div> <!-- Removed duplicate id -->
+<!-- Search Input for Discussions -->
+<div id="search-section">
+    <input type="text" id="search-input" placeholder="Search discussions..." oninput="searchDiscussions()" />
+</div>
+
+<div id="discussions" class="discussion-grid"></div>
 
 <!-- Emoji Picker -->
 <div id="emoji-picker" style="display: none;"></div>
