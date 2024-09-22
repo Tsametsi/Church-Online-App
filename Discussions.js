@@ -204,6 +204,47 @@ function toggleEmojiPicker(inputId) {
     document.getElementById(inputId).focus();  // Focus on the text input when showing the picker
 }
 
+function toggleDiscussionInput() {
+    const newDiscussionDiv = document.getElementById('new-discussion');
+    newDiscussionDiv.style.display = newDiscussionDiv.style.display === 'none' ? 'block' : 'none';
+}
+
+let discussionsData = []; // Store the discussions fetched from the API
+
+async function fetchDiscussions() {
+    const response = await fetch('http://localhost:3000/api/discussions');
+    discussionsData = await response.json(); // Store discussions in the variable
+    renderDiscussions(discussionsData); // Render discussions
+}
+
+function renderDiscussions(discussions) {
+    const discussionsDiv = document.getElementById('discussions');
+    discussionsDiv.innerHTML = discussions.map(d => `
+        <div class="discussion">
+            <h3>${d.title}</h3>
+            <p>${d.content}</p>
+            <p><em>Posted by: ${d.username}</em></p>
+            <button onclick="toggleComments(${d.id}, '${d.username}')">💬 Comments</button>
+            <div id="comments-${d.id}" class="comment-section"></div>
+            <input type="text" id="comment-input-${d.id}" placeholder="Add a comment..." style="display: none;">
+            <button id="comment-button-${d.id}" onclick="addComment(${d.id}, '${d.username}')" style="display: none;">Add Comment</button>
+            <button id="emoji-button-${d.id}" onclick="toggleEmojiPicker('comment-input-${d.id}')">😀 Add Emoji</button>
+            <button onclick="toggleCommentInput(${d.id})">Comment</button>
+        </div>
+    `).join('');
+}
+
+function searchDiscussions() {
+    const searchTerm = document.getElementById('search-input').value.toLowerCase();
+    const filteredDiscussions = discussionsData.filter(d => 
+        d.title.toLowerCase().includes(searchTerm) || 
+        d.content.toLowerCase().includes(searchTerm) || 
+        d.username.toLowerCase().includes(searchTerm)
+    );
+    renderDiscussions(filteredDiscussions); // Render filtered discussions
+}
+
+
 // Fetch discussions and trending topics on page load
 fetchDiscussions();
 fetchTrendingTopics();

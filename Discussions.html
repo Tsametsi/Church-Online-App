@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discussions</title>
     <link rel="stylesheet" href="Discussions.css">
+    
 </head>
 <body>
 
@@ -31,14 +32,13 @@
 </div>
 
 <!-- Search Input for Discussions -->
-<div id="search-section">
-    <input type="text" id="search-input" placeholder="Search discussions..." oninput="searchDiscussions()" />
-</div>
+<input type="text" id="search-input" placeholder="Search discussions..." oninput="searchDiscussions()" />
+<div id="discussions"></div>
 
 <div id="discussions" class="discussion-grid"></div>
 
 <!-- Emoji Picker -->
-<div id="emoji-picker" style="display: none;"></div>
+<div id="emoji-picker"></div>
 
 <script src="Discussions.js"></script>
 
