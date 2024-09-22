@@ -937,18 +937,35 @@ app.get('/api/discussions', (req, res) => {
 });
 
 // Create new discussion
+// Create new discussion
 app.post('/api/discussions', (req, res) => {
-    const { title, content } = req.body;
-
-    if (!title || !content) {
-        return res.status(400).json({ message: 'Title and content are required' });
-    }
-
-    db.query('INSERT INTO discussions (title, content) VALUES (?, ?)', [title, content], (err, result) => {
-        if (err) return res.status(500).send(err);
-        res.status(201).json({ id: result.insertId, title, content });
+    const { title, content, username } = req.body; // Include username in the request body
+    
+    const query = 'INSERT INTO discussions (title, content, username, created_at) VALUES (?, ?, ?, NOW())'; // Include username in the query
+    db.query(query, [title, content, username], (error, results) => {
+        if (error) {
+            return res.status(500).json({ error: 'Database error' });
+        }
+        res.status(201).json({ message: 'Discussion created', discussionId: results.insertId });
     });
 });
+
+// Create a new comment
+app.post('/api/discussions/:id/comments', (req, res) => {
+    const discussionId = req.params.id;
+    const { content, username } = req.body; // Include username in the request body
+
+    if (!content || !username) {
+        return res.status(400).json({ message: 'Content and username are required' });
+    }
+
+    db.query('INSERT INTO discussion_comments (discussion_id, content, username) VALUES (?, ?, ?)', [discussionId, content, username], (err, result) => {
+        if (err) return res.status(500).send(err);
+        res.status(201).json({ id: result.insertId, content, username }); // Send username back in response
+    });
+});
+
+
 
 // Get comments for a discussion
 app.get('/api/discussions/:id/comments', (req, res) => {
@@ -959,20 +976,7 @@ app.get('/api/discussions/:id/comments', (req, res) => {
     });
 });
 
-// Create a new comment
-app.post('/api/discussions/:id/comments', (req, res) => {
-    const discussionId = req.params.id;
-    const { content } = req.body;
 
-    if (!content) {
-        return res.status(400).json({ message: 'Content is required' });
-    }
-
-    db.query('INSERT INTO discussion_comments (discussion_id, content) VALUES (?, ?)', [discussionId, content], (err, result) => {
-        if (err) return res.status(500).send(err);
-        res.status(201).json({ id: result.insertId, content });
-    });
-});
 
 // Like a comment
 app.post('/api/comments/:id/like', (req, res) => {

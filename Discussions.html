@@ -3,20 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discussions App</title>
+    <title>Discussions</title>
     <link rel="stylesheet" href="Discussions.css">
 </head>
 <body>
 
 <h1>Discussions</h1>
 
-<div id="discussion-form">
-    <input type="text" id="title" placeholder="Title" required>
-    <textarea id="content" placeholder="Content" required></textarea>
-    <button id="submit">Submit</button>
+<div id="new-discussion">
+    <input type="text" id="discussion-username" placeholder="Enter your username" />
+    <input type="text" id="discussion-title" placeholder="Discussion Title" />
+    <textarea id="discussion-content" placeholder="Discussion Content"></textarea>
+    <button onclick="submitDiscussion()">Create a Discussion</button>
 </div>
 
-<div id="discussions" class="discussion-grid"></div>
+<div id="discussions" class="discussion-grid"></div> <!-- Removed duplicate id -->
+
+<!-- Emoji Picker -->
+<div id="emoji-picker" style="display: none;"></div>
 
 <script src="Discussions.js"></script>
 
