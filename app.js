@@ -1032,6 +1032,47 @@ app.get('/api/topics', (req, res) => {
     });
 });
 
+
+// Route to fetch organizations by category
+app.get('/api/organizations/:categoryId', (req, res) => {
+    const categoryId = req.params.categoryId;
+    const query = `
+        SELECT o.id, o.name, o.email, o.phone, o.description 
+        FROM donations_organizations o
+        WHERE o.help_category_id = ?;
+    `;
+
+    db.query(query, [categoryId], (err, results) => {
+        if (err) return res.status(500).send('Error fetching organizations');
+        res.json(results);
+    });
+});
+
+// Route to handle donations
+app.post('/api/donate', (req, res) => {
+    const { name, email, categoryId } = req.body;
+    const query = 'INSERT INTO donations_donors (name, email, category_id) VALUES (?, ?, ?)';
+    
+    db.query(query, [name, email, categoryId], (err, result) => {
+        if (err) return res.status(500).send('Error inserting donation');
+        res.send('Donation successful');
+    });
+});
+
+// Route to sign up organizations
+app.post('/api/signup', (req, res) => {
+    const { name, email, phone, contactPerson, orgNumber, description, helpCategoryId } = req.body;
+    const query = `
+        INSERT INTO donations_organizations (name, email, phone, contact_person, org_number, description, help_category_id) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    `;
+    
+    db.query(query, [name, email, phone, contactPerson, orgNumber, description, helpCategoryId], (err, result) => {
+        if (err) return res.status(500).send('Error signing up organization');
+        res.send('Organization signed up successfully');
+    });
+});
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
