@@ -3,20 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discussions App</title>
+    <title>Discussions</title>
     <link rel="stylesheet" href="Discussions.css">
+    
 </head>
 <body>
 
 <h1>Discussions</h1>
 
-<div id="discussion-form">
-    <input type="text" id="title" placeholder="Title" required>
-    <textarea id="content" placeholder="Content" required></textarea>
-    <button id="submit">Submit</button>
+<div id="trending-topics" class="trending-bar">
+    <h2>Trending Topics</h2>
+    <div id="topics-container"></div>
 </div>
 
+
+
+<!-- Button to show discussion input -->
+<button id="show-discussion-btn" onclick="toggleDiscussionInput()">Create a Discussion</button>
+
+<div id="new-discussion" style="display: none;">
+    <input type="text" id="discussion-username" placeholder="Enter your username" />
+    <input type="text" id="discussion-title" placeholder="Discussion Title" />
+    <textarea id="discussion-content" placeholder="Discussion Content"></textarea>
+    <button onclick="submitDiscussion()">Submit Discussion</button>
+</div>
+
+<!-- Search Input for Discussions -->
+<input type="text" id="search-input" placeholder="Search discussions..." oninput="searchDiscussions()" />
+<div id="discussions"></div>
+
 <div id="discussions" class="discussion-grid"></div>
+
+<!-- Emoji Picker -->
+<div id="emoji-picker"></div>
 
 <script src="Discussions.js"></script>
 

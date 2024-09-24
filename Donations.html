@@ -3,70 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Make a Donation</title>
-    <link rel="stylesheet" href="/Donations.css">
-    <script src="https://www.paypal.com/sdk/js?client-id=AfkU9KUOMBmUFmR4XbDUaxZGGtb2cPStPbeoqKQGd-2GPQYdrR5k8eZjvd1xoV6nDqmr1m1x3gG497Rw"></script>
+    <title>Donations Page</title>
+    <link rel="stylesheet" href="Donations.css">
 </head>
 <body>
-    <header>
-        <!-- Add this back button inside the header -->
-        <a href="javascript:history.back()" class="back-button">←Back</a>
-    </header>
-        <h1>Make a Donation</h1>
-    <form id="donation-form">
-        <label for="amount">Amount:</label>
-        <input type="number" id="amount" name="amount" required min="1">
+    <div class="container">
+        <h1>Welcome to the Donations Page</h1>
+        <div class="options">
+            <button id="donateBtn" class="option-button">I want to donate</button>
+            <button id="signupBtn" class="option-button">I am an organization in need of donations</button>
+        </div>
 
-        <label for="currency">Currency:</label>
-        <select id="currency" name="currency" required>
-            <option value="USD">USD</option>
-            <option value="EUR">EUR</option>
-            <option value="CNY">CNY</option>
-            <option value="ZAR">ZAR</option>
-        </select>
+        <div id="donateForm" class="form" style="display:none;">
+            <h2>Donation Form</h2>
+            <input type="text" id="donorName" placeholder="Your Name" required>
+            <input type="email" id="donorEmail" placeholder="Your Email" required>
+            <select id="donationCategory" required>
+                <option value="">Select Donation Category</option>
+                <option value="1">Money</option>
+                <option value="2">Airtime</option>
+                <option value="3">Food</option>
+                <option value="4">Clothes</option>
+                <option value="5">NGOs</option>
+                <option value="6">Blankets</option>
+                <option value="7">Shelter</option>
+                <option value="8">Other</option>
+            </select>
+            <button id="submitCategory" class="submit-button">Show Organizations</button>
+        </div>
 
-        <label for="description">Description:</label>
-        <input type="text" id="description" name="description" required>
+        <div id="organizationGrid" style="display:none;">
+            <h3>Organizations in Need:</h3>
+            <div class="grid-container" id="orgGrid"></div>
+        </div>
 
-        <button type="submit">Donate</button>
-    </form>
+        <div id="signupForm" class="form" style="display:none;">
+            <h2>Organization Sign Up</h2>
+            <input type="text" id="orgName" placeholder="Organization Name" required>
+            <input type="email" id="orgEmail" placeholder="Your Email" required>
+            <input type="text" id="orgPhone" placeholder="Phone Number" required>
+            <input type="text" id="orgContactPerson" placeholder="Contact Person" required>
+            <input type="text" id="orgNumber" placeholder="Business/NGO Number" required>
+            <textarea id="orgDescription" placeholder="Organization Description"></textarea>
+            <label for="helpCategory">Select Help Category:</label>
+            <select id="helpCategory" required>
+                <option value="">Select Help Category</option>
+                <option value="1">Money</option>
+                <option value="2">Airtime</option>
+                <option value="3">Food</option>
+                <option value="4">Clothes</option>
+                <option value="5">NGOs</option>
+                <option value="6">Blankets</option>
+                <option value="7">Shelter</option>
+                <option value="8">Other</option>
+            </select>
+            <button id="submitSignup" class="submit-button">Sign Up</button>
+        </div>
+    </div>
 
-    <div id="paypal-button-container"></div>
+    <div id="popup" class="popup" style="display:none;">
+        <div class="popup-content">
+            <span id="closePopup" class="close">&times;</span>
+            <p>Thank you for your action!</p>
+        </div>
+    </div>
 
-    <script>
-        document.getElementById('donation-form').addEventListener('submit', async (event) => {
-            event.preventDefault(); // Prevent default form submission
-    
-            const amount = document.getElementById('amount').value;
-            const currency = document.getElementById('currency').value;
-            const description = document.getElementById('description').value;
-    
-            // Send the donation details to the server
-            try {
-                const response = await fetch('/donate', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ amount, currency, description }),
-                });
-    
-                if (response.ok) {
-                    const result = await response.json();
-                    // Handle the response (e.g., redirect to Alipay, show success message)
-                    console.log('Success:', result);
-                    window.location.href = result.redirectUrl; // Assuming you return a redirect URL
-                } else {
-                    const errorMessage = await response.text();
-                    console.error('Error:', errorMessage);
-                    alert('Error: ' + errorMessage);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('There was an error processing your request.');
-            }
-        });
-    </script>
-    
+    <script src="Donations.js"></script>
 </body>
 </html>
