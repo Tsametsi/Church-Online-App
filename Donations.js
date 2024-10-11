@@ -1,12 +1,9 @@
 document.getElementById('donateBtn').addEventListener('click', function() {
-    document.getElementById('donateForm').style.display = 'block';
-    document.getElementById('signupForm').style.display = 'none';
-    document.getElementById('organizationGrid').style.display = 'none';
+    showForm('donateForm');
 });
 
 document.getElementById('signupBtn').addEventListener('click', function() {
-    document.getElementById('signupForm').style.display = 'block';
-    document.getElementById('donateForm').style.display = 'none';
+    showForm('signupForm');
 });
 
 // Handle category selection for donations
@@ -36,6 +33,9 @@ document.getElementById('submitCategory').addEventListener('click', async functi
             `;
             orgGrid.appendChild(gridItem);
         });
+
+        // Fade in effect for grid items
+        fadeInItems(orgGrid);
 
         document.getElementById('organizationGrid').style.display = 'block';
     } else {
@@ -68,25 +68,112 @@ document.getElementById('submitSignup').addEventListener('click', async function
         alert('Error signing up organization.');
     }
 });
-document.getElementById('donateBtn').onclick = function() {
-    document.getElementById('donateForm').style.display = 'block';
-    document.getElementById('signupForm').style.display = 'none';
-    document.getElementById('organizationGrid').style.display = 'none';
-};
 
-document.getElementById('signupBtn').onclick = function() {
-    document.getElementById('signupForm').style.display = 'block';
-    document.getElementById('donateForm').style.display = 'none';
-    document.getElementById('organizationGrid').style.display = 'none';
-};
+// Show donor registration form
+document.getElementById('donorRegBtn').addEventListener('click', function() {
+    showForm('donorRegistrationForm');
+});
 
-document.getElementById('submitCategory').onclick = function() {
-    // Show organizations (mockup for demonstration)
-    document.getElementById('organizationGrid').style.display = 'block';
-    // Trigger the popup as a placeholder for further action
-    document.getElementById('popup').style.display = 'flex';
-};
+// Handle donor registration
+document.getElementById('submitDonorReg').addEventListener('click', async function() {
+    const name = document.getElementById('donorNameReg').value;
+    const email = document.getElementById('donorEmailReg').value;
+    const phone = document.getElementById('donorPhoneReg').value;
+    const helpCategoryId = document.getElementById('donorHelpCategory').value;
 
+    const response = await fetch('/api/registerDonor', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, email, phone, helpCategoryId })
+    });
+
+    if (response.ok) {
+        alert('Donor registered successfully!');
+        document.getElementById('donorRegistrationForm').reset();
+    } else {
+        alert('Error registering donor.');
+    }
+});
+
+// Show donor category selection form
+document.getElementById('donorCategoryBtn').addEventListener('click', function() {
+    showForm('donorCategoryForm');
+});
+
+// Show the specified form with transition
+function showForm(formId) {
+    const forms = ['donateForm', 'signupForm', 'donorRegistrationForm', 'donorCategoryForm'];
+    forms.forEach(form => {
+        const formElement = document.getElementById(form);
+        if (form === formId) {
+            formElement.style.display = 'block';
+            formElement.classList.add('fade-in');
+        } else {
+            formElement.classList.remove('fade-in');
+            formElement.style.display = 'none';
+        }
+    });
+}
+
+// Handle donor category selection
+document.getElementById('submitDonorCategory').addEventListener('click', async function() {
+    const categoryId = document.getElementById('donorHelpCategorySelect').value;
+
+    if (!categoryId) {
+        alert('Please select a category');
+        return;
+    }
+
+    const response = await fetch(`/api/donors/${categoryId}`);
+
+    if (response.ok) {
+        const donors = await response.json();
+        const donorGrid = document.getElementById('donorGrid');
+        donorGrid.innerHTML = ''; // Clear existing donors
+
+        donors.forEach(donor => {
+            const gridItem = document.createElement('div');
+            gridItem.classList.add('grid-item');
+            gridItem.innerHTML = `
+                <h4>${donor.name}</h4>
+                <p>Email: ${donor.email}</p>
+                <p>Phone: ${donor.phone}</p>
+                <p>Comment: ${donor.comment || 'N/A'}</p>
+            `;
+            donorGrid.appendChild(gridItem);
+        });
+
+        // Fade in effect for donor grid items
+        fadeInItems(donorGrid);
+
+        document.getElementById('donorGridContainer').style.display = 'block'; // Show donor grid
+    } else {
+        alert('Error fetching donors.');
+    }
+});
+
+// Fade-in function for grid items
+function fadeInItems(container) {
+    const gridItems = container.querySelectorAll('.grid-item');
+    gridItems.forEach((item, index) => {
+        item.style.opacity = 0; // Start invisible
+        item.style.transition = `opacity 0.5s ease ${index * 0.1}s`; // Staggered delay
+        item.style.opacity = 1; // Fade in
+    });
+}
+
+// Close popup
 document.getElementById('closePopup').onclick = function() {
     document.getElementById('popup').style.display = 'none';
 };
+
+// Ensure donor list is only shown under "I'm looking for a donor"
+function showDonorGrid() {
+    document.getElementById('donorGridContainer').style.display = 'none'; // Hide by default
+    document.getElementById('donorCategoryBtn').addEventListener('click', function() {
+        showForm('donorCategoryForm');
+        document.getElementById('donorGridContainer').style.display = 'block'; // Show only when in this section
+    });
+}

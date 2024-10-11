@@ -1,124 +1,165 @@
-body {
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
+/* Reset and Base Styles */
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
+}
+
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, rgba(240, 244, 255, 0.8), rgba(255, 255, 255, 0.8));
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure full height */
     overflow-y: auto; /* Enable vertical scrolling */
 }
 
-h1 {
-    text-align: center;
-    color: #fcfcfc;
-    margin-top: 20px;
-    font-size: 2.5em; /* Larger font size for emphasis */
-}
-
-#events-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 20px auto; /* Centered with auto left/right margin */
-    max-width: 800px; /* Set a maximum width for better layout */
-    opacity: 0.9;
-}
-
-.event {
-    background-color: #ffffff;
-    border-radius: 10px; /* Rounded corners for a softer look */
-    padding: 20px;
-    margin: 10px;
-    width: 100%; /* Full width within the container */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Softer and larger shadow */
-    transition: transform 0.3s; /* Transition for scaling effect */
-}
-
-.event:hover {
-    transform: translateY(-2px); /* Lift effect on hover */
-}
-
-.event h2 {
-    margin: 0;
-    font-size: 1.75em; /* Slightly larger font for event titles */
-    color: #333; /* Darker color for better readability */
-}
-
-.event p {
-    color: #555; /* Slightly darker gray for better contrast */
-    line-height: 1.6; /* Increase line height for readability */
-}
-
-.event a {
-    color: #0066cc; /* Changed link color for visibility */
-    text-decoration: none;
-}
-
-.event a:hover {
-    text-decoration: underline;
-}
-
-button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff; /* Bootstrap primary color */
+/* Header Styles */
+header {
+    background-color: rgba(0, 77, 153, 0.9); /* Deep blue with transparency */
     color: white;
-    cursor: pointer;
-    margin-top: 10px;
-    font-weight: bold; /* Bold text for button */
-    transition: background-color 0.3s, transform 0.2s; /* Smooth transition */
+    padding: 20px;
+    text-align: center;
+    position: relative; /* For absolute positioning of back button */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-    transform: scale(1.05); /* Slightly grow button on hover */
+h1 {
+    font-size: 2.5em;
+    text-transform: uppercase;
 }
 
-/* Back button styles */
+/* Back Button */
 .back-button {
-    position: fixed; /* Change to fixed to keep it in the same spot when scrolling */
-    top: 41px; /* Distance from the top */
-    left: 20px; /* Distance from the left */
-    background-color: #444343; /* Button color */
-    color: white; /* Text color */
-    padding: 10px 15px; /* Button padding */
-    border: none; /* No border */
-    border-radius: 5px; /* Rounded corners */
-    text-decoration: none; /* No underline */
-    font-size: 1rem; /* Font size */
-    transition: background-color 0.3s, transform 0.2s; /* Transition effects */
-    z-index: 1000; /* Ensure it’s on top of other elements */
+    color: white;
+    background: transparent;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    transition: color 0.3s;
 }
 
 .back-button:hover {
-    background-color: #03274e; /* Darker green on hover */
-    transform: scale(1.05); /* Slightly grow button on hover */
+    color: #ffcc00; /* Highlight color */
 }
 
+/* Main Content Styles */
+.main-content {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 1200px; /* Center content with max width */
+    display: flex;
+    flex-direction: column;
+}
 
+/* Section Styles */
+section {
+    width: 100%; /* Full width */
+    margin-bottom: 40px; /* Space between sections */
+}
 
-/* Modal styles */
+/* Headings for Sections */
+h2 {
+    font-size: 2em;
+    color: #004d99;
+    margin: 20px 0 10px;
+    width: 100%;
+    text-align: left;
+    border-bottom: 3px solid #007bff; /* Underline effect */
+}
+
+/* Event Containers */
+#trending-events-container,
+#events-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px; /* Space between cards */
+    overflow-y: auto; /* Enable vertical scrolling for containers */
+    max-height: 400px; /* Set a max height for scrolling */
+}
+
+/* Event Card Styles */
+.event {
+    background-color: rgba(255, 255, 255, 0.9); /* White background with transparency */
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden; /* Rounded corners for images */
+    position: relative; /* For overlay */
+}
+
+.event img {
+    width: 100%; /* Make images responsive */
+    border-radius: 15px 15px 0 0; /* Round the top corners */
+    opacity: 0.8; /* Semi-transparent images */
+    transition: opacity 0.3s;
+}
+
+.event img:hover {
+    opacity: 1; /* Full opacity on hover */
+}
+
+.event:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.event h3 {
+    margin: 10px 0;
+    color: #007bff;
+    font-size: 1.5em;
+}
+
+.event p {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Button Styles */
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #28a745; /* Success color */
+    color: white;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 15px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #218838; /* Darker green */
+    transform: scale(1.05);
+}
+
+/* Modal Styles */
 .modal {
     display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1000; /* Sit on top */
+    position: fixed;
+    z-index: 1000;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0,0,0,0.5); /* Dark overlay with opacity */
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Dark overlay */
+    overflow-y: auto; /* Allow scrolling if content overflows */
 }
 
 .modal-content {
-    background-color: #fff;
-    margin: 10% auto; /* Centered with some top margin */
-    padding: 20px;
-    border-radius: 8px; /* Rounded corners */
-    width: 90%; /* Responsive width */
-    max-width: 600px; /* Maximum width for larger screens */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* Softer shadow */
-    position: relative; /* For close button positioning */
-    animation: fadeIn 0.3s ease-out; /* Fade-in effect */
+    background-color: rgba(255, 255, 255, 0.95); /* Light background with transparency */
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease-out;
 }
 
 .close {
@@ -129,17 +170,17 @@ button:hover {
     cursor: pointer;
 }
 
-.close:hover,
-.close:focus {
+.close:hover {
     color: #000;
-    text-decoration: none;
 }
 
+/* Animation Keyframes */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
 
+/* Form Styles */
 .modal form {
     display: flex;
     flex-direction: column;
@@ -150,24 +191,176 @@ button:hover {
     font-weight: bold;
 }
 
-.modal input, .modal textarea {
-    padding: 10px;
+.modal input,
+.modal textarea {
+    padding: 12px;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 6px;
     margin-top: 5px;
+    transition: border 0.3s;
 }
 
+.modal input:focus,
+.modal textarea:focus {
+    border: 1px solid #007bff; /* Highlight on focus */
+}
+
+/* Submit Button in Modal */
 .modal button {
-    background-color: #21389e; /* Green for success */
-    border: none;
-    color: white;
-    padding: 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
-    font-weight: bold;
+    background-color: #007bff;
+    margin-top: 15px;
 }
 
 .modal button:hover {
-    background-color: #218838; /* Darker green on hover */
+    background-color: #0056b3; /* Darker blue */
+}
+
+/* Footer Styles */
+footer {
+    background-color: rgba(0, 77, 153, 0.9); /* Deep blue with transparency */
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    width: 100%;
+}
+
+/* Tooltip Styles */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Position above the tooltip */
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    header, footer {
+        padding: 15px 0;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    .event {
+        padding: 15px;
+    }
+
+    button, .back-button {
+        width: 100%; /* Full width on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5em;
+    }
+
+    .modal-content {
+        padding: 20px;
+    }
+
+    .modal input,
+    .modal textarea {
+        font-size: 0.9em;
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #007bff;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #0056b3;
+}
+
+/* Progress Bar Styles */
+.progress-container {
+    width: 100%;
+    background-color: #eaeaea;
+    border-radius: 25px;
+    margin: 20px 0;
+}
+
+.progress {
+    height: 20px;
+    border-radius: 25px;
+    background-color: #007bff;
+    width: 0%; /* Default progress */
+    transition: width 0.4s ease;
+}
+
+/* Card Flip Animation */
+.card {
+    background: #fff;
+    border-radius: 10px;
+    width: 280px;
+    height: 400px;
+    perspective: 1000px;
+    position: relative;
+}
+
+.card-inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.card:hover .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 10px;
+}
+
+.card-front {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.card-back {
+    background-color: rgba(0, 77, 153, 0.9);
+    color: white;
+    transform: rotateY(180deg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
 }

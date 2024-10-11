@@ -7,17 +7,26 @@
     <link rel="stylesheet" href="Donations.css">
 </head>
 <body>
+    <a href="javascript:history.back()" class="back-button">←Back</a>
+    <div class="thank-you-section">
+        <h2>Your Donations Change Lives!</h2>
+        <p>"With every donation, you are impacting a life. Over <span id="impactCount">500 families</span> have already been helped."</p>
+        <p>Thank you to our <strong>350 donors</strong> for their generous contributions!</p>
+    </div>
+    
+
     <div class="container">
         <h1>Welcome to the Donations Page</h1>
         <div class="options">
-            <button id="donateBtn" class="option-button">I want to donate</button>
-            <button id="signupBtn" class="option-button">I am an organization in need of donations</button>
+            <button id="donateBtn" class="option-button">Show organizations in need</button>
+            <button id="signupBtn" class="option-button">Register to be a donee</button>
+            <button id="donorRegBtn" class="option-button">Register to be a donor</button>
+            <button id="donorCategoryBtn" class="option-button">I'm Looking for a donor</button>
         </div>
-
+        
+        <!-- Donation Form -->
         <div id="donateForm" class="form" style="display:none;">
-            <h2>Donation Form</h2>
-            <input type="text" id="donorName" placeholder="Your Name" required>
-            <input type="email" id="donorEmail" placeholder="Your Email" required>
+            <h2>Choose Categories of Organizations in Need of Donations:</h2>
             <select id="donationCategory" required>
                 <option value="">Select Donation Category</option>
                 <option value="1">Money</option>
@@ -31,12 +40,57 @@
             </select>
             <button id="submitCategory" class="submit-button">Show Organizations</button>
         </div>
-
+    
         <div id="organizationGrid" style="display:none;">
             <h3>Organizations in Need:</h3>
             <div class="grid-container" id="orgGrid"></div>
         </div>
-
+    
+        <!-- Donor Registration Form -->
+        <div id="donorRegistrationForm" class="form" style="display:none;">
+            <h2>Donor Registration</h2>
+            <input type="text" id="donorNameReg" placeholder="Your Name" required>
+            <input type="email" id="donorEmailReg" placeholder="Your Email" required>
+            <input type="text" id="donorPhoneReg" placeholder="Phone Number" required>
+            <label for="donorHelpCategory">Select Help Category:</label>
+            <select id="donorHelpCategory" required>
+                <option value="">Select Help Category</option>
+                <option value="1">Money</option>
+                <option value="2">Airtime</option>
+                <option value="3">Food</option>
+                <option value="4">Clothes</option>
+                <option value="5">NGOs</option>
+                <option value="6">Blankets</option>
+                <option value="7">Shelter</option>
+                <option value="8">Other</option>
+            </select>
+            <button id="submitDonorReg" class="submit-button">Register as Donor</button>
+        </div>
+    
+        <!-- Donor Category Selection -->
+        <div id="donorCategoryForm" class="form" style="display:none;">
+            <h2>Select Help Category for Donors</h2>
+            <select id="donorHelpCategorySelect" required>
+                <option value="">Select Help Category</option>
+                <option value="1">Money</option>
+                <option value="2">Airtime</option>
+                <option value="3">Food</option>
+                <option value="4">Clothes</option>
+                <option value="5">NGOs</option>
+                <option value="6">Blankets</option>
+                <option value="7">Shelter</option>
+                <option value="8">Other</option>
+            </select>
+            <button id="submitDonorCategory" class="submit-button">Show Donors</button>
+        </div>
+    
+        <!-- Display Donors -->
+        <div id="donorGridContainer" style="display:none;">
+            <h3>Donors in this Category:</h3>
+            <div class="grid-container" id="donorGrid"></div>
+        </div>
+    
+        <!-- Organization Sign Up -->
         <div id="signupForm" class="form" style="display:none;">
             <h2>Organization Sign Up</h2>
             <input type="text" id="orgName" placeholder="Organization Name" required>
@@ -60,14 +114,54 @@
             <button id="submitSignup" class="submit-button">Sign Up</button>
         </div>
     </div>
-
+    
     <div id="popup" class="popup" style="display:none;">
         <div class="popup-content">
             <span id="closePopup" class="close">&times;</span>
             <p>Thank you for your action!</p>
         </div>
     </div>
-
+    <div class="report-cards">
+        <div class="report-card">
+            <h3>Total Donors</h3>
+            <p id="donorCount">350</p>
+        </div>
+        <div class="report-card">
+            <h3>Total Donees</h3>
+            <p id="doneeCount">1200</p>
+        </div>
+        <div class="report-card">
+            <h3>Regions Covered</h3>
+            <p id="regionCount">15</p>
+        </div>
+    </div>
+    
+    <div class="feedback-section">
+        <h2>What Our Donees Say</h2>
+        <div class="feedback">
+            <blockquote>"Thanks to these donations, my family was able to receive food and clothing during difficult times." <strong></strong></blockquote>
+            <blockquote>"We were provided with shelter after losing our home. Eternally grateful to the donors."  <strong></strong></blockquote>
+        </div>
+    </div>
+    <div class="region-stats">
+        <h2>Donees by Region</h2>
+        <div class="regions">
+            <div class="region-item">
+                <h3>Western Cape</h3>
+                <p>350 Donees</p>
+            </div>
+            <div class="region-item">
+                <h3>Gauteng</h3>
+                <p>450 Donees</p>
+            </div>
+            <div class="region-item">
+                <h3>KZN</h3>
+                <p>300 Donees</p>
+            </div>
+        </div>
+    </div>
+    
+    
     <script src="Donations.js"></script>
 </body>
 </html>

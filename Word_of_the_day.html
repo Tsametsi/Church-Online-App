@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Word of the Day</title>
     <link rel="stylesheet" href="Word_of_the_day.css">
+    <link rel="stylesheet" href="Discussions.css">
 </head>
 <body>
     <a href="javascript:history.back()" class="back-button">← Back</a>
@@ -22,11 +23,16 @@
     </header>
 
     <section class="word-section">
+        <header style="background-image: url('pictures/Home.pic2-transformed.jpeg'); height: 400px; background-size:auto; background-repeat: no-repeat;">
+            <h1>Welcome to Our Scripture Community</h1>
+        </header>
+        
         <div class="container">
             <h2>Daily Scripture</h2>
-            <div id="dailyScripture">
+            <div id="dailyScripture" style="text-align: center; font-size: 1.5em; margin: 20px auto; padding: 15px; background-color: rgba(255, 255, 255, 0.2); border: 2px solid #d89140; border-radius: 10px; max-width: 80%; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);">
                 <!-- Daily scripture will be loaded here -->
             </div>
+            
             <div class="share-section">
                 <h2>Share This Scripture</h2>
                 <div class="share-buttons">
@@ -37,7 +43,15 @@
             </div>
         </div>
     </section>
-
+    <div class="image-slider">
+        <img src="pictures/tmp1mqtg74y.webp" alt="Image 1" />
+        <img src="pictures/1bfed145c773449c89e6fcefe091214a.jpeg" alt="Image 2" />
+        <img src="pictures/tmp4u5589ah.webp" alt="Image 3" />
+        <img src="pictures/tmpvdy7w7ft.webp" alt="Image 4" />
+        <img src="pictures/tmpvwbhamqu.webp" alt="Image 5" />
+    </div>
+    
+    
     <section class="topics-section">
         <div class="container">
             <h2>Topics</h2>
@@ -115,6 +129,33 @@
         </div>
     </div>
 
+    <!-- Discussions Section -->
+    <section class="discussions-section">
+        <div class="container">
+            <h1>Discussions</h1>
+            <div id="trending-topics" class="trending-bar">
+                <h2>Trending Topics</h2>
+                <div id="topics-container"></div>
+            </div>
+            <button id="show-discussion-btn" onclick="toggleDiscussionInput()">Create a Discussion</button>
+            <div id="new-discussion" style="display: none;">
+                <input type="text" id="discussion-username" placeholder="Enter your username" />
+                <input type="text" id="discussion-title" placeholder="Discussion Title" />
+                <textarea id="discussion-content" placeholder="Discussion Content"></textarea>
+                <button onclick="submitDiscussion()">Submit Discussion</button>
+            </div>
+            <input type="text" id="search-input" placeholder="Search discussions..." oninput="searchDiscussions()" />
+            <div id="discussions" class="discussion-grid"></div>
+            <div id="emoji-picker"></div>
+        </div>
+    </section>
+
     <script src="Word_of_the_day.js"></script>
+    <script src="Discussions.js"></script>
+    <footer>
+    <a href="#"><img src="path/to/facebook-icon.png" alt="Facebook" /></a>
+    <a href="#"><img src="path/to/twitter-icon.png" alt="Twitter" /></a>
+</footer>
+
 </body>
 </html>

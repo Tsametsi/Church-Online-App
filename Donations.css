@@ -1,6 +1,6 @@
 body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
-    background-color: #f0f4f8; /* Light background for contrast */
+    background-color: #071166; /* Light background for contrast */
     margin: 0;
     padding: 0;
 }
@@ -63,19 +63,19 @@ input:focus, select:focus, textarea:focus {
 }
 
 .submit-button {
-    background-color: #FFD700; /* Gold */
-    color: black;
+    background-color: #000000; /* Gold */
+    color: rgb(252, 252, 252);
     border: none;
     padding: 12px;
     border-radius: 10px;
     cursor: pointer;
     width: 100%;
     font-size: 1rem;
-    transition: background 0.3s, transform 0.2s;
+    transition: background 0.3s, transform 0.3s;
 }
 
 .submit-button:hover {
-    background-color: #FFC300; /* Brighter gold */
+    background-color: #729cf5; /* Brighter gold */
     transform: translateY(-2px);
 }
 
@@ -91,7 +91,7 @@ input:focus, select:focus, textarea:focus {
     border-radius: 10px;
     padding: 20px;
     text-align: center;
-    background-color: #f8f9fa;
+    background-color: #326496;
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
@@ -131,4 +131,115 @@ input:focus, select:focus, textarea:focus {
 @keyframes popup-animation {
     from { transform: scale(0); }
     to { transform: scale(1); }
+}
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+/* Back button styles */
+.back-button {
+    position: fixed; /* Change to fixed to keep it in the same spot when scrolling */
+    top: 41px; /* Distance from the top */
+    left: 20px; /* Distance from the left */
+    background-color: #444343; /* Button color */
+    color: white; /* Text color */
+    padding: 10px 15px; /* Button padding */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* No underline */
+    font-size: 1rem; /* Font size */
+    transition: background-color 0.3s, transform 0.2s; /* Transition effects */
+    z-index: 1000; /* Ensure it’s on top of other elements */
+}
+
+.back-button:hover {
+    background-color: #03274e; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly grow button on hover */
+}
+.report-cards {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.report-card {
+    background-color: #FFD700; /* Gold */
+    padding: 20px;
+    border-radius: 10px;
+    width: 30%;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.report-card h3 {
+    margin-bottom: 10px;
+}
+
+.report-card p {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #003366;
+}
+.thank-you-section {
+    background-color: #f0f4f8;
+    padding: 30px;
+    text-align: center;
+    margin-top: 30px;
+    border-radius: 10px;
+}
+
+.thank-you-section h2 {
+    color: #003366;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+.thank-you-section p {
+    font-size: 1.2rem;
+    line-height: 1.5;
+}
+.feedback-section {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 30px;
+    text-align: center;
+}
+
+.feedback blockquote {
+    font-style: italic;
+    margin: 20px 0;
+    color: #555;
+}
+.region-stats {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.regions {
+    display: flex;
+    justify-content: space-around;
+}
+
+.region-item {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 25%;
+}
+
+.region-item h3 {
+    margin-bottom: 10px;
+}
+
+.region-item p {
+    font-size: 1.2rem;
+    color: #003366;
 }

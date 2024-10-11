@@ -490,3 +490,21 @@ footer p {
     background-color: #03274e; /* Darker green on hover */
     transform: scale(1.05); /* Slightly grow button on hover */
 }
+.image-slider {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Adjust size as needed */
+    gap: 120px; /* Space between images */
+    max-width: 100%; /* Ensure it doesn't overflow */
+    overflow: hidden; /* Hide overflow */
+}
+
+.image-slider img {
+    width: 200%; /* Make images responsive */
+    height: 200px; /* Set a specific height */
+    object-fit: cover; /* Ensure images cover the area nicely */
+    border-radius: 5px; /* Optional: rounded corners */
+}
+.tablinks.active {
+    background-color: #d89140; /* Highlight color */
+    color: white; /* Text color */
+}

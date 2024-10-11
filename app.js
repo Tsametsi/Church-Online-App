@@ -25,6 +25,7 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 
+
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -122,26 +123,6 @@ app.post('/api/events/:id/notify', (req, res) => {
 });
 
 
-
-// Handle event upload
-// Handle event upload POST request
-app.post('/api/events/upload', (req, res) => {
-    const { title, description, event_date, virtual_url } = req.body;
-
-    if (!title || !description || !event_date) {
-        return res.status(400).json({ success: false, message: 'Title, description, and event date are required.' });
-    }
-
-    const query = 'INSERT INTO events (title, description, event_date, virtual_url, notification_on, created_at) VALUES (?, ?, ?, ?, 0, NOW())';
-    db.query(query, [title, description, event_date, virtual_url || null], (err, results) => {
-        if (err) {
-            console.error('Error inserting event:', err);
-            return res.status(500).json({ success: false, message: 'Server error' });
-        }
-        res.json({ success: true });
-    });
-});
-
 // Scheduled task to check for upcoming events and send notifications
 cron.schedule('* * * * *', () => { // Check every minute
     const now = new Date();
@@ -220,6 +201,7 @@ app.get('/api/events', (req, res) => {
         res.json(results);
     });
 });
+
 
 
 // API endpoint to fetch registered users
@@ -633,17 +615,88 @@ app.post('/api/podcasts/upload', upload.fields([{ name: 'audio' }, { name: 'vide
 
 
 // API endpoint to handle adding podcast link
-// API endpoint to handle adding podcast link
+// Express route for adding a podcast link
 app.post('/api/podcasts/link', (req, res) => {
-    const { title, description, link } = req.body;
+    const { title, description, youtube_link } = req.body;
 
-    const query = 'INSERT INTO podcasts (title, description, url, like_count) VALUES (?, ?, ?, 0)';
-    db.query(query, [title, description, link], (err) => {
+    // Validate inputs
+    if (!title || !description || !youtube_link) {
+        return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    // Insert into the database
+    const query = 'INSERT INTO podcasts (title, description, youtube_link) VALUES (?, ?, ?)';
+    db.query(query, [title, description, youtube_link], (error, results) => {
+        if (error) {
+            console.error('Database error:', error);
+            return res.status(500).json({ message: 'Error adding podcast' });
+        }
+        res.status(201).json({ message: 'Podcast added successfully' });
+    });
+});
+// Express route for adding a podcast link
+app.post('/api/podcasts/:id/like', (req, res) => {
+    const podcastId = req.params.id;
+    const userId = req.body.user_id; // Assume user ID is sent in the request body
+
+    const checkLikeSql = 'SELECT * FROM likes WHERE user_id = ? AND podcast_id = ?';
+    db.query(checkLikeSql, [userId, podcastId], (err, results) => {
         if (err) {
-            console.error('Error inserting podcast link:', err);
+            console.error('Error checking like:', err);
             return res.status(500).send('Internal server error');
         }
-        res.status(201).json({ success: true, message: 'Podcast link added successfully!' });
+
+        // If the user has not liked the podcast yet, add a new like
+        if (results.length === 0) {
+            const insertLikeSql = 'INSERT INTO likes (user_id, podcast_id) VALUES (?, ?)';
+            db.query(insertLikeSql, [userId, podcastId], (err) => {
+                if (err) {
+                    console.error('Error inserting like:', err);
+                    return res.status(500).send('Internal server error');
+                }
+
+                // Increment the like_count in the podcasts table
+                const updateLikeCountSql = 'UPDATE podcasts SET like_count = like_count + 1 WHERE id = ?';
+                db.query(updateLikeCountSql, [podcastId], (err) => {
+                    if (err) {
+                        console.error('Error updating like count:', err);
+                        return res.status(500).send('Internal server error');
+                    }
+                    res.json({ success: true, message: 'Liked the podcast!', new_like_count: results.length + 1 });
+                });
+            });
+        } else {
+            // User has already liked the podcast
+            res.status(400).json({ success: false, message: 'You have already liked this podcast.' });
+        }
+    });
+});
+//Unlike podcast
+app.delete('/api/podcasts/:id/unlike', (req, res) => {
+    const podcastId = req.params.id;
+    const userId = req.body.user_id; // Assume user ID is sent in the request body
+
+    const deleteLikeSql = 'DELETE FROM likes WHERE user_id = ? AND podcast_id = ?';
+    db.query(deleteLikeSql, [userId, podcastId], (err, results) => {
+        if (err) {
+            console.error('Error unliking podcast:', err);
+            return res.status(500).json({ success: false, message: 'Internal server error' });
+        }
+
+        // Check if any rows were affected (meaning the like was found and deleted)
+        if (results.affectedRows > 0) {
+            // Decrement the like_count in the podcasts table
+            const updateLikeCountSql = 'UPDATE podcasts SET like_count = like_count - 1 WHERE id = ?';
+            db.query(updateLikeCountSql, [podcastId], (err) => {
+                if (err) {
+                    console.error('Error updating like count:', err);
+                    return res.status(500).json({ success: false, message: 'Internal server error' });
+                }
+                res.json({ success: true, message: 'Unliked the podcast!', new_like_count: results.affectedRows });
+            });
+        } else {
+            res.status(400).json({ success: false, message: 'You have not liked this podcast.' });
+        }
     });
 });
 
@@ -1072,7 +1125,114 @@ app.post('/api/signup', (req, res) => {
         res.send('Organization signed up successfully');
     });
 });
+// Register a Donor
+app.post('/api/registerDonor', async (req, res) => {
+    const { name, email, phone, helpCategoryId } = req.body;
 
+    const query = 'INSERT INTO donors (name, email, phone, help_category_id) VALUES (?, ?, ?, ?)';
+    const values = [name, email, phone, helpCategoryId];
+
+    try {
+        await db.execute(query, values);
+        res.status(201).json({ message: 'Donor registered successfully.' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error registering donor.' });
+    }
+});
+// Fetch donors by help category
+app.get('/api/donors/:categoryId', (req, res) => {
+    const categoryId = req.params.categoryId;
+
+    const query = `
+        SELECT * FROM donors 
+        WHERE help_category_id = ?`;
+
+    db.query(query, [categoryId], (error, results) => {
+        if (error) {
+            console.error(error);
+            return res.status(500).json({ error: 'Error fetching donors.' });
+        }
+        res.json(results);
+    });
+});
+
+
+// API endpoints
+
+// 1. Create a new event
+app.post('/api/events/upload', upload.single('image'), (req, res) => {
+    const { title, description, event_date, virtual_url, ticket_url } = req.body;
+    const image_url = req.file ? req.file.path : null; // Get uploaded image path
+
+    if (!title || !description || !event_date) {
+        return res.status(400).json({ success: false, message: 'Title, description, and event date are required.' });
+    }
+
+    const query = 'INSERT INTO events (title, description, event_date, virtual_url, ticket_url, image_url, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())';
+    db.query(query, [title, description, event_date, virtual_url || null, ticket_url || null, image_url], (err, results) => {
+        if (err) {
+            console.error('Error inserting event:', err);
+            return res.status(500).json({ success: false, message: 'Server error' });
+        }
+        res.json({ success: true });
+    });
+});
+
+// 2. Fetch all events
+app.get('/api/events', (req, res) => {
+    const query = 'SELECT * FROM events';
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error querying events:', err);
+            return res.status(500).send('Internal server error');
+        }
+        res.json(results);
+    });
+});
+
+// 3. Notify users for a specific event (basic example)
+app.post('/api/events/:id/notify', (req, res) => {
+    const eventId = req.params.id;
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({ success: false, message: 'Email is required.' });
+    }
+
+    // Here you would typically save the notification preference to a database or send an email
+    console.log(`Notify ${email} for event ID ${eventId}`);
+    res.json({ success: true, message: 'Notification set up successfully.' });
+});
+
+// 4. Update an event (optional)
+app.put('/api/events/:id', upload.single('image'), (req, res) => {
+    const eventId = req.params.id;
+    const { title, description, event_date, virtual_url, ticket_url } = req.body;
+    const image_url = req.file ? req.file.path : null;
+
+    const query = 'UPDATE events SET title = ?, description = ?, event_date = ?, virtual_url = ?, ticket_url = ?, image_url = ? WHERE id = ?';
+    db.query(query, [title, description, event_date, virtual_url, ticket_url, image_url, eventId], (err, results) => {
+        if (err) {
+            console.error('Error updating event:', err);
+            return res.status(500).json({ success: false, message: 'Server error' });
+        }
+        res.json({ success: true });
+    });
+});
+
+// 5. Delete an event (optional)
+app.delete('/api/events/:id', (req, res) => {
+    const eventId = req.params.id;
+
+    const query = 'DELETE FROM events WHERE id = ?';
+    db.query(query, [eventId], (err, results) => {
+        if (err) {
+            console.error('Error deleting event:', err);
+            return res.status(500).json({ success: false, message: 'Server error' });
+        }
+        res.json({ success: true, message: 'Event deleted successfully.' });
+    });
+});
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
