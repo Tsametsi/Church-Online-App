@@ -148,27 +148,35 @@ async function addReply(commentId, username) {
     document.getElementById(`reply-input-${commentId}`).value = '';
     fetchReplies(commentId, username);
 }
-
 async function submitDiscussion() {
     const title = document.getElementById('discussion-title').value;
     const content = document.getElementById('discussion-content').value;
     const username = document.getElementById('discussion-username').value;
+    const audioFile = document.getElementById('discussion-audio').files[0];
 
     if (!username.trim() || !title.trim() || !content.trim()) {
         alert('Please enter a username, title, and content for the discussion.');
         return;
     }
 
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('username', username);
+    if (audioFile) {
+        formData.append('audio', audioFile);
+    }
+
     await fetch('http://localhost:3000/api/discussions', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, content, username })
+        body: formData
     });
 
     // Clear input fields
     document.getElementById('discussion-username').value = '';
     document.getElementById('discussion-title').value = '';
     document.getElementById('discussion-content').value = '';
+    document.getElementById('discussion-audio').value = ''; // Clear audio input
 
     // Refresh discussions
     fetchDiscussions();
@@ -216,7 +224,6 @@ async function fetchDiscussions() {
     discussionsData = await response.json(); // Store discussions in the variable
     renderDiscussions(discussionsData); // Render discussions
 }
-
 function renderDiscussions(discussions) {
     const discussionsDiv = document.getElementById('discussions');
     discussionsDiv.innerHTML = discussions.map(d => `
@@ -224,6 +231,7 @@ function renderDiscussions(discussions) {
             <h3>${d.title}</h3>
             <p>${d.content}</p>
             <p><em>Posted by: ${d.username}</em></p>
+            ${d.audio_path ? `<audio controls src="${d.audio_path}"></audio>` : ''}
             <button onclick="toggleComments(${d.id}, '${d.username}')">💬 Comments</button>
             <div id="comments-${d.id}" class="comment-section"></div>
             <input type="text" id="comment-input-${d.id}" placeholder="Add a comment..." style="display: none;">
@@ -233,6 +241,7 @@ function renderDiscussions(discussions) {
         </div>
     `).join('');
 }
+
 
 function searchDiscussions() {
     const searchTerm = document.getElementById('search-input').value.toLowerCase();

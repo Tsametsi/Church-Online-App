@@ -991,11 +991,16 @@ app.get('/api/discussions', (req, res) => {
 
 // Create new discussion
 // Create new discussion
-app.post('/api/discussions', (req, res) => {
-    const { title, content, username } = req.body; // Include username in the request body
-    
-    const query = 'INSERT INTO discussions (title, content, username, created_at) VALUES (?, ?, ?, NOW())'; // Include username in the query
-    db.query(query, [title, content, username], (error, results) => {
+
+// Create new discussion with audio upload
+app.post('/api/discussions', upload.single('audio'), (req, res) => {
+    const { title, content, username } = req.body;
+
+    // Save audio file path if uploaded
+    const audioPath = req.file ? req.file.path : null;
+
+    const query = 'INSERT INTO discussions (title, content, username, created_at, audio_path) VALUES (?, ?, ?, NOW(), ?)';
+    db.query(query, [title, content, username, audioPath], (error, results) => {
         if (error) {
             return res.status(500).json({ error: 'Database error' });
         }
