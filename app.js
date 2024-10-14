@@ -1085,60 +1085,57 @@ app.get('/api/topics', (req, res) => {
     });
 });
 
-
 // Route to fetch organizations by category
 app.get('/api/organizations/:categoryId', (req, res) => {
     const categoryId = req.params.categoryId;
     const query = `
-        SELECT o.id, o.name, o.email, o.phone, o.description 
+        SELECT o.id, o.name, o.email, o.phone, o.description, o.address
         FROM donations_organizations o
         WHERE o.help_category_id = ?;
     `;
 
     db.query(query, [categoryId], (err, results) => {
-        if (err) return res.status(500).send('Error fetching organizations');
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Error fetching organizations');
+        }
         res.json(results);
-    });
-});
-
-// Route to handle donations
-app.post('/api/donate', (req, res) => {
-    const { name, email, categoryId } = req.body;
-    const query = 'INSERT INTO donations_donors (name, email, category_id) VALUES (?, ?, ?)';
-    
-    db.query(query, [name, email, categoryId], (err, result) => {
-        if (err) return res.status(500).send('Error inserting donation');
-        res.send('Donation successful');
     });
 });
 
 // Route to sign up organizations
 app.post('/api/signup', (req, res) => {
-    const { name, email, phone, contactPerson, orgNumber, description, helpCategoryId } = req.body;
+    const { name, email, phone, contactPerson, orgNumber, description, helpCategoryId, address } = req.body;
     const query = `
-        INSERT INTO donations_organizations (name, email, phone, contact_person, org_number, description, help_category_id) 
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO donations_organizations (name, email, phone, contact_person, org_number, description, help_category_id, address) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
-    
-    db.query(query, [name, email, phone, contactPerson, orgNumber, description, helpCategoryId], (err, result) => {
-        if (err) return res.status(500).send('Error signing up organization');
+
+    db.query(query, [name, email, phone, contactPerson, orgNumber, description, helpCategoryId, address], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Error signing up organization');
+        }
         res.send('Organization signed up successfully');
     });
 });
+
 // Register a Donor
-app.post('/api/registerDonor', async (req, res) => {
-    const { name, email, phone, helpCategoryId } = req.body;
+app.post('/api/registerDonor', (req, res) => {
+    const { name, email, phone, helpCategoryId, address, donorType } = req.body;
 
-    const query = 'INSERT INTO donors (name, email, phone, help_category_id) VALUES (?, ?, ?, ?)';
-    const values = [name, email, phone, helpCategoryId];
+    const query = 'INSERT INTO donors (name, email, phone, help_category_id, address, donor_type) VALUES (?, ?, ?, ?, ?, ?)';
+    const values = [name, email, phone, helpCategoryId, address, donorType];
 
-    try {
-        await db.execute(query, values);
+    db.query(query, values, (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Error registering donor.' });
+        }
         res.status(201).json({ message: 'Donor registered successfully.' });
-    } catch (error) {
-        res.status(500).json({ message: 'Error registering donor.' });
-    }
+    });
 });
+
 // Fetch donors by help category
 app.get('/api/donors/:categoryId', (req, res) => {
     const categoryId = req.params.categoryId;
@@ -1147,14 +1144,73 @@ app.get('/api/donors/:categoryId', (req, res) => {
         SELECT * FROM donors 
         WHERE help_category_id = ?`;
 
-    db.query(query, [categoryId], (error, results) => {
-        if (error) {
-            console.error(error);
+    db.query(query, [categoryId], (err, results) => {
+        if (err) {
+            console.error(err);
             return res.status(500).json({ error: 'Error fetching donors.' });
         }
         res.json(results);
     });
 });
+
+// Route to display donors and donees
+app.get('/donors-donees', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'donors-donees.html'));
+});
+app.post('/submit_volunteer', (req, res) => {
+    const { volunteerName, volunteerEmail, volunteerPhone, volunteerSkills, volunteerAvailability } = req.body;
+
+    // Log the incoming data for debugging
+    console.log('Volunteer data:', {
+        volunteerName,
+        volunteerEmail,
+        volunteerPhone,
+        volunteerSkills,
+        volunteerAvailability
+    });
+
+    // Check if any of the required fields are missing
+    if (!volunteerName || !volunteerEmail || !volunteerPhone || !volunteerSkills || !volunteerAvailability) {
+        return res.status(400).send('All fields are required.');
+    }
+
+    // SQL insert statement
+    const query = 'INSERT INTO volunteers (name, email, phone, skills, availability) VALUES (?, ?, ?, ?, ?)';
+    db.query(query, [volunteerName, volunteerEmail, volunteerPhone, volunteerSkills, volunteerAvailability], (err) => {
+        if (err) {
+            console.error('Error inserting volunteer:', err);
+            return res.status(500).send('Server error');
+        }
+        res.status(200).send('Volunteer application submitted successfully!');
+    });
+});
+app.post('/submit_review', (req, res) => {
+    const { name, rating, review } = req.body;
+
+    // Assuming you have a database function to insert reviews
+    db.query('INSERT INTO donation_reviews (username, rating, review) VALUES (?, ?, ?)', 
+        [name, rating, review], 
+        (error, results) => {
+            if (error) {
+                return res.status(500).json({ error: 'Error inserting review' });
+            }
+            res.status(201).json({ name, rating, review });
+        }
+    );
+});
+app.get('/get_reviews', (req, res) => {
+    db.query('SELECT username, rating, review FROM donation_reviews ORDER BY created_at DESC', 
+        (error, results) => {
+            if (error) {
+                return res.status(500).json({ error: 'Error fetching reviews' });
+            }
+            res.json(results);
+        }
+    );
+});
+
+
+// Route to fetch organizations by category
 
 
 // API endpoints

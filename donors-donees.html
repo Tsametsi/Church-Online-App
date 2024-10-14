@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donors and Donees</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Donors and Organizations in Need</h1>
+    <div>
+        <h2>Organizations in Need</h2>
+        <select id="organizationCategory">
+            <option value="">Select a Category</option>
+            <!-- Categories will be populated here -->
+        </select>
+        <button id="submitOrganizationCategory">Show Organizations</button>
+        <div id="orgGrid" class="grid"></div>
+    </div>
+    
+    <div>
+        <h2>Donors</h2>
+        <select id="donorCategory">
+            <option value="">Select a Category</option>
+            <!-- Categories will be populated here -->
+        </select>
+        <button id="submitDonorCategory">Show Donors</button>
+        <div id="donorGrid" class="grid"></div>
+    </div>
+
+    <script src="donors-donees.js"></script>
+</body>
+</html>

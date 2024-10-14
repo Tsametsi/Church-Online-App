@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Donations Page</title>
     <link rel="stylesheet" href="Donations.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+    <style>
+        .form {
+            display: none; /* Hide all forms initially */
+        }
+    </style>
 </head>
 <body>
     <a href="javascript:history.back()" class="back-button">←Back</a>
@@ -13,8 +19,38 @@
         <p>"With every donation, you are impacting a life. Over <span id="impactCount">500 families</span> have already been helped."</p>
         <p>Thank you to our <strong>350 donors</strong> for their generous contributions!</p>
     </div>
-    
-
+    <!-- Media Section -->
+    <div class="media-section">
+        <h2>Our Team in Action</h2>
+        <div class="media-grid">
+            <div class="media-item">
+                <img src="pictures/pexels-lagosfoodbank-9090900.jpg" alt="Donation Worker 1">
+                <p>Helping families in need.</p>
+            </div>
+            <div class="media-item">
+                <img src="pictures/pexels-rdne-6646864.jpg" alt="Donation Worker 2">
+                <p>Distributing food supplies.</p>
+            </div>
+            <div class="media-item">
+                <img src="pexels-rdne-6647119.jpg" alt="Donation Worker 3">
+                <p>Organizing donations.</p>
+            </div>
+            <div class="media-item">
+                <video controls>
+                    <source src="videos/3209571-uhd_3840_2160_25fps.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p>Community outreach program.</p>
+            </div>
+            <div class="media-item">
+                <video controls>
+                    <source src="path/to/video2.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p>Thank you to our volunteers!</p>
+            </div>
+        </div>
+    </div>
     <div class="container">
         <h1>Welcome to the Donations Page</h1>
         <div class="options">
@@ -22,10 +58,23 @@
             <button id="signupBtn" class="option-button">Register to be a donee</button>
             <button id="donorRegBtn" class="option-button">Register to be a donor</button>
             <button id="donorCategoryBtn" class="option-button">I'm Looking for a donor</button>
+            <button id="volunteerRegBtn" class="option-button">Register as a Volunteer</button>
         </div>
+
+        <!-- Volunteer Registration Form -->
+        <form id="volunteerRegistrationForm" class="form" method="POST" action="/submit_volunteer">
+            <h2>Volunteer Registration</h2>
+            <input type="text" name="volunteerName" placeholder="Your Name" required>
+            <input type="email" name="volunteerEmail" placeholder="Your Email" required>
+            <input type="text" name="volunteerPhone" placeholder="Phone Number" required>
+            <textarea name="volunteerSkills" placeholder="Your Skills/Experience" required></textarea>
+            <input type="text" name="volunteerAvailability" placeholder="Availability (e.g., weekends, weekdays)" required>
+            <button type="submit" class="submit-button">Register as Volunteer</button>
+            <p id="thankYouMessage" style="display:none; color: green;">Thank you for your submission! We'll contact you soon.</p>
+        </form>
         
         <!-- Donation Form -->
-        <div id="donateForm" class="form" style="display:none;">
+        <div id="donateForm" class="form">
             <h2>Choose Categories of Organizations in Need of Donations:</h2>
             <select id="donationCategory" required>
                 <option value="">Select Donation Category</option>
@@ -41,17 +90,28 @@
             <button id="submitCategory" class="submit-button">Show Organizations</button>
         </div>
     
-        <div id="organizationGrid" style="display:none;">
+        <div id="organizationGrid" class="form">
             <h3>Organizations in Need:</h3>
             <div class="grid-container" id="orgGrid"></div>
         </div>
     
         <!-- Donor Registration Form -->
-        <div id="donorRegistrationForm" class="form" style="display:none;">
+        <div id="donorRegistrationForm" class="form">
             <h2>Donor Registration</h2>
             <input type="text" id="donorNameReg" placeholder="Your Name" required>
             <input type="email" id="donorEmailReg" placeholder="Your Email" required>
             <input type="text" id="donorPhoneReg" placeholder="Phone Number" required>
+            <input type="text" id="donorAddressReg" placeholder="Your Address" required>
+            <label for="donorType">Select Type:</label>
+            <select id="donorType" required>
+                <option value="">Select Type</option>
+                <option value="school">School</option>
+                <option value="church">Church</option>
+                <option value="business">Business</option>
+                <option value="NGO">NGO</option>
+                <option value="individual">Individual</option>
+                <option value="other">Other</option>
+            </select>
             <label for="donorHelpCategory">Select Help Category:</label>
             <select id="donorHelpCategory" required>
                 <option value="">Select Help Category</option>
@@ -68,7 +128,7 @@
         </div>
     
         <!-- Donor Category Selection -->
-        <div id="donorCategoryForm" class="form" style="display:none;">
+        <div id="donorCategoryForm" class="form">
             <h2>Select Help Category for Donors</h2>
             <select id="donorHelpCategorySelect" required>
                 <option value="">Select Help Category</option>
@@ -85,19 +145,20 @@
         </div>
     
         <!-- Display Donors -->
-        <div id="donorGridContainer" style="display:none;">
+        <div id="donorGridContainer" class="form">
             <h3>Donors in this Category:</h3>
             <div class="grid-container" id="donorGrid"></div>
         </div>
     
         <!-- Organization Sign Up -->
-        <div id="signupForm" class="form" style="display:none;">
+        <div id="signupForm" class="form">
             <h2>Organization Sign Up</h2>
             <input type="text" id="orgName" placeholder="Organization Name" required>
             <input type="email" id="orgEmail" placeholder="Your Email" required>
             <input type="text" id="orgPhone" placeholder="Phone Number" required>
             <input type="text" id="orgContactPerson" placeholder="Contact Person" required>
             <input type="text" id="orgNumber" placeholder="Business/NGO Number" required>
+            <input type="text" id="orgAddress" placeholder="Organization Address" required>
             <textarea id="orgDescription" placeholder="Organization Description"></textarea>
             <label for="helpCategory">Select Help Category:</label>
             <select id="helpCategory" required>
@@ -118,9 +179,10 @@
     <div id="popup" class="popup" style="display:none;">
         <div class="popup-content">
             <span id="closePopup" class="close">&times;</span>
-            <p>Thank you for your action!</p>
+            <p>Thank you for your action! We will be in contact with you soon 😊😊</p>
         </div>
     </div>
+    
     <div class="report-cards">
         <div class="report-card">
             <h3>Total Donors</h3>
@@ -143,25 +205,129 @@
             <blockquote>"We were provided with shelter after losing our home. Eternally grateful to the donors."  <strong></strong></blockquote>
         </div>
     </div>
-    <div class="region-stats">
-        <h2>Donees by Region</h2>
-        <div class="regions">
-            <div class="region-item">
-                <h3>Western Cape</h3>
-                <p>350 Donees</p>
-            </div>
-            <div class="region-item">
-                <h3>Gauteng</h3>
-                <p>450 Donees</p>
-            </div>
-            <div class="region-item">
-                <h3>KZN</h3>
-                <p>300 Donees</p>
+    
+            <!-- Continent Stats -->
+        <div class="continent-stats">
+            <h2>Donees by Continent</h2>
+            <div class="continents">
+                <div class="continent-item">
+                    <h3>Africa</h3>
+                    <p>1200 Donees</p>
+                </div>
+                <div class="continent-item">
+                    <h3>Asia</h3>
+                    <p>800 Donees</p>
+                </div>
+                <div class="continent-item">
+                    <h3>Europe</h3>
+                    <p>600 Donees</p>
+                </div>
+                <div class="continent-item">
+                    <h3>North America</h3>
+                    <p>400 Donees</p>
+                </div>
+                <div class="continent-item">
+                    <h3>South America</h3>
+                    <p>200 Donees</p>
+                </div>
+                <div class="continent-item">
+                    <h3>Australia</h3>
+                    <p>100 Donees</p>
+                </div>
             </div>
         </div>
+
     </div>
+
+    <div class="review-section">
+        <h2>Leave a Review</h2>
+        <form id="reviewForm">
+            <input type="text" id="reviewerName" placeholder="Your Name" required>
+            <div class="star-rating">
+                <span class="star" data-value="1">★</span>
+                <span class="star" data-value="2">★</span>
+                <span class="star" data-value="3">★</span>
+                <span class="star" data-value="4">★</span>
+                <span class="star" data-value="5">★</span>
+                <input type="hidden" id="ratingValue" value="0">
+            </div>
+            <textarea id="reviewText" placeholder="Write your review..." required></textarea>
+            <button type="submit" class="submit-button">Submit Review</button>
+        </form>
     
-    
+        <h3>Reviews</h3>
+        <div id="reviewsList">
+            <!-- Existing reviews will be appended here -->
+        </div>
+    </div>
+
+    <!-- Global Impact Map -->
+    <div class="container">
+        <h2>Our Global Impact</h2>
+        <div id="globalImpactMap"></div>
+    </div>
+
     <script src="Donations.js"></script>
+    <script>
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('globalImpactMap'), {
+                zoom: 2,
+                center: {lat: 0, lng: 0}
+            });
+
+            var impactedRegions = [
+                {lat: -33.9249, lng: 18.4241, name: "Cape Town, South Africa"},
+                {lat: -26.2041, lng: 28.0473, name: "Johannesburg, South Africa"},
+                {lat: -29.8587, lng: 31.0218, name: "Durban, South Africa"},
+                {lat: 6.5244, lng: 3.3792, name: "Lagos, Nigeria"},
+                {lat: -1.2921, lng: 36.8219, name: "Nairobi, Kenya"},
+                {lat: 30.0444, lng: 31.2357, name: "Cairo, Egypt"},
+                {lat: 14.6928, lng: -17.4467, name: "Dakar, Senegal"},
+                {lat: 5.6037, lng: -0.1870, name: "Accra, Ghana"}
+            ];
+
+            impactedRegions.forEach(function(region) {
+                var marker = new google.maps.Marker({
+                    position: {lat: region.lat, lng: region.lng},
+                    map: map,
+                    title: region.name
+                });
+            });
+        }
+
+        // JavaScript to handle button clicks
+        document.getElementById('donateBtn').addEventListener('click', function() {
+            hideAllForms();
+            document.getElementById('donateForm').style.display = 'block';
+        });
+
+        document.getElementById('signupBtn').addEventListener('click', function() {
+            hideAllForms();
+            document.getElementById('signupForm').style.display = 'block';
+        });
+
+        document.getElementById('donorRegBtn').addEventListener('click', function() {
+            hideAllForms();
+            document.getElementById('donorRegistrationForm').style.display = 'block';
+        });
+
+        document.getElementById('donorCategoryBtn').addEventListener('click', function() {
+            hideAllForms();
+            document.getElementById('donorCategoryForm').style.display = 'block';
+        });
+
+        document.getElementById('volunteerRegBtn').addEventListener('click', function() {
+            hideAllForms();
+            document.getElementById('volunteerRegistrationForm').style.display = 'block';
+        });
+
+        function hideAllForms() {
+            var forms = document.querySelectorAll('.form');
+            forms.forEach(function(form) {
+                form.style.display = 'none';
+            });
+        }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
 </body>
 </html>
