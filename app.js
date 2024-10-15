@@ -17,6 +17,8 @@ const helmet = require('helmet');
 const authRoutes = require('./routes/auth');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
+const jwt = require('jsonwebtoken'); // Add this at the top
+
 
 // Create HTTP server
 const server = http.createServer(app);
@@ -60,6 +62,21 @@ app.get('/', (req, res) => res.redirect('/Login.html'));
 //Use Helmet
 app.use(helmet());
 
+app.post('/api/verifyToken', (req, res) => {
+    const token = req.headers['authorization']?.split(' ')[1]; // Extract the token from the 'Bearer' string
+    
+    if (!token) {
+        return res.status(403).send('A token is required for authentication');
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        res.status(200).send('Token is valid');
+    } catch (err) {
+        res.status(401).send('Invalid or expired token');
+    }
+});
+
 // Sign-up
 app.post('/signup', (req, res) => {
     const { username, email, password, church_id, branch_name, role } = req.body;
@@ -73,10 +90,45 @@ app.post('/signup', (req, res) => {
                 console.error('Error inserting new user:', err);
                 return res.status(500).send('Server error');
             }
-            res.redirect('/Login.html');
+
+            // Generate JWT Token
+            const token = jwt.sign({ username, email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            res.json({ success: true, token });
         });
     });
 });
+// Token verification route
+app.post('/api/verifyToken', (req, res) => {
+    const token = req.headers['authorization']?.split(' ')[1]; // Expecting 'Bearer <token>'
+    
+    if (!token) {
+        return res.status(403).send('A token is required for authentication');
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify token with the secret key
+        res.status(200).send('Token is valid');
+    } catch (err) {
+        res.status(401).send('Invalid or expired token');
+    }
+});
+// Middleware to verify JWT token
+exports.verifyToken = (req, res, next) => {
+    const token = req.headers['authorization']?.split(' ')[1]; // Expecting 'Bearer <token>'
+    
+    if (!token) {
+        return res.status(403).send('A token is required for authentication');
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify token with the secret key
+        req.user = decoded; // Attach user info to the request object
+        next();
+    } catch (err) {
+        return res.status(401).send('Invalid or expired token');
+    }
+};
+
 
 // Handle prayer request submission
 app.post('/submit-prayer-request', (req, res) => {

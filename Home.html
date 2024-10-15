@@ -28,6 +28,7 @@
     </style>
 </head>
 <body>
+
     <div class="main-container">
         <header class="header">
             <div class="header-left">
@@ -52,7 +53,9 @@
                 </nav>
             </div>
         </header>
-
+        <div class="welcome-message" id="welcome-message">
+            <!-- Welcome message will appear here -->
+        </div>
         <div class="content">
             <h2 class="main-heading">Apostolic App</h2>
             <div class="text-and-image">
@@ -264,6 +267,39 @@
         // Example: Call this function when a user views the messages
         function onViewMessages() {
             hideRedDot();
+        }
+        // Get the JWT token and username from localStorage
+        const token = localStorage.getItem('token');
+        const username = localStorage.getItem('username');
+
+        // Display the welcome message if the user is logged in
+        if (username && token) {
+            const welcomeMessage = document.getElementById('welcome-message');
+            welcomeMessage.innerHTML = `<h2>Welcome, ${username}!</h2>`;
+
+            // Verify the token with the server
+            fetch('/api/verifyToken', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.status !== 200) {
+                    // Token is invalid or expired, redirect to login
+                    localStorage.clear();
+                    window.location.href = 'Login.html';
+                }
+            })
+            .catch(error => {
+                console.error('Error verifying token:', error);
+                localStorage.clear();
+                window.location.href = 'Login.html';
+            });
+        } else {
+            // Redirect to login page if no token is found
+            window.location.href = 'Login.html';
         }
     </script>
 </body>

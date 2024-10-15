@@ -287,3 +287,9 @@ button:hover {
     border-radius: 50%;
     display: none; /* Initially hidden */
 }
+.welcome-message {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+}

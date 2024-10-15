@@ -26,7 +26,6 @@
 
     <footer>
         <div class="slogan"> Apostles of Christ <br> "Uniting Apostles Everywhere – A Place for Every Believer to Connect and Grow"
-
         </div>
     </footer>
 
@@ -58,10 +57,11 @@
             })
             .then(data => {
                 if (data.success) {
-                    // Store username in localStorage
+                    // Store token and username in localStorage
+                    localStorage.setItem('token', data.token);
                     localStorage.setItem('username', data.username);
                     // Redirect to home page on successful login
-                    window.location.href = '/Home.html';
+                    window.location.href = 'Home.html';
                 } else {
                     // Show error message if login fails
                     alert(data.message);

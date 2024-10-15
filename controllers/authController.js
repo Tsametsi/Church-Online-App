@@ -3,57 +3,43 @@ const bcrypt = require('bcryptjs');
 const db = require('../config/db');
 
 
-// Login function with detailed logging
+
+// Login function with JWT
 exports.login = (req, res) => {
     const { username, password } = req.body;
-    
-    // Log the incoming request details
+
     console.log(`Login attempt: Username: ${username}`);
 
     const query = 'SELECT * FROM logged_in_users WHERE username = ?';
-
-    // Execute the database query
     db.query(query, [username], (err, results) => {
         if (err) {
-            // Log the error if the database query fails
             console.error('Error querying the database:', err);
             return res.status(500).json({ success: false, message: 'Error querying the database' });
         }
-
-        // Log the query result
-        console.log('Query result:', results);
 
         if (results.length === 0) {
             console.log('No user found with the provided username');
             return res.status(401).json({ success: false, message: 'Invalid username or password.' });
         }
 
-        // Compare the provided password with the stored hash
+        // Compare passwords
         bcrypt.compare(password, results[0].password, (err, result) => {
             if (err) {
-                // Log the error if password comparison fails
                 console.error('Error comparing passwords:', err);
                 return res.status(500).json({ success: false, message: 'Error comparing passwords' });
             }
 
-            // Log the password comparison result
-            console.log('Password comparison result:', result);
-
             if (result) {
-                const updateQuery = 'UPDATE logged_in_users SET logged_in = 1 WHERE username = ?';
-                db.query(updateQuery, [username], (err) => {
-                    if (err) {
-                        // Log the error if updating the login status fails
-                        console.error('Error updating user login status:', err);
-                        return res.status(500).json({ success: false, message: 'Error updating user login status' });
-                    }
+                // Generate JWT Token
+                const token = jwt.sign(
+                    { id: results[0].id, username: results[0].username },
+                    process.env.JWT_SECRET,
+                    { expiresIn: '1h' }
+                );
 
-                    // Log the successful login
-                    console.log(`Login successful for user: ${username}`);
-                    return res.json({ success: true, username: results[0].username });
-                });
+                console.log(`Login successful for user: ${username}`);
+                return res.json({ success: true, token, username: results[0].username });
             } else {
-                // Log the failed password match
                 console.log('Password did not match for user:', username);
                 return res.status(401).json({ success: false, message: 'Invalid username or password.' });
             }
@@ -63,16 +49,7 @@ exports.login = (req, res) => {
 
 // Logout function
 exports.logout = (req, res) => {
-    const { username } = req.body;
-    const query = 'UPDATE logged_in_users SET logged_in = 0 WHERE username = ?';
-    
-    db.query(query, [username], (err) => {
-        if (err) {
-            console.error('Error updating user logout status:', err);
-            return res.status(500).send('Server error');
-        }
-        res.sendStatus(200);
-    });
+    res.sendStatus(200); // Client just needs to remove the token
 };
 
 // Sign-up function
@@ -93,4 +70,23 @@ exports.signup = (req, res) => {
             res.redirect('/Login.html');
         });
     });
+};
+const jwt = require('jsonwebtoken');
+
+// Middleware to verify JWT token
+exports.verifyToken = (req, res, next) => {
+    const token = req.headers['authorization'];
+
+    if (!token) {
+        return res.status(403).send('A token is required for authentication');
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded;
+    } catch (err) {
+        return res.status(401).send('Invalid Token');
+    }
+
+    next();
 };
