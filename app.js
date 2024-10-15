@@ -62,13 +62,13 @@ app.use(helmet());
 
 // Sign-up
 app.post('/signup', (req, res) => {
-    const { username, email, password, church_id, branch_name } = req.body;
+    const { username, email, password, church_id, branch_name, role } = req.body;
     bcrypt.hash(password, saltRounds, (err, hash) => {
         if (err) {
             return res.status(500).send('Server error');
         }
-        const query = 'INSERT INTO logged_in_users (username, email, password, church_id, branch_name) VALUES (?, ?, ?, ?, ?)';
-        db.query(query, [username, email, hash, church_id, branch_name], (err) => {
+        const query = 'INSERT INTO logged_in_users (username, email, password, church_id, branch_name, role) VALUES (?, ?, ?, ?, ?, ?)';
+        db.query(query, [username, email, hash, church_id, branch_name, role], (err) => {
             if (err) {
                 console.error('Error inserting new user:', err);
                 return res.status(500).send('Server error');
