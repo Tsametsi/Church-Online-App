@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discussions</title>
     <link rel="stylesheet" href="Discussions.css">
-    
 </head>
 <body>
 
@@ -16,8 +15,6 @@
     <div id="topics-container"></div>
 </div>
 
-
-
 <!-- Button to show discussion input -->
 <button id="show-discussion-btn" onclick="toggleDiscussionInput()">Create a Discussion</button>
 
@@ -25,20 +22,25 @@
     <input type="text" id="discussion-username" placeholder="Enter your username" />
     <input type="text" id="discussion-title" placeholder="Discussion Title" />
     <textarea id="discussion-content" placeholder="Discussion Content"></textarea>
+    
+    <!-- Existing audio upload input -->
     <input type="file" id="discussion-audio" accept="audio/*" />
+    
+    <!-- Buttons for recording audio -->
+    <button id="start-recording" onclick="toggleRecording()">Start Recording</button>
+    <button id="stop-recording" onclick="toggleRecording()" style="display: none;">Stop Recording</button>
+    <audio id="recorded-audio" controls style="display: none;"></audio>
+    
     <button onclick="submitDiscussion()">Submit Discussion</button>
 </div>
 
 <!-- Search Input for Discussions -->
 <input type="text" id="search-input" placeholder="Search discussions..." oninput="searchDiscussions()" />
-<div id="discussions"></div>
-
 <div id="discussions" class="discussion-grid"></div>
 
 <!-- Emoji Picker -->
-<div id="emoji-picker"></div>
+<div id="emoji-picker" style="display: none;"></div>
 
 <script src="Discussions.js"></script>
-
 </body>
 </html>

@@ -1069,6 +1069,21 @@ app.post('/api/comments/:id/replies', (req, res) => {
         res.status(201).json({ id: result.insertId, content });
     });
 });
+// Create new discussion with audio upload
+app.post('/api/discussions', upload.single('audio'), (req, res) => {
+    const { title, content, username } = req.body;
+
+    // Save audio file path if uploaded
+    const audioPath = req.file ? req.file.path : null; // multer automatically populates req.file
+
+    const query = 'INSERT INTO discussions (title, content, username, created_at, audio_path) VALUES (?, ?, ?, NOW(), ?)';
+    db.query(query, [title, content, username, audioPath], (error, results) => {
+        if (error) {
+            return res.status(500).json({ error: 'Database error' });
+        }
+        res.status(201).json({ message: 'Discussion created', discussionId: results.insertId });
+    });
+});
 
 
 // Endpoint to add a topic

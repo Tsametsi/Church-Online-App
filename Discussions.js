@@ -19,14 +19,27 @@ async function fetchDiscussions() {
     `).join('');
 }
 
-async function fetchTrendingTopics() {
-    const response = await fetch('YOUR_API_URL_FOR_TRENDING_TOPICS'); // Replace with your API URL
-    const topics = await response.json();
+const gnewsApiKey = '1f6ba38c9c1c12128e2fff26d91c6547'; // Your GNews API key
+const gnewsApiUrl = 'https://gnews.io/api/v4/top-headlines'; // GNews API endpoint
 
-    const topicsContainer = document.getElementById('topics-container');
-    topicsContainer.innerHTML = topics.map(topic => `
-        <div class="topic" onclick="setDiscussionTitle('${topic}')">${topic}</div>
-    `).join('');
+async function fetchTrendingTopics() {
+    try {
+        const response = await fetch(`${gnewsApiUrl}?token=${gnewsApiKey}&lang=en`);
+        const data = await response.json();
+
+        if (data.articles) {
+            const topicsContainer = document.getElementById('topics-container');
+            topicsContainer.innerHTML = data.articles.map(article => `
+                <div class="topic" onclick="setDiscussionTitle('${article.title}')">
+                    ${article.title}
+                </div>
+            `).join('');
+        } else {
+            console.error('No articles found:', data);
+        }
+    } catch (error) {
+        console.error('Error fetching trending topics:', error);
+    }
 }
 
 function setDiscussionTitle(title) {
@@ -182,6 +195,7 @@ async function submitDiscussion() {
     fetchDiscussions();
 }
 
+
 const emojis = [
     '😀', '😁', '😂', '🤣', '😃', '😄', '😅', '😆', '😉', '😊',
     '😎', '😍', '😘', '😗', '😙', '😚', '☺️', '😋', '😛', '😜',
@@ -229,9 +243,9 @@ function renderDiscussions(discussions) {
     discussionsDiv.innerHTML = discussions.map(d => `
         <div class="discussion">
             <h3>${d.title}</h3>
+            ${d.audio_path ? `<audio controls src="${d.audio_path}"></audio>` : ''}
             <p>${d.content}</p>
             <p><em>Posted by: ${d.username}</em></p>
-            ${d.audio_path ? `<audio controls src="${d.audio_path}"></audio>` : ''}
             <button onclick="toggleComments(${d.id}, '${d.username}')">💬 Comments</button>
             <div id="comments-${d.id}" class="comment-section"></div>
             <input type="text" id="comment-input-${d.id}" placeholder="Add a comment..." style="display: none;">
@@ -243,6 +257,7 @@ function renderDiscussions(discussions) {
 }
 
 
+
 function searchDiscussions() {
     const searchTerm = document.getElementById('search-input').value.toLowerCase();
     const filteredDiscussions = discussionsData.filter(d => 
@@ -251,6 +266,55 @@ function searchDiscussions() {
         d.username.toLowerCase().includes(searchTerm)
     );
     renderDiscussions(filteredDiscussions); // Render filtered discussions
+}
+
+let mediaRecorder;
+let audioChunks = [];
+
+async function toggleRecording() {
+    const startBtn = document.getElementById('start-recording');
+    const stopBtn = document.getElementById('stop-recording');
+    const recordedAudio = document.getElementById('recorded-audio');
+
+    if (!mediaRecorder) {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+
+        mediaRecorder.ondataavailable = event => {
+            audioChunks.push(event.data);
+        };
+
+        mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            const audioFile = new File([audioBlob], 'recording.wav', { type: 'audio/wav' });
+
+            // Set the recorded audio to the audio element
+            const audioURL = URL.createObjectURL(audioBlob);
+            recordedAudio.src = audioURL;
+            recordedAudio.style.display = 'block'; // Show the audio element
+            audioChunks = []; // Clear the audio chunks for the next recording
+
+            // Update the discussion audio input with the recorded file
+            document.getElementById('discussion-audio').files = createFileList(audioFile);
+        };
+    }
+
+    if (mediaRecorder.state === 'inactive') {
+        mediaRecorder.start();
+        startBtn.style.display = 'none'; // Hide start button
+        stopBtn.style.display = 'inline'; // Show stop button
+    } else {
+        mediaRecorder.stop();
+        startBtn.style.display = 'inline'; // Show start button
+        stopBtn.style.display = 'none'; // Hide stop button
+    }
+}
+
+// Helper function to create a FileList
+function createFileList(file) {
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(file);
+    return dataTransfer.files;
 }
 
 
