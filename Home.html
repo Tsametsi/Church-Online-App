@@ -30,6 +30,12 @@
 <body>
 
     <div class="main-container">
+        <div class="video-background">
+            <video autoplay muted loop class="bg-video">
+                <source src="pictures\16864283-hd_1920_1080_30fps.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
         <header class="header">
             <div class="header-left">
                 <img src="Logopic.jpg" alt="Logo" class="round-logo">
@@ -59,7 +65,7 @@
         <div class="content">
             <h2 class="main-heading">Apostolic App</h2>
             <div class="text-and-image">
-                <p class="sub-text">
+                <p class="sub-text" style="color: black;">
                     In a Church App, members and visitors alike are provided with a centralized
                     digital platform that brings together various church-related functions and resources. 
                     This app becomes a vital tool for keeping the congregation connected to the church’s 
@@ -68,7 +74,7 @@
                     announcements can be quickly shared with the church community, enhancing engagement 
                     and fostering a sense of unity among members.
                 </p>
-                <img src="home.jpg" alt="Church Image" class="side-image">
+                <img src="home.jpg" alt="Church Image" class="side-image" style="opacity: 0.8;">
             </div>
             
             <button class="cta-button" onclick="window.location.href='AboutUs.html'">About Us</button>
@@ -182,126 +188,55 @@
                   can listen to at any time. This convenience means that even those unable to attend in-person 
                   services can still engage with the church’s spiritual content throughout their week. Podcasts
                    also offer a platform for deeper teaching and community-building as users can access sermons or series 
-                   that they might have missed or want to revisit</p>
-        </div>
-
-        <h2 class="main-heading">Members</h2>
-        <div class="text-and-image">
-            <p class="sub-text">
-                The Members menu tab on our app provides a dedicated space for managing and enjoying 
-                your membership benefits. Here, you can view your account details, track your subscription
-                 status, and access exclusive content tailored just for you. The intuitive interface allows 
-                 you to easily update your profile, manage payment options, and explore personalized recommendations
-                based on your viewing history. Additionally, you can view and redeem special offers, participate in
-                member-only events, and get support directly from our team. The Members tab is your hub for making the
-                most out of your membership experience, ensuring that all your preferences and needs are just a tap away.
-            </p>
-            <a href="Member_profile.html">
-                <img src="members.jpg" alt="Members Image" class="side-image">
-            </a>
-        </div>
-
-        <h1 class="main-heading">Chat</h1>
-        <div class="text-and-image reverse-text-and-image">
-            <a href="Chat.html">
-                <img src="chaticon.jpg" alt="Chat Image" class="side-image">
-            </a>
-            <p class="sub-text">Chat is your go-to solution for seamless, real-time conversations. Whether you're catching up with friends,
-                 collaborating with colleagues, or meeting new people, our app offers a smooth, intuitive chat experience.
-                  Enjoy features like instant messaging and multi-media sharing designed to keep you connected wherever you are. 
-                  Dive into effortless communication with Chat today!
-            </p>
+                   that they may have missed or want to revisit.</p>
         </div>
 
         <footer class="footer">
             <ul class="footer-links">
-                <li><a href="#">© 2024 Church App. All rights reserved. <br>Address: Block 6,
-                     Lords Office Estate, 276 West Ave, Centurion, 0163</a></li>
+                <li><a href="Terms.html">Terms & Conditions</a></li>
+                <li><a href="Privacy.html">Privacy Policy</a></li>
+                <li><a href="Contact.html">Contact Us</a></li>
             </ul>
             <div class="social-media">
-                <a href="https://www.facebook.com/login/" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://x.com/i/flow/login?input_flow_data=%7B%22requested_variant%22%3A%22eyJteCI6IjIifQ%3D%3D%22%7D" class="social-icon"><i class="fab fa-twitter"></i></a>
-                <a href="https://www.instagram.com/accounts/login/" class="social-icon"><i class="fab fa-instagram"></i></a>
-                <a href="https://www.youtube.com/#!%20/" class="social-icon"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-facebook social-icon"></i></a>
+                <a href="#"><i class="fab fa-twitter social-icon"></i></a>
+                <a href="#"><i class="fab fa-instagram social-icon"></i></a>
             </div>
-            <button onclick="window.location.href='Login.html'" class="logout-btn">Log out?</button>
+            <button class="logout-btn" onclick="logout()">Logout</button>
         </footer>
     </div>
 
-    <!-- JavaScript for slideshow -->
     <script>
         let slideIndex = 0;
         showSlides();
 
         function showSlides() {
-            let slides = document.getElementsByClassName("slide");
+            const slides = document.getElementsByClassName("slide");
             for (let i = 0; i < slides.length; i++) {
                 slides[i].style.display = "none";
             }
             slideIndex++;
-            if (slideIndex > slides.length) { slideIndex = 1 }
+            if (slideIndex > slides.length) { slideIndex = 1; }
             slides[slideIndex - 1].style.display = "block";
-            setTimeout(showSlides, 8000); // Change slide every 8 seconds
+            setTimeout(showSlides, 3000); // Change slide every 3 seconds
         }
 
-        function plusSlides(n) {
-            showSlides(slideIndex += n);
-        }
+        // Example of how to show a welcome message
+        const welcomeMessage = document.getElementById('welcome-message');
+        welcomeMessage.textContent = "Welcome to Our Church App!";
 
-        // Function to show the red dot
-        function showRedDot() {
-            document.getElementById('new-message-dot').style.display = 'block';
-        }
+        // Simulate a notification for new messages
+        const newMessageDot = document.getElementById('new-message-dot');
+        // Simulate showing the red dot after 5 seconds
+        setTimeout(() => {
+            newMessageDot.style.display = 'block';
+        }, 5000);
 
-        // Function to hide the red dot
-        function hideRedDot() {
-            document.getElementById('new-message-dot').style.display = 'none';
-        }
-
-        // Example: Call this function when a new message arrives
-        // This function should be triggered by your chat application logic
-        function onNewMessage() {
-            showRedDot();
-        }
-
-        // Example: Call this function when a user views the messages
-        function onViewMessages() {
-            hideRedDot();
-        }
-        // Get the JWT token and username from localStorage
-        const token = localStorage.getItem('token');
-        const username = localStorage.getItem('username');
-
-        // Display the welcome message if the user is logged in
-        if (username && token) {
-            const welcomeMessage = document.getElementById('welcome-message');
-            welcomeMessage.innerHTML = `<h2>Welcome, ${username}!</h2>`;
-
-            // Verify the token with the server
-            fetch('/api/verifyToken', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (response.status !== 200) {
-                    // Token is invalid or expired, redirect to login
-                    localStorage.clear();
-                    window.location.href = 'Login.html';
-                }
-            })
-            .catch(error => {
-                console.error('Error verifying token:', error);
-                localStorage.clear();
-                window.location.href = 'Login.html';
-            });
-        } else {
-            // Redirect to login page if no token is found
-            window.location.href = 'Login.html';
+        function logout() {
+            // Logout logic goes here
+            alert('You have been logged out.');
+            window.location.href = 'Login.html'; // Redirect to login page
         }
     </script>
 </body>
-
 </html>

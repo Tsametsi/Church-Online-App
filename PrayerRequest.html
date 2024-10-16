@@ -4,40 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prayer Request</title>
-    <link rel="stylesheet" href="Prayer Request.css">
-    <a href="javascript:history.back()" class="back-button">←Back</a>
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="Prayer_request.css">
 </head>
-    <!-- Add this back button inside the header -->
-<a href="javascript:history.back()" class="back-button">← Back</a>
-
-<body style="background: linear-gradient(to bottom, #0956b9, #ffffff); /* White to blue gradient */
-    overflow-y: auto; /* Enable vertical scrolling */">
-        <h2>Prayer Request</h2>
-        <form action="/submit-prayer-request" method="POST">
+<body>
+    <div class="container mt-5">
+        <h2>Submit a Prayer Request</h2>
+        <form id="prayerRequestForm">
             <div class="form-group">
-                <label for="name">Your Name:</label>
-                <input type="text" id="name" name="name" required aria-label="Your Name">
+                <label for="pastorSelect">Select a Pastor</label>
+                <select class="form-control" id="pastorSelect" required>
+                    <option value="">Select a Pastor</option>
+                </select>
             </div>
             <div class="form-group">
-                <label for="email">Your Email:</label>
-                <input type="email" id="email" name="email" required aria-label="Your Email">
+                <label for="message">Message</label>
+                <textarea class="form-control" id="message" rows="4" required></textarea>
             </div>
-            <div class="form-group">
-                <label for="prayer_request">Prayer Request:</label>
-                <textarea id="prayer_request" name="prayer_request" required aria-label="Prayer Request"></textarea>
-            </div>
-            <button type="submit">Submit</button>
-            <button type="reset">Reset</button>
+            <button type="submit" class="btn btn-primary">Submit Request</button>
         </form>
+        <div id="successMessage" class="alert alert-success mt-3" style="display:none;"></div>
     </div>
-    <p style="text-align: center; margin-top: 13%;">
-        In times of joy or struggle, the act of requesting prayer is a powerful step towards finding peace and support. Whether you're facing challenges that seem overwhelming or celebrating moments of gratitude, sharing your intentions with others through prayer connects you with a community of empathy and compassion.
-        
-        Remember, your request for prayer is not just a plea for help but a declaration of faith in the healing power of collective prayer. It's a reminder that you are never alone in your journey. Together, we uplift each other, share burdens, and celebrate victories.
-        
-        So, take heart and reach out. Let us join hands in prayer, knowing that in our shared moments of vulnerability, we find strength, hope, and the comforting presence of love.
-        
-    </p>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script src="Prayer_request.js"></script>
 </body>
 </html>
