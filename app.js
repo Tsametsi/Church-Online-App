@@ -1413,9 +1413,24 @@ app.post('/api/prayer/submit', (req, res) => {
     });
 });
 // API endpoint to fetch prayer requests for a specific pastor
+// API endpoint to fetch prayer requests for a specific pastor
 app.get('/api/prayer/requests/:pastorId', (req, res) => {
     const { pastorId } = req.params;
-    const query = 'SELECT * FROM prayer_requests WHERE pastor_id = ? ORDER BY created_at DESC';
+    const query = `
+        SELECT 
+            pr.id, 
+            pr.message, 
+            pr.created_at, 
+            lu.username 
+        FROM 
+            prayer_requests pr 
+        JOIN 
+            logged_in_users lu ON pr.user_id = lu.id 
+        WHERE 
+            pr.pastor_id = ? 
+        ORDER BY 
+            pr.created_at DESC
+    `;
     db.query(query, [pastorId], (err, results) => {
         if (err) {
             console.error('Error querying prayer requests:', err);
@@ -1424,6 +1439,20 @@ app.get('/api/prayer/requests/:pastorId', (req, res) => {
         res.json(results);
     });
 });
+
+// API endpoint to send a response to a prayer request
+app.post('/api/prayer/response', (req, res) => {
+    const { requestId, message, pastorName } = req.body;
+    const query = 'INSERT INTO prayer_responses (request_id, pastor_name, message) VALUES (?, ?, ?)';
+    db.query(query, [requestId, pastorName, message], (err, result) => {
+        if (err) {
+            console.error('Error inserting response:', err);
+            return res.status(500).send('Internal server error');
+        }
+        res.sendStatus(200);
+    });
+});
+
 // Socket.IO integration for prayer requests
 io.on('connection', (socket) => {
     console.log('A user connected');
