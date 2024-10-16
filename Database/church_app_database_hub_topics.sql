@@ -23,15 +23,14 @@ DROP TABLE IF EXISTS `hub_topics`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `hub_topics` (
-  `topic_id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `description` text,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL,
-  `views` int DEFAULT '0',
-  PRIMARY KEY (`topic_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `topic_title` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `hub_topics_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `logged_in_users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +39,6 @@ CREATE TABLE `hub_topics` (
 
 LOCK TABLES `hub_topics` WRITE;
 /*!40000 ALTER TABLE `hub_topics` DISABLE KEYS */;
-INSERT INTO `hub_topics` VALUES (1,'hi','hi','2024-09-17 18:50:46','2024-09-17 18:50:46',NULL,0),(2,'hi','hi','2024-09-17 18:55:05','2024-09-17 18:55:05',NULL,0);
 /*!40000 ALTER TABLE `hub_topics` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-17 21:28:54
+-- Dump completed on 2024-10-16 13:34:26

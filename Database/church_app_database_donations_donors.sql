@@ -16,27 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `churches`
+-- Table structure for table `donations_donors`
 --
 
-DROP TABLE IF EXISTS `churches`;
+DROP TABLE IF EXISTS `donations_donors`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `churches` (
+CREATE TABLE `donations_donors` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `help_category_id` int DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `org_type` enum('School','Church','Business','NGO','Other') NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `churches`
+-- Dumping data for table `donations_donors`
 --
 
-LOCK TABLES `churches` WRITE;
-/*!40000 ALTER TABLE `churches` DISABLE KEYS */;
-INSERT INTO `churches` VALUES (3,'Anglican Church'),(8,'Methodist Church'),(9,'Presbyterian Church'),(10,'Lutheran Church'),(11,'Assemblies of God'),(12,'Christ Embassy'),(13,'Victory Outreach'),(14,'Hillsong Church'),(15,'Zion Christian Church (ZCC)'),(16,'Apostolic Faith Mission (AFM)'),(18,'Shepherd Bushiri Ministries'),(19,'Roman Catholic Church'),(20,'Greek Orthodox Church'),(21,'Russian Orthodox Church'),(23,'Reformed Churches'),(24,'Church of the Nazarene'),(25,'Baptist Churches'),(26,'Independent and Non-Denominational Churches'),(27,'Ethiopian Orthodox Tewahedo Church');
-/*!40000 ALTER TABLE `churches` ENABLE KEYS */;
+LOCK TABLES `donations_donors` WRITE;
+/*!40000 ALTER TABLE `donations_donors` DISABLE KEYS */;
+/*!40000 ALTER TABLE `donations_donors` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -48,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-16 13:34:13
+-- Dump completed on 2024-10-16 13:34:17

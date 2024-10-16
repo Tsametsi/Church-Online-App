@@ -16,30 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `donations`
+-- Table structure for table `discussion_comment_replies`
 --
 
-DROP TABLE IF EXISTS `donations`;
+DROP TABLE IF EXISTS `discussion_comment_replies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `donations` (
+CREATE TABLE `discussion_comment_replies` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `amount` decimal(10,2) NOT NULL,
-  `currency` varchar(3) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `status` varchar(50) DEFAULT NULL,
+  `comment_id` int NOT NULL,
+  `content` text NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`),
+  KEY `comment_id` (`comment_id`),
+  CONSTRAINT `discussion_comment_replies_ibfk_1` FOREIGN KEY (`comment_id`) REFERENCES `discussion_comments` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `donations`
+-- Dumping data for table `discussion_comment_replies`
 --
 
-LOCK TABLES `donations` WRITE;
-/*!40000 ALTER TABLE `donations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `donations` ENABLE KEYS */;
+LOCK TABLES `discussion_comment_replies` WRITE;
+/*!40000 ALTER TABLE `discussion_comment_replies` DISABLE KEYS */;
+INSERT INTO `discussion_comment_replies` VALUES (23,55,'f','2024-09-22 15:34:57'),(24,62,'?','2024-09-25 11:29:32');
+/*!40000 ALTER TABLE `discussion_comment_replies` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-17 21:29:01
+-- Dump completed on 2024-10-16 13:34:21

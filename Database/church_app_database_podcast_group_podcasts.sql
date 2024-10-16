@@ -38,6 +38,7 @@ CREATE TABLE `podcast_group_podcasts` (
 
 LOCK TABLES `podcast_group_podcasts` WRITE;
 /*!40000 ALTER TABLE `podcast_group_podcasts` DISABLE KEYS */;
+INSERT INTO `podcast_group_podcasts` VALUES (7,1);
 /*!40000 ALTER TABLE `podcast_group_podcasts` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-17 21:28:54
+-- Dump completed on 2024-10-16 13:34:14

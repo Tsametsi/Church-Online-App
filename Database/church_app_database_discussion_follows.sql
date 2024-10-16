@@ -16,27 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `churches`
+-- Table structure for table `discussion_follows`
 --
 
-DROP TABLE IF EXISTS `churches`;
+DROP TABLE IF EXISTS `discussion_follows`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `churches` (
+CREATE TABLE `discussion_follows` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `user_id` int DEFAULT NULL,
+  `discussion_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `discussion_id` (`discussion_id`),
+  CONSTRAINT `discussion_follows_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `logged_in_users` (`id`),
+  CONSTRAINT `discussion_follows_ibfk_2` FOREIGN KEY (`discussion_id`) REFERENCES `discussions` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `churches`
+-- Dumping data for table `discussion_follows`
 --
 
-LOCK TABLES `churches` WRITE;
-/*!40000 ALTER TABLE `churches` DISABLE KEYS */;
-INSERT INTO `churches` VALUES (3,'Anglican Church'),(8,'Methodist Church'),(9,'Presbyterian Church'),(10,'Lutheran Church'),(11,'Assemblies of God'),(12,'Christ Embassy'),(13,'Victory Outreach'),(14,'Hillsong Church'),(15,'Zion Christian Church (ZCC)'),(16,'Apostolic Faith Mission (AFM)'),(18,'Shepherd Bushiri Ministries'),(19,'Roman Catholic Church'),(20,'Greek Orthodox Church'),(21,'Russian Orthodox Church'),(23,'Reformed Churches'),(24,'Church of the Nazarene'),(25,'Baptist Churches'),(26,'Independent and Non-Denominational Churches'),(27,'Ethiopian Orthodox Tewahedo Church');
-/*!40000 ALTER TABLE `churches` ENABLE KEYS */;
+LOCK TABLES `discussion_follows` WRITE;
+/*!40000 ALTER TABLE `discussion_follows` DISABLE KEYS */;
+INSERT INTO `discussion_follows` VALUES (1,1,30),(2,1,30),(3,1,30),(4,1,30),(5,1,30),(6,1,30),(7,1,30),(8,1,30),(9,1,30),(10,1,30),(11,1,30),(12,1,30),(13,1,30),(14,1,30);
+/*!40000 ALTER TABLE `discussion_follows` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -48,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-16 13:34:13
+-- Dump completed on 2024-10-16 13:34:18

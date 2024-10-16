@@ -23,15 +23,15 @@ DROP TABLE IF EXISTS `hub_replies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `hub_replies` (
-  `reply_id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `comment_id` int DEFAULT NULL,
   `user_id` int DEFAULT NULL,
-  `reply_text` text NOT NULL,
+  `reply` text NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`reply_id`),
-  KEY `idx_comment_id_replies` (`comment_id`),
-  KEY `idx_user_id_replies` (`user_id`),
-  CONSTRAINT `hub_replies_ibfk_1` FOREIGN KEY (`comment_id`) REFERENCES `hub_comments` (`comment_id`),
+  PRIMARY KEY (`id`),
+  KEY `comment_id` (`comment_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `hub_replies_ibfk_1` FOREIGN KEY (`comment_id`) REFERENCES `hub_comments` (`id`),
   CONSTRAINT `hub_replies_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `logged_in_users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-17 21:29:01
+-- Dump completed on 2024-10-16 13:34:15

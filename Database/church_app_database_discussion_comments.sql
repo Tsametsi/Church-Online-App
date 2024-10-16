@@ -16,27 +16,33 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `churches`
+-- Table structure for table `discussion_comments`
 --
 
-DROP TABLE IF EXISTS `churches`;
+DROP TABLE IF EXISTS `discussion_comments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `churches` (
+CREATE TABLE `discussion_comments` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `discussion_id` int NOT NULL,
+  `content` text NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `username` varchar(255) NOT NULL,
+  `like_count` int DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `discussion_id` (`discussion_id`),
+  CONSTRAINT `discussion_comments_ibfk_1` FOREIGN KEY (`discussion_id`) REFERENCES `discussions` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `churches`
+-- Dumping data for table `discussion_comments`
 --
 
-LOCK TABLES `churches` WRITE;
-/*!40000 ALTER TABLE `churches` DISABLE KEYS */;
-INSERT INTO `churches` VALUES (3,'Anglican Church'),(8,'Methodist Church'),(9,'Presbyterian Church'),(10,'Lutheran Church'),(11,'Assemblies of God'),(12,'Christ Embassy'),(13,'Victory Outreach'),(14,'Hillsong Church'),(15,'Zion Christian Church (ZCC)'),(16,'Apostolic Faith Mission (AFM)'),(18,'Shepherd Bushiri Ministries'),(19,'Roman Catholic Church'),(20,'Greek Orthodox Church'),(21,'Russian Orthodox Church'),(23,'Reformed Churches'),(24,'Church of the Nazarene'),(25,'Baptist Churches'),(26,'Independent and Non-Denominational Churches'),(27,'Ethiopian Orthodox Tewahedo Church');
-/*!40000 ALTER TABLE `churches` ENABLE KEYS */;
+LOCK TABLES `discussion_comments` WRITE;
+/*!40000 ALTER TABLE `discussion_comments` DISABLE KEYS */;
+INSERT INTO `discussion_comments` VALUES (55,38,'?','2024-09-22 15:34:48','x',0),(56,39,'x','2024-09-22 15:36:37','x',0),(57,39,'?','2024-09-22 15:36:43','x',0),(58,39,'x','2024-09-22 15:36:49','x',0),(59,39,'x','2024-09-22 15:36:51','x',0),(60,39,'x','2024-09-22 15:36:55','x',0),(61,38,'?','2024-09-25 11:28:57','x',0),(62,38,'?','2024-09-25 11:29:08','x',0),(63,42,'?Well','2024-10-02 09:20:39','New one',0),(64,43,'d fhrfhrfhbrrbghtrbghhtbgtbgtngngjtngjtngjnjrnjrrnjgnrjgnrjgjgtbgu','2024-10-09 17:06:31','eyethu',0),(65,43,'?','2024-10-09 17:07:07','eyethu',0),(66,45,'yep?','2024-10-14 18:06:24','df',0);
+/*!40000 ALTER TABLE `discussion_comments` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

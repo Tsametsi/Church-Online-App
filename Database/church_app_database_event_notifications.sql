@@ -30,7 +30,7 @@ CREATE TABLE `event_notifications` (
   PRIMARY KEY (`id`),
   KEY `event_id` (`event_id`),
   CONSTRAINT `event_notifications_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `event_notifications` (
 
 LOCK TABLES `event_notifications` WRITE;
 /*!40000 ALTER TABLE `event_notifications` DISABLE KEYS */;
-INSERT INTO `event_notifications` VALUES (1,1,'followme303030@gmail.com',1),(2,1,'eyethugwacela457@gmail.com',1),(3,1,'eyethugwacela457@gmail.com',1),(4,1,'followme303030@gmail.com',1),(5,1,'eyethugwacela457@gmail.com',1),(6,9,'eyethugwacela457@gmail.com',1),(7,10,'eyethugwacela457@gmail.com',1),(8,10,'tsametsibmalala@gmail.com',1),(9,10,'tsametsibmalala@gmail.com',1),(10,10,'tsametsibmalala@gmail.com',1),(11,10,'tsametsibmalala@gmail.com',1),(12,10,'followme303030@gmail.com',1),(13,11,'eyethugwacel457@gmail.com',1),(14,11,'eyethugwacela457@gmail.com',1);
+INSERT INTO `event_notifications` VALUES (1,1,'followme303030@gmail.com',1),(2,1,'eyethugwacela457@gmail.com',1),(3,1,'eyethugwacela457@gmail.com',1),(4,1,'followme303030@gmail.com',1),(5,1,'eyethugwacela457@gmail.com',1),(6,9,'eyethugwacela457@gmail.com',1),(7,10,'eyethugwacela457@gmail.com',1),(8,10,'tsametsibmalala@gmail.com',1),(9,10,'tsametsibmalala@gmail.com',1),(10,10,'tsametsibmalala@gmail.com',1),(11,10,'tsametsibmalala@gmail.com',1),(12,10,'followme303030@gmail.com',1),(13,11,'eyethugwacel457@gmail.com',1),(14,11,'eyethugwacela457@gmail.com',1),(15,21,'followme303030@gmail.com',1);
 /*!40000 ALTER TABLE `event_notifications` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-17 21:28:52
+-- Dump completed on 2024-10-16 13:34:23

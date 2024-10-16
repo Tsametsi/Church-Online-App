@@ -16,32 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `channel_members`
+-- Table structure for table `online_users`
 --
 
-DROP TABLE IF EXISTS `channel_members`;
+DROP TABLE IF EXISTS `online_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `channel_members` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `channel_id` int DEFAULT NULL,
-  `user_id` int DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `channel_id` (`channel_id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `channel_members_ibfk_1` FOREIGN KEY (`channel_id`) REFERENCES `channels` (`id`),
-  CONSTRAINT `channel_members_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `logged_in_users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `online_users` (
+  `user_id` int NOT NULL,
+  `session_token` varchar(255) NOT NULL,
+  `logged_in_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `username` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `session_token` (`session_token`),
+  UNIQUE KEY `username` (`username`),
+  CONSTRAINT `online_users_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `logged_in_users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `channel_members`
+-- Dumping data for table `online_users`
 --
 
-LOCK TABLES `channel_members` WRITE;
-/*!40000 ALTER TABLE `channel_members` DISABLE KEYS */;
-INSERT INTO `channel_members` VALUES (10,9,5),(11,9,4);
-/*!40000 ALTER TABLE `channel_members` ENABLE KEYS */;
+LOCK TABLES `online_users` WRITE;
+/*!40000 ALTER TABLE `online_users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `online_users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-17 21:29:01
+-- Dump completed on 2024-10-16 13:34:14

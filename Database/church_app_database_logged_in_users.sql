@@ -31,14 +31,15 @@ CREATE TABLE `logged_in_users` (
   `logged_in` tinyint DEFAULT '0',
   `church_id` int DEFAULT NULL,
   `branch_name` varchar(255) DEFAULT NULL,
+  `role` enum('Pastor','Bishop','Member','Elder','Deacon','Ministry Leader','Volunteer','Youth Leader','Worship Leader','Administrative Staff','New Visitor','Church Staff','Missionary','Sunday School Teacher','Small Group Leader','Community Group Leader','Outreach Coordinator','Prayer Team Member','Event Coordinator','Media/Tech Team','Finance Committee Member','Counselor/Spiritual Advisor','Children’s Ministry Leader','Mission Trip Coordinator','Hospitality Team Member','Facilities Manager') DEFAULT 'Member',
   `subscription_status` enum('free','basic','premium') DEFAULT 'free',
   `caption` text,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   KEY `fk_church` (`church_id`),
-  CONSTRAINT `fk_church` FOREIGN KEY (`church_id`) REFERENCES `churches` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `fk_church` FOREIGN KEY (`church_id`) REFERENCES `churches` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,7 +48,7 @@ CREATE TABLE `logged_in_users` (
 
 LOCK TABLES `logged_in_users` WRITE;
 /*!40000 ALTER TABLE `logged_in_users` DISABLE KEYS */;
-INSERT INTO `logged_in_users` VALUES (3,'Matt','Matt@','Matt@gmail.com','chat_icon.png',1,NULL,NULL,'premium',NULL,'2024-09-17 13:17:14'),(4,'James','James@','James@gmail.com','chat_icon.png',1,NULL,NULL,'free',NULL,'2024-09-17 13:17:14'),(5,'mahlogonolo','mahlogonolo@','ramathetje00@gmail.com','chat_icon.png',1,NULL,NULL,'free',NULL,'2024-09-17 13:17:14'),(21,'Thakgo','thakgo@','thakgo@1','chat_icon.png',1,15,'Mohlaletse ','free',NULL,'2024-09-17 13:17:14'),(22,'Sammy','$2b$10$pYpgpg2AKP.wTkAayLLYueK9oLq0BoInHYirCrFYyh/zlfWpzKwhm','Sammy@gmail.com','chat_icon.png',1,21,'Midrand','free',NULL,'2024-09-17 13:17:14'),(23,'Eyethu','$2b$10$5lfKrN0bRnLgTK2MOTikbODYpDsNIm1SeDyRjItSLhEglcMpEXaNK','eyethu@gmail.com','chat_icon.png',1,19,'Midrand','free',NULL,'2024-09-17 13:17:14'),(24,'Mpho','$2b$10$rZiKvLxpv.t9YGbSFAc7heSTltdhTZF6U2BVPvmWab7LwQUPtEtzm','Mpho@gmail.com','default-profile.png',1,18,'Midrand','free',NULL,'2024-09-17 13:17:14'),(25,'qwerty','$2a$10$MB3tMNJUOC1GvRevU/VR0ewxFhdmsKZ3uPr5.desYArlCqPxdA.06','qwerty@gmail.com','default-profile.png',1,19,'Midrand','free',NULL,'2024-09-17 13:17:14'),(26,'Max','$2b$10$KpfE/VKLyufGVeW2/rKBw.BQ/rROO8h7UhollJBu2g.8oWcfWTpdW','Max@gmail.com','default-profile.png',1,10,'Midrand','free',NULL,'2024-09-17 13:17:14'),(27,'john_doe','password123','john@example.com','john_profile.png',1,NULL,NULL,'premium','Just a debate enthusiast.','2024-09-17 13:30:37'),(28,'jane_smith','password456','jane@example.com','jane_profile.png',1,NULL,NULL,'basic','Love discussing current events.','2024-09-17 13:30:37'),(29,'alice_jones','password789','alice@example.com','alice_profile.png',0,NULL,NULL,'free','Tech lover and debater.','2024-09-17 13:30:37');
+INSERT INTO `logged_in_users` VALUES (1,'Sammy','$2b$10$4A1Ea/GF7j0Iei6UaVGpTeNs89HZteQcNhKgWHjeZGn0sW.CtrYMe','Sammy@gmail.com','default-profile.png',1,15,'Midrand','Member','free',NULL,'2024-09-19 10:51:40'),(2,'Eyethu','$2b$10$2lVQP6mOqCktt2JZM12xcuPYwpde1UIfU3KDqzK4DyEnw6Q/SV5j6','eyethu@gmail.com','default-profile.png',1,24,'Midrand','Member','free',NULL,'2024-09-19 10:52:30'),(3,'Man','$2b$10$mND.HcbzyW7eG/cJVpIhne.MD/senHTx8lpYc/kh1k0Iy/uf8XupK','Man@gmail.com','default-profile.png',1,25,'Midrand','Member','free',NULL,'2024-09-19 11:16:19'),(4,'qwe','$2b$10$yFG1cINDia2ARIAIyo9a2OJJEJ9epLaxFzWOQnzqsdr1t5YBcMHiG','qwe@gmail.com','default-profile.png',1,26,'Midrand','Member','free',NULL,'2024-09-23 12:57:50'),(5,'Scott','$2b$10$48O50kJHA6PtRjXeFUGr0.Ri8E0Mu5gIF99K9LJMhs6BaUVpgJCIO','Scott@gmail.com','default-profile.png',1,26,'Midrand','Member','free',NULL,'2024-10-15 08:18:51'),(7,'Smith','$2b$10$ozI9vvM9s4JGCucWtv6wDu1cBjjZhYgGPS5FM18unnNYFbLnTa26O','Smith@gmail.com','default-profile.png',0,23,'Midrand','Pastor','free',NULL,'2024-10-15 09:54:33'),(8,'Mazz','$2b$10$ukQ7SEFnRdcboDQAlpJQCu2L14nMFdQ7sIcYZnzPBB4ogFSBHvigi','Mazz@gmail.com','default-profile.png',1,25,'Midrand','Pastor','free',NULL,'2024-10-15 09:55:55');
 /*!40000 ALTER TABLE `logged_in_users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -60,4 +61,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-17 21:29:00
+-- Dump completed on 2024-10-16 13:34:23

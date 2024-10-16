@@ -31,7 +31,7 @@ CREATE TABLE `chat_messages` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `group_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=119 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,6 +40,7 @@ CREATE TABLE `chat_messages` (
 
 LOCK TABLES `chat_messages` WRITE;
 /*!40000 ALTER TABLE `chat_messages` DISABLE KEYS */;
+INSERT INTO `chat_messages` VALUES (109,'Sammy','jane_smith','hi',NULL,'2024-09-18 09:58:34',NULL),(110,'Sammy','jane_smith','?',NULL,'2024-09-18 09:58:39',NULL),(111,'Sammy','Man','?',NULL,'2024-09-19 17:02:26',NULL),(112,'Eyethu','Sammy','?',NULL,'2024-09-19 18:19:01',NULL),(113,'Eyethu','Man','Muffins',NULL,'2024-09-19 18:40:47',NULL),(114,'Sammy','qwe','?',NULL,'2024-10-03 05:28:45',NULL),(117,'Eyethu','Sammy','?',NULL,'2024-10-09 16:54:46',NULL);
 /*!40000 ALTER TABLE `chat_messages` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-17 21:28:58
+-- Dump completed on 2024-10-16 13:34:16

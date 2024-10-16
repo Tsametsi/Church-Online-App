@@ -16,30 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `channel_attachments`
+-- Table structure for table `donations_categories`
 --
 
-DROP TABLE IF EXISTS `channel_attachments`;
+DROP TABLE IF EXISTS `donations_categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `channel_attachments` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `message_id` int DEFAULT NULL,
-  `file_name` varchar(255) NOT NULL,
-  `file_path` varchar(255) NOT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `donations_categories` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `category_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `channel_attachments`
+-- Dumping data for table `donations_categories`
 --
 
-LOCK TABLES `channel_attachments` WRITE;
-/*!40000 ALTER TABLE `channel_attachments` DISABLE KEYS */;
-/*!40000 ALTER TABLE `channel_attachments` ENABLE KEYS */;
+LOCK TABLES `donations_categories` WRITE;
+/*!40000 ALTER TABLE `donations_categories` DISABLE KEYS */;
+INSERT INTO `donations_categories` VALUES (1,'Money'),(2,'Airtime'),(3,'Food'),(4,'Clothes'),(5,'NGOs'),(6,'Blankets'),(7,'Shelter'),(8,'Other');
+/*!40000 ALTER TABLE `donations_categories` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-17 21:28:58
+-- Dump completed on 2024-10-16 13:34:24

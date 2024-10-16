@@ -33,8 +33,12 @@ CREATE TABLE `podcasts` (
   `video_file` varchar(255) DEFAULT NULL,
   `like_count` int DEFAULT '0',
   `url` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `show_id` int DEFAULT NULL,
+  `dislike_count` int DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `show_id` (`show_id`),
+  CONSTRAINT `podcasts_ibfk_1` FOREIGN KEY (`show_id`) REFERENCES `podcast_shows` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +47,7 @@ CREATE TABLE `podcasts` (
 
 LOCK TABLES `podcasts` WRITE;
 /*!40000 ALTER TABLE `podcasts` DISABLE KEYS */;
-INSERT INTO `podcasts` VALUES (1,' AFM Cape Town','Nanga Amanxeba Esandleni, Nali Elinye Ephangweni @','https://www.youtube.com/embed/yXHAl6dkHAk','2024-07-28 15:55:11',NULL,NULL,NULL,0,NULL),(2,'Episode 2: The Evolution of Storytelling','Exploring how storytelling has changed over the years.','https://www.youtube.com/watch?v=3JZ_D3ELwOQ','2024-07-28 15:55:11',NULL,NULL,NULL,7,NULL);
+INSERT INTO `podcasts` VALUES (1,' AFM Cape Town','Nanga Amanxeba Esandleni, Nali Elinye Ephangweni @','https://www.youtube.com/embed/yXHAl6dkHAk','2024-07-28 15:55:11',NULL,NULL,NULL,123901,NULL,NULL,7),(2,'Episode 2: The Evolution of Storytelling','Exploring how storytelling has changed over the years.','https://www.youtube.com/watch?v=3JZ_D3ELwOQ','2024-07-28 15:55:11',NULL,NULL,NULL,778901,NULL,NULL,1),(70,'Muffin','Muffin','https://www.youtube.com/embed/u96rVINbAUI','2024-10-11 10:06:57',NULL,NULL,NULL,0,NULL,NULL,2),(72,'new episode','New one',NULL,'2024-10-14 16:54:22',NULL,NULL,'/uploads/podcasts/1728917662335.mp4',0,NULL,NULL,0);
 /*!40000 ALTER TABLE `podcasts` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +60,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-17 21:28:53
+-- Dump completed on 2024-10-16 13:34:24

@@ -16,32 +16,33 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `channel_messages`
+-- Table structure for table `notifications`
 --
 
-DROP TABLE IF EXISTS `channel_messages`;
+DROP TABLE IF EXISTS `notifications`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `channel_messages` (
+CREATE TABLE `notifications` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `channel_id` int NOT NULL,
-  `username` varchar(100) NOT NULL,
-  `message` text NOT NULL,
+  `user_id` int NOT NULL,
+  `discussion_id` int NOT NULL,
+  `comment_id` int DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `channel_id` (`channel_id`),
-  CONSTRAINT `channel_messages_ibfk_1` FOREIGN KEY (`channel_id`) REFERENCES `channels` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `discussion_id` (`discussion_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`discussion_id`) REFERENCES `discussions` (`id`),
+  CONSTRAINT `notifications_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `channel_messages`
+-- Dumping data for table `notifications`
 --
 
-LOCK TABLES `channel_messages` WRITE;
-/*!40000 ALTER TABLE `channel_messages` DISABLE KEYS */;
-INSERT INTO `channel_messages` VALUES (34,9,'Matt','Hi guys welcome to the Youth prayer channel','2024-09-08 18:49:47'),(35,9,'James','Awesome','2024-09-08 18:51:56');
-/*!40000 ALTER TABLE `channel_messages` ENABLE KEYS */;
+LOCK TABLES `notifications` WRITE;
+/*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-17 21:28:52
+-- Dump completed on 2024-10-16 13:34:21

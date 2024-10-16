@@ -30,8 +30,11 @@ CREATE TABLE `events` (
   `virtual_url` varchar(255) DEFAULT NULL,
   `notification_on` tinyint(1) DEFAULT '0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `ticket_url` varchar(255) DEFAULT NULL,
+  `trending` tinyint(1) DEFAULT '0',
+  `image_url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +43,7 @@ CREATE TABLE `events` (
 
 LOCK TABLES `events` WRITE;
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
-INSERT INTO `events` VALUES (1,'Sunday Service','Join us for our weekly service.','2024-08-18 10:33:00','https://example.com/sunday-service',0,'2024-08-18 08:05:40'),(2,'Youth Fellowship','A gathering for young adults.','2024-07-25 18:00:00','https://example.com/youth-fellowship',0,'2024-07-17 13:45:40'),(3,'Bible Study','Weekly study of scriptures.','2024-07-22 19:00:00','https://example.com/bible-study',0,'2024-07-17 13:45:40'),(4,'Prayer Meeting','Community prayer session.','2024-07-24 20:00:00',NULL,0,'2024-07-17 13:45:40'),(5,'Guest Speaker Event','Special event with guest speakers.','2024-07-28 14:00:00','https://example.com/guest-speaker-event',1,'2024-07-17 13:45:40'),(7,'m','kn','2024-08-18 10:37:00',NULL,0,'2024-08-18 08:38:08'),(8,'kcxnv','jnsd','2024-08-18 10:39:00',NULL,0,'2024-08-18 08:38:33'),(9,'sc','sdc','2024-08-18 10:42:00',NULL,0,'2024-08-18 08:41:07'),(10,'Test','Test','2024-09-03 12:19:00',NULL,0,'2024-08-29 12:10:21'),(11,'Myy','Myyy','2024-09-14 12:28:00',NULL,0,'2024-09-14 10:27:11'),(12,'dfg','fdga','2024-09-14 13:54:00',NULL,0,'2024-09-14 11:53:42');
+INSERT INTO `events` VALUES (1,'Sunday Service','Join us for our weekly service.','2024-08-18 10:33:00','https://example.com/sunday-service',0,'2024-08-18 08:05:40',NULL,0,NULL),(2,'Youth Fellowship','A gathering for young adults.','2024-07-25 18:00:00','https://example.com/youth-fellowship',0,'2024-07-17 13:45:40',NULL,0,NULL),(3,'Bible Study','Weekly study of scriptures.','2024-07-22 19:00:00','https://example.com/bible-study',0,'2024-07-17 13:45:40',NULL,0,NULL),(4,'Prayer Meeting','Community prayer session.','2024-07-24 20:00:00',NULL,0,'2024-07-17 13:45:40',NULL,0,NULL),(5,'Guest Speaker Event','Special event with guest speakers.','2024-07-28 14:00:00','https://example.com/guest-speaker-event',1,'2024-07-17 13:45:40',NULL,0,NULL),(13,'lkx',',kxs','2024-11-08 11:54:00',NULL,0,'2024-10-06 09:55:04',NULL,0,NULL),(14,'fd','df','2024-10-06 12:08:00',NULL,0,'2024-10-06 10:06:16',NULL,0,NULL),(15,'kdm','nked','2024-10-17 12:11:00',NULL,0,'2024-10-06 10:09:22',NULL,0,NULL),(16,'nvhjvm','  vbvjv ','2024-10-16 18:32:00',NULL,0,'2024-10-07 16:32:59',NULL,0,NULL),(17,'nvhjvm','  vbvjv ','2024-10-16 18:32:00',NULL,0,'2024-10-07 16:32:59',NULL,0,NULL),(18,'dfs','sdf','2024-10-09 13:44:00',NULL,0,'2024-10-09 11:44:32',NULL,0,NULL),(19,'ddc','sdc','2024-10-09 13:48:00',NULL,0,'2024-10-09 11:48:54',NULL,0,NULL),(20,'cake','cake','2024-10-09 13:56:00',NULL,0,'2024-10-09 11:56:40','https://claude.ai/chat/866fbdf1-3aba-4649-a74c-c638dab4b93b',0,NULL),(21,'muffins','muffins','2024-10-09 13:58:00','https://claude.ai/chat/866fbdf1-3aba-4649-a74c-c638dab4b93b',0,'2024-10-09 11:57:42','https://claude.ai/chat/866fbdf1-3aba-4649-a74c-c638dab4b93b',0,NULL),(22,'jnj','jsd','2024-10-10 16:14:00','https://claude.ai/chat/866fbdf1-3aba-4649-a74c-c638dab4b93b',0,'2024-10-10 14:15:08','https://claude.ai/chat/866fbdf1-3aba-4649-a74c-c638dab4b93b',0,NULL),(23,'fgfd','fdhsfd','2024-10-11 09:57:00',NULL,0,'2024-10-11 07:57:19','https://claude.ai/chat/866fbdf1-3aba-4649-a74c-c638dab4b93b',0,NULL),(24,'ghf','gf','2024-10-11 10:42:00',NULL,0,'2024-10-11 08:42:28','https://claude.ai/chat/866fbdf1-3aba-4649-a74c-c638dab4b93b',0,NULL);
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-17 21:28:57
+-- Dump completed on 2024-10-16 13:34:11

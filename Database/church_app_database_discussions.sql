@@ -16,28 +16,36 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `channels`
+-- Table structure for table `discussions`
 --
 
-DROP TABLE IF EXISTS `channels`;
+DROP TABLE IF EXISTS `discussions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `channels` (
+CREATE TABLE `discussions` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `username` varchar(255) NOT NULL,
+  `topic_id` int DEFAULT NULL,
+  `audio_path` varchar(255) DEFAULT NULL,
+  `media_type` enum('image','video') DEFAULT NULL,
+  `media_path` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `topic_id` (`topic_id`),
+  CONSTRAINT `discussions_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `discussion_topics` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `channels`
+-- Dumping data for table `discussions`
 --
 
-LOCK TABLES `channels` WRITE;
-/*!40000 ALTER TABLE `channels` DISABLE KEYS */;
-INSERT INTO `channels` VALUES (9,'Youth Prayer','2024-09-08 18:48:24');
-/*!40000 ALTER TABLE `channels` ENABLE KEYS */;
+LOCK TABLES `discussions` WRITE;
+/*!40000 ALTER TABLE `discussions` DISABLE KEYS */;
+INSERT INTO `discussions` VALUES (51,'Philippines to host 4th World Marketing Forum and 53rd National Marketing Conference','That not fair','2024-10-15 07:37:33','matt',NULL,NULL,NULL,NULL),(52,'Sara Sharif murder trial latest: Father’s 999 call revealed as schoolgirl found with ‘disturbing’ injuries','well','2024-10-15 07:38:35','matt',NULL,'uploads\\podcasts\\1728977915127.wav',NULL,NULL);
+/*!40000 ALTER TABLE `discussions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -49,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-17 21:28:51
+-- Dump completed on 2024-10-16 13:34:19
