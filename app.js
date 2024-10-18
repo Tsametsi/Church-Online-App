@@ -1439,6 +1439,18 @@ app.get('/api/prayer/requests/:pastorId', (req, res) => {
         res.json(results);
     });
 });
+// Get replies for a specific prayer request
+app.get('/api/prayer/replies/:requestId', (req, res) => {
+    const { requestId } = req.params;
+    const query = 'SELECT * FROM prayer_responses WHERE request_id = ?';
+    db.query(query, [requestId], (err, results) => {
+        if (err) {
+            console.error('Error querying replies:', err);
+            return res.status(500).send('Internal server error');
+        }
+        res.json(results);
+    });
+});
 
 // API endpoint to send a response to a prayer request
 app.post('/api/prayer/response', (req, res) => {

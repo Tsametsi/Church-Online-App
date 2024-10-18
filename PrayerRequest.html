@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h2>Submit Your Request</h2>
+        <h2>Submit Your Prayer Request</h2>
         <form id="prayerRequestForm">
             <div class="form-group">
                 <label for="pastorSelect">Select a Pastor</label>
@@ -25,12 +25,14 @@
         </form>
         <div id="successMessage" class="alert alert-success mt-3" style="display:none;"></div>
 
-        <h3 class="mt-5">Conversations with Pastors</h3>
+        <h3 class="mt-5">Prayer Requests</h3>
+        <ul id="requestList" class="list-group mt-3"></ul>
+
+        <h3 class="mt-5">Pastors</h3>
         <ul id="pastorList" class="list-group mt-3"></ul>
 
-        <div id="conversation" class="mt-3" style="display:none;">
+        <div id="conversation" style="display:none;">
             <h4 id="pastorName"></h4>
-            <ul id="requestList" class="list-group"></ul>
         </div>
     </div>
 

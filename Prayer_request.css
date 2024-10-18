@@ -1,11 +1,208 @@
 body {
-    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
 }
 
 h2 {
+    text-align: center;
+    color: #333;
+}
+
+.form-group {
     margin-bottom: 20px;
 }
 
+label {
+    font-weight: bold;
+    color: #555;
+}
+
+select, textarea {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #5cb85c;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #4cae4c;
+}
+
 .alert {
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 4px;
     display: none;
+}
+
+#successMessage {
+    background-color: #dff0d8;
+    color: #3c763d;
+}
+
+#requestList {
+    list-style-type: none;
+    padding: 0;
+}
+
+.list-group-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 4px;
+    position: relative;
+}
+
+.list-group-item:hover {
+    background-color: #f1f1f1;
+}
+
+.pastor-item {
+    cursor: pointer;
+}
+
+.pastor-item.active {
+    background-color: #5bc0de;
+    color: white;
+}
+
+.zoom-button {
+    background-color: #428bca;
+    color: white;
+    margin-top: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 10px;
+    transition: background-color 0.3s;
+}
+
+.zoom-button:hover {
+    background-color: #3276b1;
+}
+
+/* Icons */
+.icon {
+    margin-right: 8px;
+}
+
+/* Response input field */
+.response-input {
+    display: none;
+    margin-top: 10px;
+}
+
+.response-message {
+    width: calc(100% - 22px);
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.unread {
+    font-weight: bold;
+    color: #d9534f; /* Red color to indicate unread */
+}
+
+.reply-button {
+    background-color: #f0ad4e; /* Warning color for reply button */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.reply-button:hover {
+    background-color: #ec971f;
+}
+
+.reply-list {
+    margin-top: 10px;
+    padding-left: 20px;
+    display: none; /* Initially hide replies */
+}
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+}
+
+h2, h3, h4 {
+    color: #343a40;
+}
+
+.list-group-item {
+    transition: background-color 0.3s;
+}
+
+.list-group-item.unread {
+    background-color: #e2e6ea; /* Light grey for unread requests */
+    border-left: 5px solid #007bff; /* Blue left border for emphasis */
+}
+
+.list-group-item:hover {
+    background-color: #f1f1f1;
+}
+
+.btn-link {
+    color: #007bff;
+}
+
+.reply-input {
+    margin-top: 10px;
+}
+
+.response-list {
+    margin-top: 10px;
+    padding-left: 20px; /* Indent responses */
+}
+
+.response-list li {
+    background-color: #d1ecf1; /* Light blue for responses */
+    border: 1px solid #bee5eb;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+textarea {
+    resize: none; /* Prevent resizing of the textarea */
+}
+
+.reply-button {
+    margin-top: 5px;
+}
+
+.show-replies {
+    cursor: pointer;
+    color: #007bff;
+}
+.unread {
+    font-weight: bold;
+    background-color: #f9f9f9; /* Light background for unread items */
 }

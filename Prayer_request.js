@@ -44,17 +44,20 @@ $(document).ready(function() {
         $.get(`/api/prayer/requests/${pastorId}`, function(requests) {
             $('#requestList').empty();
             requests.forEach(request => {
+                const unreadClass = request.viewed ? '' : 'unread';
                 $('#requestList').append(`
-                    <li class="list-group-item">
+                    <li class="list-group-item ${unreadClass}">
                         <strong>From:</strong> ${request.username} <br>
                         <strong>Request:</strong> ${request.message} <br>
                         <small>Submitted at: ${request.created_at}</small>
                         <button class="btn btn-link reply-button" data-request-id="${request.id}">Reply</button>
+                        <button class="btn btn-primary call-button" data-username="${request.username}">Call</button>
+                        <button class="btn btn-link show-replies" data-request-id="${request.id}">Show Replies</button>
                         <div class="reply-input" style="display:none; margin-top: 10px;">
                             <textarea class="form-control responseMessage" rows="2" placeholder="Type your response..." required></textarea>
                             <button class="btn btn-primary send-response" data-request-id="${request.id}">Send</button>
                         </div>
-                        <ul class="response-list"></ul>
+                        <ul class="response-list" style="display:none;"></ul>
                     </li>
                 `);
             });
@@ -64,6 +67,29 @@ $(document).ready(function() {
     // Show the reply input field when the Reply button is clicked
     $('#requestList').on('click', '.reply-button', function() {
         $(this).siblings('.reply-input').toggle(); // Show or hide the reply input
+    });
+
+    // Show replies when the Show Replies button is clicked
+    $('#requestList').on('click', '.show-replies', function() {
+        const requestId = $(this).data('request-id');
+        const responseList = $(this).siblings('.response-list');
+        responseList.toggle(); // Show or hide replies
+
+        if (responseList.is(':visible')) {
+            // Fetch replies for the specific request
+            $.get(`/api/prayer/replies/${requestId}`, function(replies) {
+                responseList.empty(); // Clear existing replies
+                replies.forEach(reply => {
+                    const replyHtml = `
+                        <li class="list-group-item ml-4">
+                            <strong>${reply.pastor_name}:</strong> ${reply.message} <br>
+                            <small>Responded at: ${reply.created_at}</small>
+                        </li>
+                    `;
+                    responseList.append(replyHtml);
+                });
+            });
+        }
     });
 
     // Send response to a prayer request
@@ -79,22 +105,32 @@ $(document).ready(function() {
 
         $.post('/api/prayer/response', { requestId, message: responseMessage, pastorName })
             .done(function() {
-                // Clear the input and hide the reply section
                 $(this).siblings('.responseMessage').val('');
                 $(this).parent().hide();
 
-                // Append the response to the corresponding request in the list
                 const responseHtml = `
-                    <li class="list-group-item ml-4">
+                    <li class="list-group-item ml-4 unread">
                         <strong>${pastorName}:</strong> ${responseMessage} <br>
                         <small>Responded at: ${new Date().toLocaleString()}</small>
                     </li>
                 `;
                 $(`button[data-request-id="${requestId}"]`).siblings('.response-list').append(responseHtml);
-            }.bind(this)) // Bind this to access the context
+            }.bind(this))
             .fail(function(jqXHR) {
                 console.error('Failed to send response:', { requestId, message: responseMessage });
                 alert('Error sending response.');
             });
     });
+
+    // Handle click on the Call button
+    $('#requestList').on('click', '.call-button', function() {
+        const username = $(this).data('username');
+        initiateCall(username);
+    });
+
+    // Example function to initiate a call
+    function initiateCall(username) {
+        alert(`Initiating call to ${username}...`);
+        // Implement your actual calling logic here (e.g., WebRTC, Twilio)
+    }
 });
