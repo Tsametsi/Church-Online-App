@@ -34,9 +34,20 @@ async function fetchPodcasts() {
                 <button onclick="likePodcast(${podcast.id})">Like <span id="like-count-${podcast.id}">${podcast.like_count}</span></button>
                 ${unlikeButton}
                 <button onclick="deletePodcast(${podcast.id})">Delete</button>
+                
+                <button id="toggle-comments-${podcast.id}" onclick="toggleComments(${podcast.id})">Show Comments</button>
+                <div id="comments-container-${podcast.id}" class="comments-container" style="display: none;">
+                    <div class="comments">
+                        <h4>Comments:</h4>
+                        <div id="comments-${podcast.id}" class="comments-list"></div>
+                        <input type="text" id="comment-input-${podcast.id}" placeholder="Add a comment" />
+                        <button onclick="postComment(${podcast.id})">Comment</button>
+                    </div>
+                </div>
             `;
 
             episodeGrid.appendChild(episode);
+            fetchComments(podcast.id); // Fetch comments for each podcast
 
             // Populate episode selection for grouping
             const checkbox = document.createElement('input');
@@ -109,6 +120,62 @@ async function likePodcast(podcastId) {
     } catch (error) {
         console.error('Error liking podcast:', error);
         alert('Error liking podcast');
+    }
+}
+
+// Post a comment
+async function postComment(podcastId) {
+    const commentInput = document.getElementById(`comment-input-${podcastId}`);
+    const commentText = commentInput.value.trim();
+    if (!commentText) {
+        alert('Comment cannot be empty.');
+        return; // Stop if the comment is empty
+    }
+
+    try {
+        const response = await fetch(`/api/podcasts/${podcastId}/comments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                user_id: 1, // Replace with actual user ID
+                comment_text: commentText
+            })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            commentInput.value = ''; // Clear the input
+            fetchComments(podcastId); // Refresh comments
+        } else {
+            alert(result.message);
+        }
+    } catch (error) {
+        console.error('Error posting comment:', error);
+        alert('Error posting comment');
+    }
+}
+// Fetch comments for a podcast
+async function fetchComments(podcastId) {
+    try {
+        const response = await fetch(`/api/podcasts/${podcastId}/comments`);
+        if (!response.ok) {
+            console.error(`HTTP error! Status: ${response.status}`);
+            return; // Stop execution if response is not okay
+        }
+        const comments = await response.json();
+        const commentsDiv = document.getElementById(`comments-${podcastId}`);
+        commentsDiv.innerHTML = ''; // Clear existing comments
+
+        comments.forEach(comment => {
+            const commentElement = document.createElement('div');
+            commentElement.classList.add('comment');
+            commentElement.innerHTML = `<strong>${comment.username}</strong>: ${comment.comment_text}`;
+            commentsDiv.appendChild(commentElement);
+        });
+    } catch (error) {
+        console.error('Error fetching comments:', error);
     }
 }
 
@@ -187,77 +254,70 @@ document.getElementById('addPodcastLink').onsubmit = async (e) => {
 
 // Function to convert YouTube URL to embed format
 function convertToEmbedUrl(url) {
-    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^&\n]{11})/;
+    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const match = url.match(regex);
-    if (match && match[1]) {
-        return `https://www.youtube.com/embed/${match[1]}`;
-    } else {
-        return null; // Return null for invalid URLs
+    return match ? `https://www.youtube.com/embed/${match[1]}` : null;
+}
+// Toggle visibility of sections
+document.getElementById('toggleUpload').addEventListener('click', () => {
+    const uploadSection = document.getElementById('uploadSection');
+    const linkSection = document.getElementById('linkSection');
+    const groupSection = document.getElementById('groupSection');
+
+    uploadSection.style.display = uploadSection.style.display === 'none' ? 'block' : 'none';
+    linkSection.style.display = 'none'; // Hide other sections
+    groupSection.style.display = 'none';
+});
+
+document.getElementById('toggleLink').addEventListener('click', () => {
+    const uploadSection = document.getElementById('uploadSection');
+    const linkSection = document.getElementById('linkSection');
+    const groupSection = document.getElementById('groupSection');
+
+    linkSection.style.display = linkSection.style.display === 'none' ? 'block' : 'none';
+    uploadSection.style.display = 'none'; // Hide other sections
+    groupSection.style.display = 'none';
+});
+
+document.getElementById('toggleGroups').addEventListener('click', () => {
+    const uploadSection = document.getElementById('uploadSection');
+    const linkSection = document.getElementById('linkSection');
+    const groupSection = document.getElementById('groupSection');
+
+    groupSection.style.display = groupSection.style.display === 'none' ? 'block' : 'none';
+    uploadSection.style.display = 'none'; // Hide other sections
+    linkSection.style.display = 'none';
+});
+function toggleComments(podcastId) {
+    const commentsContainer = document.getElementById(`comments-container-${podcastId}`);
+    const isVisible = commentsContainer.style.display === 'block';
+    
+    commentsContainer.style.display = isVisible ? 'none' : 'block';
+    if (!isVisible) {
+        commentsContainer.scrollTop = 0; // Scroll to the top when opened
     }
 }
-
-// Group form submission
-document.getElementById('groupForm').onsubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    try {
-        const response = await fetch('/api/groups', {
-            method: 'POST',
-            body: JSON.stringify({
-                groupName: formData.get('groupName'),
-                episodes: Array.from(formData.getAll('episode'))
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const result = await response.json();
-        alert(result.message);
-        fetchGroups(); // Refresh the group list
-        e.target.reset(); // Reset the form
-    } catch (error) {
-        console.error('Error creating group:', error);
-        alert('Error creating group');
-    }
-};
-
-// Toggle display sections
-document.getElementById('toggleUpload').onclick = () => {
-    document.getElementById('uploadSection').style.display = 'block';
-    document.getElementById('linkSection').style.display = 'none';
-    document.getElementById('groupSection').style.display = 'none';
-    fetchPodcasts(); // Fetch and display podcasts
-};
-
-document.getElementById('toggleLink').onclick = () => {
-    document.getElementById('uploadSection').style.display = 'none';
-    document.getElementById('linkSection').style.display = 'block';
-    document.getElementById('groupSection').style.display = 'none';
-};
-
-document.getElementById('toggleGroups').onclick = () => {
-    document.getElementById('uploadSection').style.display = 'none';
-    document.getElementById('linkSection').style.display = 'none';
-    document.getElementById('groupSection').style.display = 'block';
-    fetchGroups(); // Fetch and display groups
-};
-
-// Initialize the podcast and group data
-fetchPodcasts(); // Initial fetch for podcasts
-fetchGroups(); // Initial fetch for groups
-
-// Search functionality
-document.querySelector('.search-bar').addEventListener('input', (event) => {
-    const query = event.target.value.toLowerCase();
-    const episodes = document.querySelectorAll('#episodeGrid .episode');
+// Add this function to handle the search functionality
+function searchPodcasts() {
+    const searchTerm = document.querySelector('.search-bar').value.toLowerCase(); // Get the search term
+    const episodes = document.querySelectorAll('.episode'); // Select all podcast episodes
 
     episodes.forEach(episode => {
-        const title = episode.querySelector('h3').textContent.toLowerCase();
-        const description = episode.querySelector('p').textContent.toLowerCase();
-        if (title.includes(query) || description.includes(query)) {
-            episode.style.display = 'block';
+        const title = episode.querySelector('h3').innerText.toLowerCase(); // Get the title of the podcast
+        const description = episode.querySelector('p').innerText.toLowerCase(); // Get the description of the podcast
+
+        // Check if the title or description includes the search term
+        if (title.includes(searchTerm) || description.includes(searchTerm)) {
+            episode.style.display = 'block'; // Show the episode
         } else {
-            episode.style.display = 'none';
+            episode.style.display = 'none'; // Hide the episode
         }
     });
-});
+}
+
+// Add event listener to the search bar
+document.querySelector('.search-bar').addEventListener('input', searchPodcasts);
+
+// Initialize the application
+fetchPodcasts();
+fetchGroups();

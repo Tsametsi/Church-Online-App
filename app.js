@@ -981,33 +981,42 @@ app.delete('/api/podcasts/:id', (req, res) => {
     });
 });
 
-// API endpoint to fetch comments for a podcast
+// API endpoint to get podcast comments
 app.get('/api/podcasts/:id/comments', (req, res) => {
     const podcastId = req.params.id;
-    const sql = 'SELECT * FROM comments WHERE podcast_id = ? ORDER BY comment_date DESC';
-    connection.query(sql, [podcastId], (err, results) => {
-        if (err) {
-            console.error('Error querying comments:', err);
-            return res.status(500).send('Internal server error');
+    db.query(
+        `SELECT pc.*, u.username FROM podcast_comments pc
+         JOIN logged_in_users u ON pc.user_id = u.id
+         WHERE pc.podcast_id = ?`,
+        [podcastId],
+        (error, results) => {
+            if (error) {
+                console.error('Error querying comments:', error);
+                return res.status(500).send('Error fetching comments');
+            }
+            res.json(results);
         }
-        res.json(results);
-    });
+    );
 });
 
-// API endpoint to add a comment to a podcast
+// API endpoint to add a comment
 app.post('/api/podcasts/:id/comments', (req, res) => {
     const podcastId = req.params.id;
-    const { user_name, comment_text } = req.body;
+    const { user_id, comment_text, emoji } = req.body;
 
-    const sql = 'INSERT INTO comments (podcast_id, user_name, comment_text) VALUES (?, ?, ?)';
-    connection.query(sql, [podcastId, user_name, comment_text], (err) => {
-        if (err) {
-            console.error('Error inserting comment:', err);
-            return res.status(500).send('Internal server error');
+    db.query(
+        'INSERT INTO podcast_comments (podcast_id, user_id, comment_text, emoji, created_at) VALUES (?, ?, ?, ?, NOW())',
+        [podcastId, user_id, comment_text, emoji],
+        (error, results) => {
+            if (error) {
+                console.error('Error inserting comment:', error);
+                return res.status(500).send('Error adding comment');
+            }
+            res.status(201).send({ message: 'Comment added successfully', commentId: results.insertId });
         }
-        res.status(201).json({ success: true, message: 'Comment added successfully!' });
-    });
+    );
 });
+
 
 // Endpoint to get topics
 app.get('/api/topics', (req, res) => {
