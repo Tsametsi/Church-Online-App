@@ -656,6 +656,17 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage }); // Define the upload variable here
 
+// Set up storage for events
+// Set up storage for events
+const mediaStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/events/'); // Ensure this directory exists
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
+    }
+});
+const uploadMedia = multer({ storage: mediaStorage }); // Define upload for events
 
 // API endpoint to fetch all podcasts
 app.get('/api/podcasts', (req, res) => {
@@ -1334,80 +1345,49 @@ app.get('/get_reviews', (req, res) => {
 
 // API endpoints
 
-// 1. Create a new event
-app.post('/api/events/upload', upload.single('image'), (req, res) => {
+
+// Handle event creation
+// Handle event creation
+// Handle event creation
+app.post('/upload-event', uploadMedia.array('media', 10), (req, res) => {
     const { title, description, event_date, virtual_url, ticket_url } = req.body;
-    const image_url = req.file ? req.file.path : null; // Get uploaded image path
+    const media = req.files ? req.files.map(file => ({ url: `/uploads/events/${file.filename}` })) : [];
 
-    if (!title || !description || !event_date) {
-        return res.status(400).json({ success: false, message: 'Title, description, and event date are required.' });
-    }
-
-    const query = 'INSERT INTO events (title, description, event_date, virtual_url, ticket_url, image_url, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())';
-    db.query(query, [title, description, event_date, virtual_url || null, ticket_url || null, image_url], (err, results) => {
-        if (err) {
-            console.error('Error inserting event:', err);
-            return res.status(500).json({ success: false, message: 'Server error' });
-        }
-        res.json({ success: true });
+    const sql = `INSERT INTO events (title, description, event_date, virtual_url, ticket_url, media, created_at) 
+                 VALUES (?, ?, ?, ?, ?, ?, NOW())`;
+    db.query(sql, [title, description, event_date, virtual_url, ticket_url, JSON.stringify(media)], (err, result) => {
+        if (err) throw err; // Handle error if any
+        res.redirect('/events.html'); // Redirect to events page after creation
     });
 });
 
-// 2. Fetch all events
-app.get('/api/events', (req, res) => {
-    const query = 'SELECT * FROM events';
-    db.query(query, (err, results) => {
-        if (err) {
-            console.error('Error querying events:', err);
-            return res.status(500).send('Internal server error');
-        }
+// Fetch all events
+app.get('/events', (req, res) => {
+    const sql = 'SELECT * FROM events ORDER BY event_date ASC';
+    db.query(sql, (err, results) => {
+        if (err) throw err;
+        results = results.map(event => ({
+            ...event,
+            media: event.media ? JSON.parse(event.media) : []
+        }));
         res.json(results);
     });
 });
 
-// 3. Notify users for a specific event (basic example)
-app.post('/api/events/:id/notify', (req, res) => {
-    const eventId = req.params.id;
-    const { email } = req.body;
 
-    if (!email) {
-        return res.status(400).json({ success: false, message: 'Email is required.' });
-    }
-
-    // Here you would typically save the notification preference to a database or send an email
-    console.log(`Notify ${email} for event ID ${eventId}`);
-    res.json({ success: true, message: 'Notification set up successfully.' });
-});
-
-// 4. Update an event (optional)
-app.put('/api/events/:id', upload.single('image'), (req, res) => {
-    const eventId = req.params.id;
-    const { title, description, event_date, virtual_url, ticket_url } = req.body;
-    const image_url = req.file ? req.file.path : null;
-
-    const query = 'UPDATE events SET title = ?, description = ?, event_date = ?, virtual_url = ?, ticket_url = ?, image_url = ? WHERE id = ?';
-    db.query(query, [title, description, event_date, virtual_url, ticket_url, image_url, eventId], (err, results) => {
-        if (err) {
-            console.error('Error updating event:', err);
-            return res.status(500).json({ success: false, message: 'Server error' });
-        }
-        res.json({ success: true });
+// Fetch all events
+app.get('/events', (req, res) => {
+    const sql = 'SELECT * FROM events ORDER BY event_date ASC';
+    db.query(sql, (err, results) => {
+        if (err) throw err;
+        results = results.map(event => ({
+            ...event,
+            media: event.media ? JSON.parse(event.media) : []
+        }));
+        res.json(results);
     });
 });
 
-// 5. Delete an event (optional)
-app.delete('/api/events/:id', (req, res) => {
-    const eventId = req.params.id;
-
-    const query = 'DELETE FROM events WHERE id = ?';
-    db.query(query, [eventId], (err, results) => {
-        if (err) {
-            console.error('Error deleting event:', err);
-            return res.status(500).json({ success: false, message: 'Server error' });
-        }
-        res.json({ success: true, message: 'Event deleted successfully.' });
-    });
-});
 // API endpoint to fetch pastors
 app.get('/api/pastors', (req, res) => {
     const query = 'SELECT * FROM logged_in_users WHERE role = "Pastor"';
@@ -1503,6 +1483,14 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         console.log('A user disconnected');
+    });
+});
+//////Events advertisement section at the top
+app.get('/advertisements', (req, res) => {
+    const sql = 'SELECT * FROM advertisements';
+    db.query(sql, (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
     });
 });
 

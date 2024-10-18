@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/Events.css">
 </head>
 <body>
-    <a href="javascript:history.back()" class="back-button">←Back</a>
+    <a href="javascript:history.back()" class="back-button">← Back</a>
 
     <header>
         <h1>Upcoming Church Events</h1>
@@ -18,41 +18,68 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Add a New Event</h2>
+            <p>Welcome to the event creation page! Please provide the necessary details to ensure your event is well represented and easily discoverable by our community. The information you provide will help us promote your event effectively.</p>
             <form id="event-form" action="/upload-event" method="post" enctype="multipart/form-data">
-                <label for="title">Title:</label>
-                <input type="text" id="title" name="title" required><br>
+                <label for="title">Event Title:</label>
+                <input type="text" id="title" name="title" required placeholder="Enter the event title"><br>
             
-                <label for="description">Description:</label>
-                <textarea id="description" name="description" required></textarea><br>
+                <label for="description">Event Description:</label>
+                <textarea id="description" name="description" required placeholder="Describe the event in detail. Include any important information such as guest speakers, activities, and themes."></textarea><br>
             
                 <label for="event_date">Event Date and Time:</label>
                 <input type="datetime-local" id="event_date" name="event_date" required><br>
             
                 <label for="virtual_url">Virtual URL (Optional):</label>
-                <input type="url" id="virtual_url" name="virtual_url"><br>
+                <input type="url" id="virtual_url" name="virtual_url" placeholder="Link to the virtual event (if applicable)"><br>
             
                 <label for="ticket_url">Ticket Purchase URL (Optional):</label>
-                <input type="url" id="ticket_url" name="ticket_url"><br>
+                <input type="url" id="ticket_url" name="ticket_url" placeholder="Link to purchase tickets or register"><br>
             
-                <label for="image">Event Image (Optional):</label>
-                <input type="file" id="image" name="image" accept="image/*"><br>
+                <label for="media">Upload Event Media (Images and Videos):</label>
+                <input type="file" id="media" name="media" accept="image/*,video/*" multiple required><br>
+                <p>Select up to 10 media items to showcase your event. Images and videos can enhance your event description and attract more attendees!</p>
+                <div id="media-preview" class="media-display"></div>
                 
                 <button type="submit">Upload Event</button>
             </form>
-            
         </div>
     </section>
 
     <h2>Trending Events</h2>
-    <div id="trending-events-container">
-        <!-- Trending events will be dynamically added here -->
-    </div>
+    <div id="trending-events-container"></div>
 
+    <section id="advertisement-section">
+        <h2>User Advertisements</h2>
+        <p>We believe in supporting our community members. If you'd like to promote your services, products, or upcoming events, we provide a dedicated space here for you to showcase your media! This is a fantastic opportunity to reach a wider audience.</p>
+        <p>Please contact us to learn more about how you can advertise your offerings effectively on our platform. We can help you get the word out!</p>
+        <div class="contact-info">
+            <p><strong>Contact for Advertisements:</strong></p>
+            <p>Email: <a href="mailto:advertise@churchcommunity.com">advertise@churchcommunity.com</a></p>
+            <p>Phone: <a href="tel:+1234567890">+1 (234) 567-890</a></p>
+        </div>
+        <div id="advertisement-slider" class="slider">
+            <div class="slides">
+                <!-- Advertisements will be dynamically added here -->
+            </div>
+            <div class="dots" id="advertisement-dots"></div>
+        </div>
+    </section>
+    
     <h2>All Events</h2>
-    <div id="events-container">
-        <!-- Events will be dynamically added here -->
+    <div id="events-container"></div>
+    <div id="full-view-modal" class="modal">
+        <span class="close" id="close-full-view">&times;</span>
+        <img id="full-view-image" class="modal-content" alt="Full View" style="display: none;">
+        <video id="full-view-video" class="modal-content" controls style="display: none;"></video>
+        <div class="dots" id="dots-container"></div>
     </div>
-
+    
+    <div id="virtual-event-modal" class="modal">
+        <span class="close" onclick="document.getElementById('virtual-event-modal').style.display='none'">&times;</span>
+        <iframe id="virtual-event-frame" style="width: 100%; height: 500px;" frameborder="0"></iframe>
+    </div>
+    
     <script src="events.js"></script>
+    <script src="advertisement.js"></script>
 </body>
 </html>
