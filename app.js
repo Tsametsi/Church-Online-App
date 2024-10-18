@@ -643,7 +643,7 @@ io.on('connection', (socket) => {
     });
 });
 
-
+///////////////////Podcasts
 // Set up storage for podcasts
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -1038,7 +1038,7 @@ app.get('/api/podcasts/:id/comments', (req, res) => {
     );
 });
 
-
+///////Topics
 
 // Endpoint to get topics
 app.get('/api/topics', (req, res) => {
@@ -1090,10 +1090,7 @@ app.get('/api/discussions', (req, res) => {
         res.json(results);
     });
 });
-
-// Create new discussion
-// Create new discussion
-
+////////////////Discussions
 // Create new discussion with audio upload
 app.post('/api/discussions', upload.single('audio'), (req, res) => {
     const { title, content, username } = req.body;
@@ -1138,7 +1135,7 @@ app.get('/api/discussions/:id/comments', (req, res) => {
 
 
 
-// Like a comment
+// Like a Discussions comment
 app.post('/api/comments/:id/like', (req, res) => {
     const commentId = req.params.id;
     const userId = req.body.userId; // This should come from the user's session or token
@@ -1148,7 +1145,7 @@ app.post('/api/comments/:id/like', (req, res) => {
         res.status(201).json({ message: 'Liked successfully' });
     });
 });
-// Get replies for a comment
+// Get replies for a Discussions comment
 app.get('/api/comments/:id/replies', (req, res) => {
     const commentId = req.params.id;
     db.query('SELECT * FROM discussion_comment_replies WHERE comment_id = ?', [commentId], (err, results) => {
