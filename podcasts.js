@@ -33,6 +33,8 @@ async function fetchPodcasts() {
                 <br>
                 <button onclick="likePodcast(${podcast.id})">Like <span id="like-count-${podcast.id}">${podcast.like_count}</span></button>
                 ${unlikeButton}
+                    <button onclick="dislikePodcast(${podcast.id})">Dislike <span id="dislike-count-${podcast.id}">${podcast.dislike_count}</span></button>
+                ${unlikeButton}
                 <button onclick="deletePodcast(${podcast.id})">Delete</button>
                 
                 <button id="toggle-comments-${podcast.id}" onclick="toggleComments(${podcast.id})">Show Comments</button>
@@ -98,6 +100,28 @@ async function fetchGroups() {
         console.error('Error fetching groups:', error);
     }
 }
+async function dislikePodcast(podcastId) {
+    try {
+        const response = await fetch(`/api/podcasts/${podcastId}/dislike`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ user_id: 1 }) // Replace with actual user ID
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            // Update the dislike count on the page
+            document.getElementById(`dislike-count-${podcastId}`).textContent = result.new_dislike_count;
+        } else {
+            alert(result.message); // Show message if user has already disliked
+        }
+    } catch (error) {
+        console.error('Error disliking podcast:', error);
+        alert('Error disliking podcast');
+    }
+}
 
 // Like a podcast
 async function likePodcast(podcastId) {
@@ -122,14 +146,16 @@ async function likePodcast(podcastId) {
         alert('Error liking podcast');
     }
 }
-
-// Post a comment
+//Post comment
 async function postComment(podcastId) {
     const commentInput = document.getElementById(`comment-input-${podcastId}`);
     const commentText = commentInput.value.trim();
+    const emoji = ''; // Assume you have a way to get the emoji if needed
+    const username = localStorage.getItem('username'); // Get username from local storage
+
     if (!commentText) {
         alert('Comment cannot be empty.');
-        return; // Stop if the comment is empty
+        return;
     }
 
     try {
@@ -140,12 +166,14 @@ async function postComment(podcastId) {
             },
             body: JSON.stringify({
                 user_id: 1, // Replace with actual user ID
-                comment_text: commentText
+                comment_text: commentText,
+                emoji: emoji, // Add emoji if needed
+                username: username // Include the username
             })
         });
 
         const result = await response.json();
-        if (result.success) {
+        if (result.message) {
             commentInput.value = ''; // Clear the input
             fetchComments(podcastId); // Refresh comments
         } else {
@@ -156,13 +184,12 @@ async function postComment(podcastId) {
         alert('Error posting comment');
     }
 }
-// Fetch comments for a podcast
 async function fetchComments(podcastId) {
     try {
         const response = await fetch(`/api/podcasts/${podcastId}/comments`);
         if (!response.ok) {
             console.error(`HTTP error! Status: ${response.status}`);
-            return; // Stop execution if response is not okay
+            return;
         }
         const comments = await response.json();
         const commentsDiv = document.getElementById(`comments-${podcastId}`);
@@ -171,13 +198,14 @@ async function fetchComments(podcastId) {
         comments.forEach(comment => {
             const commentElement = document.createElement('div');
             commentElement.classList.add('comment');
-            commentElement.innerHTML = `<strong>${comment.username}</strong>: ${comment.comment_text}`;
+            commentElement.innerHTML = `<strong>${comment.username}</strong>: ${comment.comment_text} ${comment.emoji || ''}`;
             commentsDiv.appendChild(commentElement);
         });
     } catch (error) {
         console.error('Error fetching comments:', error);
     }
 }
+
 
 // Delete a podcast
 async function deletePodcast(podcastId) {

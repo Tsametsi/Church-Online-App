@@ -742,6 +742,45 @@ app.post('/api/podcasts/:id/like', (req, res) => {
         }
     });
 });
+// Podcast dislike
+app.post('/api/podcasts/:id/dislike', (req, res) => {
+    const podcastId = req.params.id;
+    const userId = req.body.user_id; // Assume user ID is sent in the request body
+
+    // Check if the user has already disliked the podcast
+    const checkDislikeSql = 'SELECT * FROM podcast_comments WHERE user_id = ? AND podcast_id = ? AND emoji = "dislike"';
+    db.query(checkDislikeSql, [userId, podcastId], (err, results) => {
+        if (err) {
+            console.error('Error checking dislike:', err);
+            return res.status(500).send('Internal server error');
+        }
+
+        // If the user has not disliked the podcast yet, increment the dislike count
+        if (results.length === 0) {
+            const updateDislikeCountSql = 'UPDATE podcasts SET dislike_count = dislike_count + 1 WHERE id = ?';
+            db.query(updateDislikeCountSql, [podcastId], (err) => {
+                if (err) {
+                    console.error('Error updating dislike count:', err);
+                    return res.status(500).send('Internal server error');
+                }
+
+                // Optionally, add a record to podcast_comments to track the dislike
+                const insertCommentSql = 'INSERT INTO podcast_comments (podcast_id, user_id, comment_text, emoji, created_at) VALUES (?, ?, ?, "dislike", NOW())';
+                db.query(insertCommentSql, [podcastId, userId, 'User disliked this podcast.'], (err) => {
+                    if (err) {
+                        console.error('Error inserting dislike record:', err);
+                        return res.status(500).send('Internal server error');
+                    }
+                    res.json({ success: true, message: 'Disliked the podcast!', new_dislike_count: results.length + 1 });
+                });
+            });
+        } else {
+            // User has already disliked the podcast
+            res.status(400).json({ success: false, message: 'You have already disliked this podcast.' });
+        }
+    });
+});
+
 //Unlike podcast
 app.delete('/api/podcasts/:id/unlike', (req, res) => {
     const podcastId = req.params.id;
@@ -999,23 +1038,6 @@ app.get('/api/podcasts/:id/comments', (req, res) => {
     );
 });
 
-// API endpoint to add a comment
-app.post('/api/podcasts/:id/comments', (req, res) => {
-    const podcastId = req.params.id;
-    const { user_id, comment_text, emoji } = req.body;
-
-    db.query(
-        'INSERT INTO podcast_comments (podcast_id, user_id, comment_text, emoji, created_at) VALUES (?, ?, ?, ?, NOW())',
-        [podcastId, user_id, comment_text, emoji],
-        (error, results) => {
-            if (error) {
-                console.error('Error inserting comment:', error);
-                return res.status(500).send('Error adding comment');
-            }
-            res.status(201).send({ message: 'Comment added successfully', commentId: results.insertId });
-        }
-    );
-});
 
 
 // Endpoint to get topics
