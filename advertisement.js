@@ -67,6 +67,12 @@ document.addEventListener('DOMContentLoaded', () => {
         playCurrentMedia();
     }
 
+    function goToPreviousSlide() {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length; // Move to the previous index
+        updateSlide();
+        playCurrentMedia();
+    }
+
     function playCurrentMedia() {
         const currentMedia = slides[currentIndex];
         const video = document.querySelectorAll('video')[currentIndex];
@@ -91,4 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
             dot.classList.toggle('active', index === currentIndex);
         });
     }
+
+    // Event listeners for navigation buttons
+    document.getElementById('prev-slide').onclick = goToPreviousSlide;
+    document.getElementById('next-slide').onclick = goToNextSlide;
 });

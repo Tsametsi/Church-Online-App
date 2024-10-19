@@ -69,8 +69,8 @@ button:hover {
 }
 
 #successMessage {
-    background-color: rgba(0, 255, 0, 0.2); /* Light green for success */
-    color: #3c763d; /* Dark green text */
+    background-color: rgba(0, 144, 211, 0.2); /* Light green for success */
+    color: #e5ece5; /* Dark green text */
 }
 
 /* Request List Styles */
@@ -140,7 +140,7 @@ button:hover {
 
 .unread {
     font-weight: bold;
-    color: #007bff; /* Blue for unread messages */
+    color: #4935b6; /* Blue for unread messages */
 }
 
 /* Reply Button */
@@ -172,8 +172,8 @@ button:hover {
 }
 
 .response-list li {
-    background-color: rgba(0, 255, 255, 0.2); /* Light blue for responses */
-    border: 1px solid rgba(0, 255, 255, 0.4); /* Light blue border */
+    background-color: rgba(42, 105, 241, 0.2); /* Light blue for responses */
+    border: 1px solid rgba(0, 0, 0, 0.4); /* Light blue border */
     border-radius: 5px;
     padding: 10px;
 }

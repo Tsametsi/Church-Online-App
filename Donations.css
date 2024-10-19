@@ -327,9 +327,12 @@ blockquote {
 }
 
 .star.selected {
-    color: rgb(47, 65, 163);
+    color: rgb(235, 252, 6);
 }
+.star-rating.hover {
 
+color: yellow;
+}
 textarea {
     width: 100%;
     height: 100px;

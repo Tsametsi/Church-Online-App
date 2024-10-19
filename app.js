@@ -55,6 +55,8 @@ app.get('/Events.html', (req, res) => res.sendFile(path.join(__dirname, 'Events.
 app.get('/Donations.html', (req, res) => res.sendFile(path.join(__dirname, 'Donations.html')));
 app.get('/Chat.html', (req, res) => res.sendFile(path.join(__dirname, 'Chat.html')));
 app.get('/Channel.html', (req, res) => res.sendFile(path.join(__dirname, 'Channel.html')));
+app.get('/Discussions.html', (req, res) => res.sendFile(path.join(__dirname, 'Discussions.html')));
+app.get('/ChurchTok.html', (req, res) => res.sendFile(path.join(__dirname, 'ChrchTok.html')));
 app.get('/podcasts.html', (req, res) => {res.sendFile(__dirname + 'podcasts.html');
 });
 // Redirect root URL to Login.html
@@ -182,7 +184,10 @@ app.post('/api/events/:id/notify', (req, res) => {
     const eventId = req.params.id;
     const { email } = req.body;
 
-    // Insert email and notification time into database
+    if (!eventId || !email) {
+        return res.status(400).json({ success: false, message: 'Invalid event ID or email' });
+    }
+
     const insertQuery = 'INSERT INTO event_notifications (event_id, email, notified) VALUES (?, ?, 0)';
     db.query(insertQuery, [eventId, email], (err) => {
         if (err) {
@@ -193,8 +198,7 @@ app.post('/api/events/:id/notify', (req, res) => {
     });
 });
 
-
-// Scheduled task to check for upcoming events and send notifications
+// Scheduled task to check for live events and send notifications
 cron.schedule('* * * * *', () => { // Check every minute
     const now = new Date();
     const query = `
@@ -211,12 +215,12 @@ cron.schedule('* * * * *', () => { // Check every minute
 
         results.forEach(event => {
             const mailOptions = {
-                from: 'followme303030@gmail.com',
+                from: process.env.EMAIL_USER,
                 to: event.email,
                 subject: `Reminder: ${event.title}`,
                 text: `Dear user,
 
-This is a reminder that the event titled "${event.title}" is starting soon.
+This is a reminder that the event titled "${event.title}" is now live.
 
 Event Description:
 ${event.description}
@@ -247,6 +251,7 @@ Church Online App`
         });
     });
 });
+
 // API endpoint to update event notification status
 app.put('/api/events/:id/notification', (req, res) => {
     const { id } = req.params;
@@ -1343,11 +1348,96 @@ app.get('/get_reviews', (req, res) => {
 // Route to fetch organizations by category
 
 
-// API endpoints
+//////////////////Events
+
+// Existing imports and setup
 
 
-// Handle event creation
-// Handle event creation
+// Handle like/dislike reactions
+app.post('/api/events/:eventId/reaction', (req, res) => {
+    const { user_id, reaction } = req.body; // Ensure user_id comes from logged_in_users
+    const eventId = req.params.eventId;
+
+    const query = `
+        INSERT INTO event_reactions (event_id, user_id, reaction)
+        VALUES (?, ?, ?)
+        ON DUPLICATE KEY UPDATE reaction = ?
+    `;
+    db.query(query, [eventId, user_id, reaction, reaction], (error) => {
+        if (error) return res.status(500).json({ error });
+        
+        // Update like/dislike counts
+        const countQuery = `
+            SELECT 
+                SUM(CASE WHEN reaction = 'like' THEN 1 ELSE 0 END) AS likeCount,
+                SUM(CASE WHEN reaction = 'dislike' THEN 1 ELSE 0 END) AS dislikeCount
+            FROM event_reactions WHERE event_id = ?
+        `;
+        db.query(countQuery, [eventId], (err, results) => {
+            if (err) return res.status(500).json({ err });
+            res.json({
+                message: 'Reaction recorded!',
+                likeCount: results[0].likeCount,
+                dislikeCount: results[0].dislikeCount
+            });
+        });
+    });
+});
+
+// Add a comment
+app.post('/api/events/:eventId/comments', (req, res) => {
+    const { user_id, comment } = req.body; // Ensure user_id comes from logged_in_users
+    const eventId = req.params.eventId;
+
+    const query = 'INSERT INTO event_comments (event_id, user_id, comment) VALUES (?, ?, ?)';
+    db.query(query, [eventId, user_id, comment], (error) => {
+        if (error) return res.status(500).json({ error });
+        res.json({ message: 'Comment added!' });
+    });
+});
+
+// Load comments for an event
+app.get('/api/events/:eventId/comments', (req, res) => {
+    const eventId = req.params.eventId;
+
+    const query = `
+        SELECT c.comment, u.username 
+        FROM event_comments c
+        JOIN logged_in_users u ON c.user_id = u.id
+        WHERE c.event_id = ?
+    `;
+    db.query(query, [eventId], (error, results) => {
+        if (error) return res.status(500).json({ error });
+        res.json({ comments: results });
+    });
+});
+
+// Fetch all events
+app.get('/events', (req, res) => {
+    const sql = 'SELECT * FROM events ORDER BY event_date ASC';
+    db.query(sql, (err, results) => {
+        if (err) throw err;
+        results = results.map(event => ({
+            ...event,
+            media: event.media ? JSON.parse(event.media) : []
+        }));
+        res.json(results);
+    });
+});
+
+
+// Fetch all events
+app.get('/events', (req, res) => {
+    const sql = 'SELECT * FROM events ORDER BY event_date ASC';
+    db.query(sql, (err, results) => {
+        if (err) throw err;
+        results = results.map(event => ({
+            ...event,
+            media: event.media ? JSON.parse(event.media) : []
+        }));
+        res.json(results);
+    });
+});
 // Handle event creation
 app.post('/upload-event', uploadMedia.array('media', 10), (req, res) => {
     const { title, description, event_date, virtual_url, ticket_url } = req.body;
@@ -1358,33 +1448,6 @@ app.post('/upload-event', uploadMedia.array('media', 10), (req, res) => {
     db.query(sql, [title, description, event_date, virtual_url, ticket_url, JSON.stringify(media)], (err, result) => {
         if (err) throw err; // Handle error if any
         res.redirect('/events.html'); // Redirect to events page after creation
-    });
-});
-
-// Fetch all events
-app.get('/events', (req, res) => {
-    const sql = 'SELECT * FROM events ORDER BY event_date ASC';
-    db.query(sql, (err, results) => {
-        if (err) throw err;
-        results = results.map(event => ({
-            ...event,
-            media: event.media ? JSON.parse(event.media) : []
-        }));
-        res.json(results);
-    });
-});
-
-
-// Fetch all events
-app.get('/events', (req, res) => {
-    const sql = 'SELECT * FROM events ORDER BY event_date ASC';
-    db.query(sql, (err, results) => {
-        if (err) throw err;
-        results = results.map(event => ({
-            ...event,
-            media: event.media ? JSON.parse(event.media) : []
-        }));
-        res.json(results);
     });
 });
 
@@ -1420,7 +1483,6 @@ app.post('/api/prayer/submit', (req, res) => {
         res.sendStatus(200);
     });
 });
-// API endpoint to fetch prayer requests for a specific pastor
 // API endpoint to fetch prayer requests for a specific pastor
 app.get('/api/prayer/requests/:pastorId', (req, res) => {
     const { pastorId } = req.params;

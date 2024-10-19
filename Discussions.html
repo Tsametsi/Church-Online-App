@@ -5,18 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discussions</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Raleway:wght@600&display=swap" rel="stylesheet">
+    <link href="Discussions.css" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #3498db;
-            --secondary-color: #2ecc71;
+            --primary-color: #000000;
+            --secondary-color: #312ecc;
             --background-color: #f4f4f4;
             --text-color: #333;
             --card-background: #fff;
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0.9;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Roboto', sans-serif;
             background-color: var(--background-color);
             color: var(--text-color);
             line-height: 1.6;
@@ -24,14 +27,8 @@
             padding: 0;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
         header {
-            background-color: var(--primary-color);
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
             color: white;
             text-align: center;
             padding: 1rem;
@@ -41,6 +38,7 @@
         h1 {
             margin: 0;
             font-size: 2.5rem;
+            font-family: 'Raleway', sans-serif;
         }
 
         .trending-bar {
@@ -50,11 +48,19 @@
             margin-bottom: 20px;
             border-radius: 5px;
             box-shadow: var(--shadow);
+            border-left: 5px solid white;
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         .trending-bar h2 {
             margin: 0;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
+            font-weight: 700;
         }
 
         #topics-container {
@@ -64,11 +70,16 @@
         }
 
         .topic {
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.5);
             padding: 5px 10px;
             margin-right: 10px;
             border-radius: 20px;
             white-space: nowrap;
+            transition: background-color 0.3s;
+        }
+
+        .topic:hover {
+            background-color: rgba(255, 255, 255, 0.7);
         }
 
         .btn {
@@ -78,11 +89,12 @@
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.3s;
         }
 
         .btn:hover {
             background-color: #2980b9;
+            transform: scale(1.05);
         }
 
         .btn i {
@@ -97,12 +109,24 @@
             margin-bottom: 20px;
         }
 
+        /* New rule for text color in new discussion section */
+        #new-discussion input[type="text"],
+        #new-discussion textarea {
+            color: black; /* Make text black */
+        }
+
         input[type="text"], textarea {
             width: 100%;
             padding: 10px;
             margin-bottom: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            border-color: var(--secondary-color);
+            outline: none;
         }
 
         #search-input {
@@ -111,6 +135,12 @@
             margin-bottom: 20px;
             border: 1px solid #ddd;
             border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        #search-input:focus {
+            border-color: var(--secondary-color);
+            outline: none;
         }
 
         .discussion-grid {
@@ -124,11 +154,17 @@
             border-radius: 5px;
             padding: 20px;
             box-shadow: var(--shadow);
+            transition: transform 0.2s;
+        }
+
+        .discussion-card:hover {
+            transform: translateY(-5px);
         }
 
         .discussion-card h3 {
             margin-top: 0;
             color: var(--primary-color);
+            font-family: 'Raleway', sans-serif;
         }
 
         .discussion-meta {
@@ -174,6 +210,8 @@
     <header>
         <h1><i class="fas fa-comments"></i> Discussions</h1>
     </header>
+    <p>Please enter a username to use for discussions</p>
+    <input type="text" id="discussion-username" placeholder="Enter your username" />
 
     <div class="container">
         <div class="trending-bar">
@@ -186,7 +224,6 @@
         </button>
 
         <div id="new-discussion" style="display: none;">
-            <input type="text" id="discussion-username" placeholder="Enter your username" />
             <input type="text" id="discussion-title" placeholder="Discussion Title" />
             <textarea id="discussion-content" placeholder="Discussion Content"></textarea>
             
@@ -201,7 +238,7 @@
             <audio id="recorded-audio" controls style="display: none;"></audio>
             
             <button class="btn" onclick="submitDiscussion()">
-                <i class="fas fa-paper-plane"></i> Submit Discussion
+                <i class="fas fa-paper-plane"></i> Post Your Discussion
             </button>
         </div>
 

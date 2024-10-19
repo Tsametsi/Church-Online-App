@@ -5,9 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Church Events</title>
     <link rel="stylesheet" href="/Events.css">
+    <style>
+        /* Add styles here for the slider */
+        .slider {
+            position: relative;
+            overflow: hidden;
+            width: 100%; /* Adjust as needed */
+            height: 300px; /* Fixed height for videos and images */
+        }
+
+        .slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slide {
+            min-width: 100%; /* Each slide takes full width */
+            height: 100%; /* Full height of the slider */
+        }
+
+        img, video {
+            width: 100%; /* Make media responsive */
+            height: auto; /* Maintain aspect ratio */
+            max-height: 100%; /* Limit height to fit the slider */
+        }
+
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        #prev-slide {
+            left: 10px; /* Positioning */
+        }
+
+        #next-slide {
+            right: 10px; /* Positioning */
+        }
+    </style>
 </head>
 <body>
-    <a href="javascript:history.back()" class="back-button">← Back</a>
+    <a href="javascript:history.back()" class="back-button">←Back</a>
 
     <header>
         <h1>Upcoming Church Events</h1>
@@ -62,6 +106,8 @@
                 <!-- Advertisements will be dynamically added here -->
             </div>
             <div class="dots" id="advertisement-dots"></div>
+            <button id="prev-slide" class="nav-button">❮ Previous</button>
+            <button id="next-slide" class="nav-button">Next ❯</button>
         </div>
     </section>
     
