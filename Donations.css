@@ -2,8 +2,8 @@
 body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
-    color: #333;
-    background-color: #f4f4f4;
+    color: white; /* Changed to white for better contrast */
+    background: linear-gradient(to right, #0a1f4b, #1c4a81); /* Background gradient */
     margin: 0;
     padding: 0;
 }
@@ -16,14 +16,14 @@ body {
 }
 
 h1, h2, h3 {
-    color: #2c3e50;
+    color: #ffffff; /* Changed to white for consistency */
 }
 
 /* Back Button */
 .back-button {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #3498db;
+    background-color: #20308a; /* Changed to accent color */
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -32,12 +32,12 @@ h1, h2, h3 {
 }
 
 .back-button:hover {
-    background-color: #2980b9;
+    background-color: #1a1717; /* Darker shade on hover */
 }
 
 /* Thank You Section */
 .thank-you-section {
-    background-color: #2ecc71;
+    background-color: rgba(10, 42, 82, 0.8); /* Semi-transparent dark background */
     color: white;
     padding: 20px;
     text-align: center;
@@ -50,7 +50,7 @@ h1, h2, h3 {
 
 /* Buttons */
 .option-button, .submit-button {
-    background-color: #3498db;
+    background-color: #4c8bff; /* Changed to accent color */
     color: white;
     border: none;
     padding: 10px 20px;
@@ -61,12 +61,12 @@ h1, h2, h3 {
 }
 
 .option-button:hover, .submit-button:hover {
-    background-color: #2980b9;
+    background-color: #4367ca; /* Darker shade on hover */
 }
 
 /* Forms */
 .form {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -90,7 +90,7 @@ input[type="text"], input[type="email"], select, textarea {
 }
 
 .grid-item {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
     border-radius: 5px;
     padding: 15px;
     box-shadow: 0 0 5px rgba(0,0,0,0.1);
@@ -103,14 +103,14 @@ input[type="text"], input[type="email"], select, textarea {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(14, 9, 88, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .popup-content {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
     padding: 20px;
     border-radius: 5px;
     text-align: center;
@@ -132,7 +132,7 @@ input[type="text"], input[type="email"], select, textarea {
 }
 
 .report-card {
-    background-color: #3498db;
+    background-color: #23223a; /* Changed to accent color */
     color: white;
     padding: 20px;
     border-radius: 5px;
@@ -148,7 +148,7 @@ input[type="text"], input[type="email"], select, textarea {
 
 /* Feedback Section */
 .feedback-section {
-    background-color: #ecf0f1;
+    background-color: rgba(8, 72, 109, 0.9); /* Semi-transparent light background */
     padding: 20px;
     border-radius: 5px;
     margin-bottom: 30px;
@@ -163,8 +163,8 @@ blockquote {
     font-style: italic;
     margin: 0;
     padding: 10px;
-    background-color: white;
-    border-left: 5px solid #3498db;
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+    border-left: 5px solid #ff4c4c; /* Accent color */
 }
 
 /* Region Stats */
@@ -178,7 +178,7 @@ blockquote {
 }
 
 .region-item {
-    background-color: #2ecc71;
+    background-color: #2ecc71; /* Maintained for distinction */
     color: white;
     padding: 15px;
     border-radius: 5px;
@@ -194,10 +194,11 @@ blockquote {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
+    color: #1a1717;
 }
 
 .media-item {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
     border-radius: 5px;
     overflow: hidden;
     box-shadow: 0 0 5px rgba(0,0,0,0.1);
@@ -237,75 +238,80 @@ blockquote {
         margin-bottom: 10px;
     }
 }
+
 .form textarea {
     width: 100%;
     height: 100px;
 }
 
 .submit-button {
-    background-color: #4CAF50; /* Green */
+    background-color: #515c75; /* Changed to accent color */
     color: white;
     padding: 10px 15px;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
 }
 
 .submit-button:hover {
-    background-color: #45a049;
+    background-color: #09173f; /* Darker shade on hover */
 }
+
 #thankYouMessage {
     font-size: 16px;
     font-weight: bold;
-    color: green;
+    color: #98a3e2; /* Accent color */
 }
+
 .continent-stats {
-    background-color: #f9f9f9; /* Light background for contrast */
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
     padding: 20px;
     margin: 20px 0;
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .continent-stats h2 {
     text-align: center;
-    color: #333; /* Darker text for better readability */
+    color: rgb(7, 15, 53); /* Changed to white */
     margin-bottom: 20px;
 }
 
 .continents {
     display: flex;
-    flex-wrap: wrap; /* Allows items to wrap */
-    justify-content: center; /* Center the items */
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .continent-item {
-    background-color: #fff; /* White background for items */
-    border: 1px solid #ddd; /* Light border */
-    border-radius: 5px; /* Slightly rounded corners */
+    background-color: rgba(82, 84, 88, 0.9); /* Semi-transparent white */
+    border: 1px solid #ddd;
+    border-radius: 5px;
     padding: 15px;
     margin: 10px;
-    flex: 0 1 calc(30% - 20px); /* Adjust size for three items in a row */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
-    transition: transform 0.3s; /* Smooth scaling effect */
+    flex: 0 1 calc(30% - 20px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
 }
 
 .continent-item:hover {
-    transform: scale(1.05); /* Scale up on hover */
+    transform: scale(1.05);
 }
 
 .continent-item h3 {
-    color: #007bff; /* Use a primary color for the continent names */
+    color: #ffffff; /* Accent color */
     margin-bottom: 10px;
 }
 
 .continent-item p {
-    color: #555; /* Softer text color for descriptions */
-    font-size: 1.1em; /* Slightly larger font for emphasis */
+    color: #e0e0e0; /* Softer text color */
+    font-size: 1.1em;
 }
+
 .review-section {
     margin: 20px 0;
     padding: 20px;
-    border: 1px solid #ddd;
+    border: 1px solid #272f9c;
     border-radius: 5px;
 }
 
@@ -321,7 +327,7 @@ blockquote {
 }
 
 .star.selected {
-    color: gold;
+    color: rgb(47, 65, 163);
 }
 
 textarea {
@@ -331,69 +337,6 @@ textarea {
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ddd;
-}
-
-.submit-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.submit-button:hover {
-    background-color: #45a049;
-}
-
-.review {
-    margin: 10px 0;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-.review-section {
-    margin: 20px 0;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-.star-rating {
-    display: flex;
-    cursor: pointer;
-}
-
-.star {
-    font-size: 24px;
-    color: gray;
-    transition: color 0.2s;
-}
-
-.star.selected {
-    color: gold;
-}
-
-textarea {
-    width: 100%;
-    height: 100px;
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-}
-
-.submit-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.submit-button:hover {
-    background-color: #45a049;
 }
 
 .review {

@@ -1493,6 +1493,41 @@ app.get('/advertisements', (req, res) => {
         res.json(results);
     });
 });
+//////////////////ChurchTok
+
+// Set up storage for videos
+const videoStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/ChurchTok_Videos/'); // Directory for videos
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
+    }
+});
+const uploadVideo = multer({ storage: videoStorage }); // Define upload for videos
+
+// Upload video endpoint
+app.post('/upload/video', uploadVideo.single('video'), (req, res) => {
+    const userId = req.body.userId; // Replace with actual user ID
+    const caption = req.body.caption;
+    const videoUrl = `/uploads/ChurchTok_Videos/${req.file.filename}`;
+
+    const query = 'INSERT INTO tok_videos (user_id, video_url, caption) VALUES (?, ?, ?)';
+    db.query(query, [userId, videoUrl, caption], (err) => {
+        if (err) {
+            return res.status(500).json({ message: 'Database error', error: err });
+        }
+        res.status(200).json({ message: 'Video uploaded successfully!' });
+    });
+});
+
+// Load videos endpoint
+app.get('/videos', (req, res) => {
+    db.query('SELECT * FROM tok_videos', (err, results) => {
+        if (err) return res.status(500).json({ message: 'Database error', error: err });
+        res.json(results);
+    });
+});
 
 // Start the server
 app.listen(port, () => {

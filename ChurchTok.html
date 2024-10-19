@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChurchTok</title>
+    <link rel="stylesheet" href="ChurchTok.css">
+</head>
+<body>
+    <header>
+        <h1>ChurchTok</h1>
+    </header>
+    
+    <main>
+        <div class="upload-section">
+            <h2>Upload Video</h2>
+            <input type="file" id="videoFile" accept="video/*">
+            <input type="text" id="captionInput" placeholder="Caption">
+            <button id="uploadBtn">Upload</button>
+        </div>
+
+        <div id="videoContainer" class="video-container">
+            <!-- Videos will be dynamically loaded here -->
+        </div>
+
+        <div id="mainVideoSection" class="main-video-section">
+            <video id="videoPlayer" controls autoplay></video>
+            <div class="video-info">
+                <p id="caption"></p>
+                <p id="username"></p>
+                <div class="likes">
+                    <button id="likeBtn">Like</button>
+                    <button id="dislikeBtn">Dislike</button>
+                    <span id="likeCount">0</span>
+                </div>
+            </div>
+            <div class="comments-section">
+                <input type="text" id="commentInput" placeholder="Add a comment...">
+                <button id="postCommentBtn">Post</button>
+                <div id="commentsList"></div>
+            </div>
+        </div>
+
+        <div class="record-section">
+            <h2>Record Video</h2>
+            <video id="recordingPlayer" controls autoplay></video>
+            <button id="startRecordingBtn">Start Recording</button>
+            <button id="stopRecordingBtn" disabled>Stop Recording</button>
+            <button id="saveRecordingBtn" disabled>Save Recording</button>
+        </div>
+    </main>
+
+    <script src="ChurchTok.js"></script>
+</body>
+</html>

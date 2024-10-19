@@ -1,57 +1,66 @@
+/* Base Styles */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f9;
     margin: 0;
-    padding: 20px;
+    padding: 0;
+    background: linear-gradient(to right, #0a1f4b, #0a2a52); /* Gradient background */
+    color: white; /* Default text color */
 }
 
 .container {
     max-width: 800px;
     margin: auto;
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Darker shadow */
     padding: 20px;
+    text-align: center; /* Center content */
 }
 
-h2 {
-    text-align: center;
-    color: #333;
+h2, h3, h4 {
+    color: #ffffff; /* White for headings */
 }
 
+/* Form Group */
 .form-group {
     margin-bottom: 20px;
 }
 
 label {
     font-weight: bold;
-    color: #555;
+    color: #f0f0f0; /* Light color for labels */
 }
 
+/* Input Elements */
 select, textarea {
-    border: 1px solid #ddd;
+    border: 1px solid #ddd; /* Light border */
     border-radius: 4px;
     width: 100%;
     padding: 10px;
     box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.2); /* Semi-transparent background for inputs */
+    color: white; /* Text color for inputs */
 }
 
+/* Buttons */
 button {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    background-color: #5cb85c;
+    background: linear-gradient(45deg, #4c8cff, #0056b3); /* Gradient for buttons */
+    padding: 15px 30px;
+    font-size: 18px;
     color: white;
-    font-size: 16px;
+    border: none;
+    border-radius: 10px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background 0.3s, transform 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Shadow for buttons */
 }
 
 button:hover {
-    background-color: #4cae4c;
+    background: linear-gradient(45deg, #0056b3, #003d7a); /* Darker gradient on hover */
+    transform: scale(1.05); /* Slight scale effect on hover */
 }
 
+/* Alert Messages */
 .alert {
     padding: 10px;
     margin-top: 15px;
@@ -60,39 +69,48 @@ button:hover {
 }
 
 #successMessage {
-    background-color: #dff0d8;
-    color: #3c763d;
+    background-color: rgba(0, 255, 0, 0.2); /* Light green for success */
+    color: #3c763d; /* Dark green text */
 }
 
+/* Request List Styles */
 #requestList {
     list-style-type: none;
     padding: 0;
 }
 
 .list-group-item {
-    background-color: #f9f9f9;
+    background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
     border: 1px solid #ddd;
     margin-bottom: 10px;
     padding: 15px;
     border-radius: 4px;
     position: relative;
+    transition: background-color 0.3s; /* Smooth transition */
 }
 
 .list-group-item:hover {
-    background-color: #f1f1f1;
+    background-color: rgba(255, 255, 255, 0.3); /* Slightly brighter on hover */
 }
 
+.list-group-item.unread {
+    background-color: rgba(255, 255, 255, 0.4); /* Light background for unread */
+    border-left: 5px solid #4c8cff; /* Highlight with blue */
+}
+
+/* Active Item Styles */
 .pastor-item {
     cursor: pointer;
 }
 
 .pastor-item.active {
-    background-color: #5bc0de;
+    background-color: #5bc0de; /* Active color */
     color: white;
 }
 
+/* Zoom Button */
 .zoom-button {
-    background-color: #428bca;
+    background-color: #428bca; /* Blue background */
     color: white;
     margin-top: 10px;
     border: none;
@@ -103,15 +121,10 @@ button:hover {
 }
 
 .zoom-button:hover {
-    background-color: #3276b1;
+    background-color: #3276b1; /* Darker blue on hover */
 }
 
-/* Icons */
-.icon {
-    margin-right: 8px;
-}
-
-/* Response input field */
+/* Response Input Field */
 .response-input {
     display: none;
     margin-top: 10px;
@@ -124,13 +137,15 @@ button:hover {
     border-radius: 4px;
     box-sizing: border-box;
 }
+
 .unread {
     font-weight: bold;
-    color: #d9534f; /* Red color to indicate unread */
+    color: #007bff; /* Blue for unread messages */
 }
 
+/* Reply Button */
 .reply-button {
-    background-color: #f0ad4e; /* Warning color for reply button */
+    background-color: #007bff; /* Primary blue */
     color: white;
     border: none;
     border-radius: 4px;
@@ -140,69 +155,36 @@ button:hover {
 }
 
 .reply-button:hover {
-    background-color: #ec971f;
+    background-color: #0056b3; /* Darker blue on hover */
 }
 
+/* Reply List */
 .reply-list {
     margin-top: 10px;
-    padding-left: 20px;
-    display: none; /* Initially hide replies */
-}
-body {
-    background-color: #f8f9fa;
-    font-family: Arial, sans-serif;
+    padding-left: 20px; /* Indent replies */
+    display: none; /* Initially hidden */
 }
 
-h2, h3, h4 {
-    color: #343a40;
-}
-
-.list-group-item {
-    transition: background-color 0.3s;
-}
-
-.list-group-item.unread {
-    background-color: #e2e6ea; /* Light grey for unread requests */
-    border-left: 5px solid #007bff; /* Blue left border for emphasis */
-}
-
-.list-group-item:hover {
-    background-color: #f1f1f1;
-}
-
-.btn-link {
-    color: #007bff;
-}
-
-.reply-input {
-    margin-top: 10px;
-}
-
+/* Response List Styles */
 .response-list {
     margin-top: 10px;
     padding-left: 20px; /* Indent responses */
 }
 
 .response-list li {
-    background-color: #d1ecf1; /* Light blue for responses */
-    border: 1px solid #bee5eb;
+    background-color: rgba(0, 255, 255, 0.2); /* Light blue for responses */
+    border: 1px solid rgba(0, 255, 255, 0.4); /* Light blue border */
     border-radius: 5px;
     padding: 10px;
 }
 
-textarea {
-    resize: none; /* Prevent resizing of the textarea */
-}
-
-.reply-button {
-    margin-top: 5px;
-}
-
+/* Show Replies */
 .show-replies {
     cursor: pointer;
-    color: #007bff;
+    color: #007bff; /* Highlight color for clickable text */
 }
-.unread {
-    font-weight: bold;
-    background-color: #f9f9f9; /* Light background for unread items */
+
+/* Icons */
+.icon {
+    margin-right: 8px; /* Space between icon and text */
 }
